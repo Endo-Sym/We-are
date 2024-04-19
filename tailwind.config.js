@@ -16,13 +16,17 @@ export default {
       '4xl': ['48px', '58px'],
       '8xl': ['96px', '106px']
     },
+    variants: {
+      fill: ['hover', 'focus']
+    },
     extend: {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
-        baloo: ['Baloo 2', 'sans-serif']
+        baloo: ['Baloo 2', 'sans-serif'],
+        nunito: ['Nunito Sans', 'sans-serif']
       },
       colors: {
-        
+        'primary-pink': '#EB5AE9'
       },
       boxShadow: {
         '3xl': '0 10px 40px rgba(0, 0, 0, 0.1)'

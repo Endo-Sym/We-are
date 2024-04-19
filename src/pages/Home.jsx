@@ -18,11 +18,36 @@
 //     )
 // }
 
+import Sidebar from '../components/Sidebar';
 
-export default function Home(){
+
+export default function Home({ showSidebar }){
     return(
-        <div className="w-full h-[100vh] flex items-center justify-center border-black bg-[url('./assets/images/home-bg.jpg')] bg-cover font-poppins">
-        <h1>Hello Home</h1>
+        <div className="overflow-hidden">
+            <Sidebar showSidebar={showSidebar}/>
+            <div className="flex w-screen h-screen bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
+                <div className="top-[60px] h-[100vh] w-[100vw] relative">
+                    <section className={`flex fixed h-full w-[40%] min-w-[300px] py-8 px-4`}>
+                        {/* sidebar clone */}
+                        <div className={`${showSidebar ? "w-[200px] min-w-[200px]" : "w-[88px] min-w-[88px]"} h-full`}></div>
+                        <div className="h-full w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md">
+                            <h1 className="text-[40px] text-center pt-4">Universe</h1>
+                        </div>
+                    </section>
+                    <section className={`flex justify-center left-[40%] relative h-full w-[60%] py-8 px-4`}>
+                        <div className="flex justify-center h-full w-[70%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md">
+                            <h1 className="text-[40px] text-center pt-4">Universe</h1>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+
+            {/* <div className="w-full h-screen flex flex-col items-center justify-center border-black bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
+                <section>Universe</section>
+            </div> */}
         </div>
+
     )
 }

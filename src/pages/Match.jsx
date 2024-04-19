@@ -1,10 +1,14 @@
 
+import Sidebar from '../components/Sidebar';
 
-
-export default function Home(){
+export default function Match({ showSidebar }){
     return(
-        <div className="w-full h-[100vh] flex items-center justify-center border-black bg-[url('./assets/images/home-bg.jpg')] bg-cover font-poppins">
-        <h1>Hello Match</h1>
+        <div className="w-full h-screen flex flex-col items-center justify-center border-black bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
+            <Sidebar showSidebar={showSidebar}/>
+            {/* <h1 className="text-white">Hello Home</h1>
+            <div className="min-w-[50px] min-h-[500px] bg-red-600"></div>
+            <div className="min-w-[50px] min-h-[500px] bg-red-400"></div> 
+            <div className="min-w-[50px] min-h-[500px] bg-red-200"></div>  */}
         </div>
     )
 }
