@@ -23,14 +23,14 @@ import Sidebar from '../components/Sidebar';
 
 export default function Home({ showSidebar }){
     return(
-        <div className="overflow-hidden">
+        <div className="overflow-hidden z-10">
             <Sidebar showSidebar={showSidebar}/>
             <div className="flex w-screen h-screen bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
                 <div className="top-[60px] h-[100vh] w-[100vw] relative">
                     <section className={`flex fixed h-full w-[40%] min-w-[300px] py-8 px-4`}>
                         {/* sidebar clone */}
                         <div className={`${showSidebar ? "w-[200px] min-w-[200px]" : "w-[88px] min-w-[88px]"} h-full`}></div>
-                        <div className="h-full w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md">
+                        <div className="h-full w-[60%] left= border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md">
                             <h1 className="text-[40px] text-center pt-4">Universe</h1>
                         </div>
                     </section>

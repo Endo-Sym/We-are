@@ -27,7 +27,7 @@ export default function Sidebar({ showSidebar }){
     }
 
     return(
-        <section className={`fixed left-0 top-[60px] flex flex-col gap-2 py-4 px-4 h-full w-[${showSidebar ? "200px" : "0px"}] bg-black bg-opacity-[46%] backdrop-blur-sm font-nunito text-white font-medium transition-transform duration-500 ease-in-out`}>
+        <section className={`z-20 fixed left-0 top-[60px] flex flex-col gap-2 py-4 px-4 h-full w-[${showSidebar ? "200px" : "0px"}] bg-black bg-opacity-[46%] backdrop-blur-sm font-nunito text-white font-medium transition-transform duration-500 ease-in-out`}>
             <div id="/" onClick={routeChange} className="flex cursor-pointer group gap-1">
                 <div className="flex items-center justify-center h-14 w-14">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 39" className="size-10" fill="none">
