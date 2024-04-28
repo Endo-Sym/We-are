@@ -26,27 +26,7 @@ export default function Home({ toggleNavbar, showSidebar }){
         }
 
     return(
-        // <section className='bg-gray-300 flex gap-6'>
-        //     <nav className='bg-[#0e0e0e] min-h-screen w-72 text-grey-100 px-4'>
-        //         <div className='py-3 flex justify-end size-10'>
-        //             <img src={menuicon}></img>
-        //         </div>
-                // <div className='flex flex-col text-white mt-4 gap-10 relative'>
-                //     <button name="/signin" onClick={(e) => routeChange(e)}>Sign-in</button>
-                //     <button name="/signup" onClick={(e) => routeChange(e)}>Sign-up</button>
-                //     <button name="/" onClick={(e) => routeChange(e)}>Home</button>
-                //     <button name="/match" onClick={(e) => routeChange(e)}>Match</button>
-                //     <button name="/message" onClick={(e) => routeChange(e)}>Message</button>
-                //     <button name="/profile" onClick={(e) => routeChange(e)}>Profile</button>
-                //     <button name="/perdata" onClick={(e) => routeChange(e)}>Personality Database</button>
-                //     <button name="/pertest" onClick={(e) => routeChange(e)}>Personality Test</button>
-                //     <button name="/resource" onClick={(e) => routeChange(e)}>Resources</button>
-                // </div>
-        //     </nav>
-        //     <a href="/"><img className="w-[60px] h-[50px]" src={logo}/></a>
-            // <input class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-full text-sm focus:outline-none"
-            // type="search" name="search" placeholder="Search"></input>
-        // </section>
+
         <div className="font-nunito">
             <section className="fixed top-0 h-[60px] w-full bg-primary-pink bg-opacity-[16%] backdrop-blur-sm">
                 <div className="grid grid-cols-[20%_auto_20%] gap-2 h-full max-w-full mx-6">
