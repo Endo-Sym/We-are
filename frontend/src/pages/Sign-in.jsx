@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast, Toaster } from 'react-hot-toast';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ErrorModal from './ErrorModal';
+import SuccessModal from './SuccessModal';
 import logo from '/assets/images/logo.png';
 
 function Signin() {
@@ -10,14 +12,24 @@ function Signin() {
     email: '',
     password: ''
   });
-
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.successMessage) {
+      setErrorMessage(location.state.successMessage);
+      setIsSuccessModalOpen(true);
+    }
+  }, [location]);
 
   const SigninUser = async (e) => {
     e.preventDefault();
     const { email, username, password } = data;
     try {
-      const response = await axios.post("/Sign-in", {
+      const response = await axios.post('/Sign-in', {
         email,
         username,
         password
@@ -34,12 +46,25 @@ function Signin() {
         navigate('/');
       }
     } catch (error) {
-      toast.error("An error occurred while signing in.");
+      setErrorMessage('Sorry, something went wrong.');
+      setIsErrorModalOpen(true);
+      console.error(error);
     }
   };
 
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center border-black bg-[url('../assets/images/welcome-bg.png')] bg-cover font-poppins"> {/* Update the path */}
+    <div className="w-full h-[100vh] flex items-center justify-center border-black bg-[url('/assets/images/welcome-bg.png')] bg-cover font-poppins">
+      <Toaster />
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onRequestClose={() => setIsErrorModalOpen(false)}
+        message={errorMessage}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onRequestClose={() => setIsSuccessModalOpen(false)}
+        message="Account created successfully."
+      />
       <div className="flex flex-col items-center justify-between m-16 p-16 w-[600px] max-w-[600px] h-[85%] bg-black text-white border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px] relative rounded-[50px] top-5">
         <div className="logo rounded-full border size-[100px] flex items-center justify-center bg-black absolute -top-[50px] border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px]">
           <a href="/"><img className="w-[60px]" src={logo} alt="logo" /></a>

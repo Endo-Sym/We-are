@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios'; // Ensure axios is imported
 import logo from '/assets/images/logo.png';
-import {toast} from "react-hot-toast"
+import { toast, Toaster } from 'react-hot-toast';
+import ErrorModal from './ErrorModal';
+import SuccessModal from './SuccessModal';
 import { useNavigate} from "react-router-dom"
 function SignUp() {
   const navigate = useNavigate()
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [data, setData] = useState({
     name: '',
     username: '',
@@ -23,16 +28,28 @@ function SignUp() {
     toast.error(data.error)
       } else {
         setData({})
-        toast.success("Login Successful, Welcome!")
+        toast.success("Transaction Complete Successfully!")
         navigate("/signin")
       }
     } catch (error) {
+      setErrorMessage('Sorry, something went wrong.');
+      setIsErrorModalOpen(true);
       console.error(error);
     }
   };
-
   return (
     <div className="w-full h-[100vh] flex items-center justify-center border-black bg-[url('/assets/images/welcome-bg.png')] bg-cover font-poppins">
+        <Toaster />
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onRequestClose={() => setIsErrorModalOpen(false)}
+        message={errorMessage}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onRequestClose={() => setIsSuccessModalOpen(false)}
+        message="Account created successfully."
+      />
       <div className="flex flex-col items-center justify-between m-16 p-16 w-[600px] max-w-[600px] h-[85%] bg-black text-white border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px] relative rounded-[50px] top-5">
         <div className="logo rounded-full border size-[100px] flex items-center justify-center bg-black absolute -top-[50px] border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px]">
           <a href="/"><img className="w-[60px]" src={logo} alt="logo" /></a>
