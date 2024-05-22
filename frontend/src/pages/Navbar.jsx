@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import logo from '/assets/images/logo.svg'
+import { useContext } from 'react'
+import { UserContext } from '../../context/Usercontext';
 import menuicon from '/assets/images/menuicon.svg';
 import searchicon from '/assets/images/searchicon.png';
 // import homeicon from '/assets/images/homeicon.svg';
@@ -12,6 +14,7 @@ import searchicon from '/assets/images/searchicon.png';
 
 export default function Home({ toggleNavbar, showSidebar }){
     let navigate = useNavigate(); 
+    const {user} = useContext(UserContext)
     const routeChange = (e) =>{ 
         let path = e.target.name; 
         navigate(path);
@@ -44,7 +47,7 @@ export default function Home({ toggleNavbar, showSidebar }){
                     </div>
                     {/* username&profile area */}
                     <div className="flex items-center justify-end gap-3 text-white col-span-1">
-                        <p className="text-right">Username</p>
+                        <p className="text-right">{!! user && (<h1>{user.name}</h1>)}</p>
                         <img src="" alt="" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink"/>
                     </div>
                 </div>

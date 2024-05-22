@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'; // นำเข้า PropTypes
 import Modal from 'react-modal';
 import { IoIosCheckmarkCircleOutline } from "react-icons/io5";
 
-const ErrorModal = ({ isOpen, onRequestClose, message }) => {
+const LogoutModal = ({ isOpen, onRequestClose, message }) => {
     return (
       <Modal
         isOpen={isOpen}
@@ -38,10 +38,10 @@ const ErrorModal = ({ isOpen, onRequestClose, message }) => {
   };
 
 
-ErrorModal.propTypes = {
+LogoutModal.propTypes = {
   isOpen: PropTypes.bool.isRequired, 
   onRequestClose: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
 };
 
-export default ErrorModal;
+export default LogoutModal;

@@ -1,29 +1,55 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
 import logo from '/assets/images/logo.png';
+import { GoogleLogin } from 'react-google-login';
+import { gapi } from 'gapi-script';
+import { FaGoogle } from "react-icons/fa";
 
 function Signin() {
+  const clientId = "534684648759-do7luvuc5v62ljngha89jillc4s2o6kn.apps.googleusercontent.com";
+  const navigate = useNavigate(); // Use navigate for redirection
+
+  const [profile, setProfile] = useState(null);
   const [data, setData] = useState({
     username: '',
     email: '',
     password: ''
   });
+
+  useEffect(() => {
+    function initClient() {
+      gapi.client.init({
+        clientId: clientId,
+        scope: ''
+      });
+    }
+    gapi.load('client:auth2', initClient);
+  }, [clientId]);
+
+  const onSuccess = (res) => {
+    console.log('success', res);
+    setProfile(res.profileObj);
+    setIsSuccessModalOpen(true);
+    setTimeout(() => {
+      navigate('/');
+    }, 3000); // Redirect after showing the modal for 2 seconds
+  };
+
+  const onFailure = (res) => {
+    console.log('failed', res);
+  };
+
+  const logOut = () => {
+    setProfile(null);
+  };
+
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.state?.successMessage) {
-      setErrorMessage(location.state.successMessage);
-      setIsSuccessModalOpen(true);
-    }
-  }, [location]);
 
   const SigninUser = async (e) => {
     e.preventDefault();
@@ -43,7 +69,10 @@ function Signin() {
           email: '',
           password: ''
         });
-        navigate('/');
+        setIsSuccessModalOpen(true);
+        setTimeout(() => {
+          navigate('/');
+        }, 2000); 
       }
     } catch (error) {
       setErrorMessage('Sorry, something went wrong.');
@@ -63,7 +92,7 @@ function Signin() {
       <SuccessModal
         isOpen={isSuccessModalOpen}
         onRequestClose={() => setIsSuccessModalOpen(false)}
-        message="Account created successfully."
+        message="Transaction Complete Successfully!."
       />
       <div className="flex flex-col items-center justify-between m-16 p-16 w-[600px] max-w-[600px] h-[85%] bg-black text-white border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px] relative rounded-[50px] top-5">
         <div className="logo rounded-full border size-[100px] flex items-center justify-center bg-black absolute -top-[50px] border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px]">
@@ -71,7 +100,23 @@ function Signin() {
         </div>
         <h1 className="text-[64px] font-bold mb-3">Sign in</h1>
         <form className="h-full w-full flex flex-col justify-center gap-4" onSubmit={SigninUser}>
-          <button className='signin-button bg-[#DF1CFF] rounded-[16px] w-full mb-6 p-3 font-medium text-xl' type="button">Sign in with Google</button>
+          <GoogleLogin 
+            clientId={clientId}
+            render={renderProps => (
+              <button
+                className='signin-button bg-[#DF1CFF] rounded-[16px] w-full mb-6 p-3 font-medium text-xl flex items-center justify-center gap-2'
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+              >
+                <FaGoogle className='text-white' />
+                <span>Sign in with Google</span>
+              </button>
+            )}
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+            cookiePolicy={"single_host_origin"}
+            isSignedIn={true}
+          />
           <label className="text-[#A8A6A6]">
             <p>Username or Email Address</p>
             <input

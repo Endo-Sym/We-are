@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import axios from 'axios'; // Ensure axios is imported
+import axios from 'axios';
 import logo from '/assets/images/logo.png';
 import { toast, Toaster } from 'react-hot-toast';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
-import { useNavigate} from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
+
 function SignUp() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -21,15 +22,26 @@ function SignUp() {
     e.preventDefault();
     const { name, username, email, password } = data;
     try {
-      const {data} = await axios.post("/Sign-up", {
-        name, username, email, password
+      const response = await axios.post("/Sign-up", {
+        name,
+        username,
+        email,
+        password
       });
-      if(data.error) {
-    toast.error(data.error)
+      const { data: responseData } = response;
+      if (responseData.error) {
+        toast.error(responseData.error);
       } else {
-        setData({})
-        toast.success("Transaction Complete Successfully!")
-        navigate("/signin")
+        setData({
+          name: '',
+          username: '',
+          email: '',
+          password: ''
+        });
+        setIsSuccessModalOpen(true);
+        setTimeout(() => {
+          navigate('/signin');
+        }, 2000);
       }
     } catch (error) {
       setErrorMessage('Sorry, something went wrong.');
@@ -37,9 +49,10 @@ function SignUp() {
       console.error(error);
     }
   };
+
   return (
     <div className="w-full h-[100vh] flex items-center justify-center border-black bg-[url('/assets/images/welcome-bg.png')] bg-cover font-poppins">
-        <Toaster />
+      <Toaster />
       <ErrorModal
         isOpen={isErrorModalOpen}
         onRequestClose={() => setIsErrorModalOpen(false)}
@@ -95,7 +108,7 @@ function SignUp() {
             />
           </label>
           <br /><br />
-          <button className='signin-button bg-white rounded-[16px] p-3 font-bold text-black mb-2' onSubmit={SignupUser}>Create Account</button>
+          <button className='signin-button bg-white rounded-[16px] p-3 font-bold text-black mb-2'>Create Account</button>
           <p className="text-[#8455B2] self-center flex gap-1">
             Already have an account? <a className="font-bold underline" href="/signin">Sign in</a>
           </p>
