@@ -11,7 +11,7 @@ import { FaGoogle } from "react-icons/fa";
 
 function Signin() {
   const clientId = "534684648759-do7luvuc5v62ljngha89jillc4s2o6kn.apps.googleusercontent.com";
-  const navigate = useNavigate(); // Use navigate for redirection
+  const navigate = useNavigate(); 
 
   const [profile, setProfile] = useState(null);
   const [data, setData] = useState({
@@ -36,7 +36,7 @@ function Signin() {
     setIsSuccessModalOpen(true);
     setTimeout(() => {
       navigate('/');
-    }, 3000); // Redirect after showing the modal for 2 seconds
+    }, 3000); 
   };
 
   const onFailure = (res) => {
