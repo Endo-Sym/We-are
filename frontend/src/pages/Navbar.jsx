@@ -46,9 +46,13 @@ export default function Home({ toggleNavbar, showSidebar }){
                         <input className="border-2 border-primary-pink bg-black text-white caret-primary-pink placeholder-primary-pink placeholder-opacity-60 w-full h-10 pl-9 rounded-full text-sm focus:outline-none" type="search" name="search" placeholder="Search" />
                     </div>
                     {/* username&profile area */}
-                    <div className="flex items-center justify-end gap-3 text-white col-span-1">
+                    <div className="flex items-center justify-end gap-3 text-white col-span-1" >
+                    <a href="/signin" className="flex items-center justify-end gap-3 text-white col-span-1">
+  Username
+</a>
+
                         <p className="text-right">{!! user && (<h1>{user.name}</h1>)}</p>
-                        <img src="" alt="" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink"/>
+                        <img src="" alt=""  href=""className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                     </div>
                 </div>
             </section>
