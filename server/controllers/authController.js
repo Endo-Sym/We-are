@@ -1,6 +1,7 @@
 const User = require('../Model/user');
 const { hashPassword, comparePassword } = require('../password/password_manager');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const test = (req, res) => {
     res.json("test is working");
@@ -55,9 +56,12 @@ const SigninUser = async (req, res) => {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });
+        
+        
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
+        
 
         const match = await comparePassword(password, user.password);
         if (!match) {
@@ -76,17 +80,35 @@ const SigninUser = async (req, res) => {
     }
 };
 
-const getprofile = (req, res) => {
-const {token} = req.cookies
-if(token) {
-    jwt.verify(token,process.env.JWT_SECRET, {}, (err, user) => {
-        if(err) throw err;
-        res.json(user)
-    })
-} else{
-    res.json(null)
-}
-}
+const getprofile = async (req, res) => {
+    const { query } = req.params;
+    const { token } = req.cookies;
+
+    try {
+        let user;
+
+        if (mongoose.Types.ObjectId.isValid(query)) {
+            user = await User.findOne({ _id: query }).select("-password -updatedAt");
+        } else {
+            user = await User.findOne({ username: query }).select("-password -updatedAt");
+        }
+
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (token) {
+            jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+                if (err) throw err;
+                res.json(user);
+            });
+        } else {
+            res.json(null);
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+        console.log("Error in getUserProfile: ", err.message);
+    }
+};
+
 
 module.exports = {
     test,

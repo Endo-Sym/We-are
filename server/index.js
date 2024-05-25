@@ -14,6 +14,7 @@ app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 
 
+
 app.use("/", require("./routes/authRoutes"))
 
 const port = process.env.PORT || 8000

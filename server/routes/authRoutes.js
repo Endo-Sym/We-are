@@ -5,6 +5,7 @@ const { resourceUsage } = require('process');
 const { SigninUser,test, SignupUser , getprofile } = require('../controllers/authController');
 
 
+//middleware
 router.use(
     cors({
         credentials: true,
