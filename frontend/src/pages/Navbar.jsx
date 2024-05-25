@@ -9,17 +9,17 @@ import LogoutModal from './LogoutModal'; // Ensure this path is correct
 
 export default function Home({ toggleNavbar, showSidebar }) {
     const navigate = useNavigate();
-    const [data, setData] = useState({
-        username: '',
-        email: '',
-        password: ''
-      });
-    const { user, setUser } = useContext(UserContext);
     const location = useLocation();
+    const { user, setUser } = useContext(UserContext);
 
     const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
+    
 
-
+    useEffect(() => {
+        if (location.state && location.state.user) {
+            setUser(location.state.user);
+        }
+    }, [location.state, setUser]);
 
     const handleLogout = () => {
         localStorage.clear();

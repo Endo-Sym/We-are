@@ -16,8 +16,7 @@ function Signin() {
   const { setUser } = useContext(UserContext);
 
   const [data, setData] = useState({
-    username: '',
-    email: '',
+    identifier: '', // Combined username or email
     password: ''
   });
 
@@ -49,18 +48,17 @@ function Signin() {
 
   const SigninUser = async (e) => {
     e.preventDefault();
-    const { email, username, password } = data;
+    const { identifier, password } = data;
     try {
-      const response = await axios.post('/Sign-in', { email, username, password });
+      const response = await axios.post('/Sign-in', { identifier, password });
       const result = response.data;
       
-      console.log('Response from server:', result); // ตรวจสอบการตอบกลับจากเซิร์ฟเวอร์
       if (result.error) {
         toast.error(result.error);
       } else {
-        console.log('User data:', result.user);
+        console.log('User data:', result);
         setUser(result.user);
-        setData({ username: '', email: '', password: '',});
+        setData({ identifier: '', password: '' });
         setIsSuccessModalOpen(true);
         setTimeout(() => {
           navigate('/');
@@ -115,8 +113,8 @@ function Signin() {
             <input
               className='blank-space text-white font-medium bg-gray-700 border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 20px] rounded-[16px] w-full px-4 py-3 mt-2'
               type="text"
-              value={data.username || data.email}
-              onChange={(e) => setData({ ...data, username: e.target.value, email: e.target.value })}
+              value={data.identifier}
+              onChange={(e) => setData({ ...data, identifier: e.target.value })}
             />
           </label>
           <label>

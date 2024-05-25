@@ -53,32 +53,42 @@ const SignupUser = async (req, res) => {
 
 const SigninUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { identifier, password } = req.body;
 
-        const user = await User.findOne({ email });
-        
-        
+        const user = await User.findOne({
+            $or: [
+                { email: identifier },
+                { username: identifier }
+            ]
+        });
+
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        
 
+        // Check if the provided password matches the stored password
         const match = await comparePassword(password, user.password);
         if (!match) {
             return res.status(401).json({ error: "Password does not match" });
         }
 
-        const token = jwt.sign({ email: user.email, id: user._id, username: user.username }, process.env.JWT_SECRET, {}, (err, token) => {
-            if(err) throw err;
-            res.cookie("token", token).json(user)
-        });
+        // Generate JWT token
+        const token = jwt.sign(
+            { email: user.email, id: user._id, username: user.username },
+            process.env.JWT_SECRET,
+            {},
+            (err, token) => {
+                if (err) throw err;
+                res.cookie("token", token).json(user);
+            }
+        );
 
-        res.json({ token });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
 
 const getprofile = async (req, res) => {
     const { query } = req.params;
