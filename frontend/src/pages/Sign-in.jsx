@@ -16,7 +16,7 @@ function Signin() {
   const { setUser } = useContext(UserContext);
 
   const [data, setData] = useState({
-    identifier: '', // Combined username or email
+    identifier: '',
     password: ''
   });
 
