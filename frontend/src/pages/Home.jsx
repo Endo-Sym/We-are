@@ -1,10 +1,22 @@
-//123
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import Createpost from '../components/Createpost';
+import { FaCirclePlus } from "react-icons/fa6"; 
 
-export default function Home({ showSidebar }){
+export default function Home({ showSidebar }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="overflow-hidden z-10">
-            <Sidebar showSidebar={showSidebar}/>
+            <Sidebar showSidebar={showSidebar} />
             <div className="flex w-screen h-screen bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
                 <div className="top-[60px] h-[100vh] w-[100vw] relative">
                     <section className={`flex fixed h-full w-[40%] min-w-[300px] py-8 px-4`}>
@@ -40,6 +52,14 @@ export default function Home({ showSidebar }){
                             </div>
                         </div>
                     </section>
+                    <button
+                        className="flex items-center justify-center bg-purple-500  text-white p-2 rounded-full hover:bg-purple-700 fixed bottom-10 right-10 z-20"
+                        onClick={handleOpenModal}
+                    >
+                        <FaCirclePlus size={30} className="" />
+                        
+                    </button>
+                    {isModalOpen && <Createpost onClose={handleCloseModal} />}
                 </div>
             </div>
         </div>

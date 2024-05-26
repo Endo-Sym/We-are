@@ -1,153 +1,73 @@
-import { AddIcon } from "@chakra-ui/icons";
-import {
-	Button,
-	CloseButton,
-	Flex,
-	FormControl,
-	Image,
-	Input,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Text,
-	Textarea,
-	useColorModeValue,
-	useDisclosure,
-} from "@chakra-ui/react";
-import { useRef, useState } from "react";
-import usePreviewImg from"./components/Previewingimage";
-import { BsFillImageFill } from "react-icons/bs";
-import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../atoms/userAtom";
-import useShowToast from "../hooks/useShowToast";
-import postsAtom from "../atoms/postsAtom";
-import { useParams } from "react-router-dom";
+import React, { useState } from 'react';
+import { IoMdClose } from "react-icons/io";
+import { MdAddPhotoAlternate } from "react-icons/md";
+import usePreviewImg from './Previewingimga';
 
-const MAX_CHAR = 500;
-
-const CreatePost = () => {
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [postText, setPostText] = useState("");
-	const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
-	const imageRef = useRef(null);
-	const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
-	const user = useRecoilValue(userAtom);
-	const showToast = useShowToast();
-	const [loading, setLoading] = useState(false);
-	const [posts, setPosts] = useRecoilState(postsAtom);
-	const { username } = useParams();
-
-	const handleTextChange = (e) => {
-		const inputText = e.target.value;
-
-		if (inputText.length > MAX_CHAR) {
-			const truncatedText = inputText.slice(0, MAX_CHAR);
-			setPostText(truncatedText);
-			setRemainingChar(0);
-		} else {
-			setPostText(inputText);
-			setRemainingChar(MAX_CHAR - inputText.length);
-		}
-	};
-
-	const handleCreatePost = async () => {
-		setLoading(true);
-		try {
-			const res = await fetch("/api/posts/create", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ postedBy: user._id, text: postText, img: imgUrl }),
-			});
-
-			const data = await res.json();
-			if (data.error) {
-				showToast("Error", data.error, "error");
-				return;
-			}
-			showToast("Success", "Post created successfully", "success");
-			if (username === user.username) {
-				setPosts([data, ...posts]);
-			}
-			onClose();
-			setPostText("");
-			setImgUrl("");
-		} catch (error) {
-			showToast("Error", error, "error");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	return (
-		<>
-			<Button
-				position={"fixed"}
-				bottom={10}
-				right={5}
-				bg={useColorModeValue("gray.300", "gray.dark")}
-				onClick={onOpen}
-				size={{ base: "sm", sm: "md" }}
-			>
-				<AddIcon />
-			</Button>
-
-			<Modal isOpen={isOpen} onClose={onClose}>
-				<ModalOverlay />
-
-				<ModalContent>
-					<ModalHeader>Create Post</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody pb={6}>
-						<FormControl>
-							<Textarea
-								placeholder='Post content goes here..'
-								onChange={handleTextChange}
-								value={postText}
-							/>
-							<Text fontSize='xs' fontWeight='bold' textAlign={"right"} m={"1"} color={"gray.800"}>
-								{remainingChar}/{MAX_CHAR}
-							</Text>
-
-							<Input type='file' hidden ref={imageRef} onChange={handleImageChange} />
-
-							<BsFillImageFill
-								style={{ marginLeft: "5px", cursor: "pointer" }}
-								size={16}
-								onClick={() => imageRef.current.click()}
-							/>
-						</FormControl>
-
-						{imgUrl && (
-							<Flex mt={5} w={"full"} position={"relative"}>
-								<Image src={imgUrl} alt='Selected img' />
-								<CloseButton
-									onClick={() => {
-										setImgUrl("");
-									}}
-									bg={"gray.800"}
-									position={"absolute"}
-									top={2}
-									right={2}
-								/>
-							</Flex>
-						)}
-					</ModalBody>
-
-					<ModalFooter>
-						<Button colorScheme='blue' mr={3} onClick={handleCreatePost} isLoading={loading}>
-							Post
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
-	);
-};
-
-export default CreatePost;
+function Createpost({ onClose }) {
+    const [heading, setHeading] = useState('');
+    const [description, setDescription] = useState('');
+    const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
+  
+    const handleHeadingChange = (event) => {
+      setHeading(event.target.value);
+    };
+  
+    const handleDescriptionChange = (event) => {
+      setDescription(event.target.value);
+    };
+  
+    const handlePost = () => {
+      console.log("Post content:", { heading, description });
+      onClose();
+    };
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="border-2 border-primary-pink rounded-[20px] bg-black bg-opacity-80 backdrop-blur-lg w-96 p-6 text-white relative">
+            <button onClick={onClose} className="absolute top-4 right-4 text-white">
+              <IoMdClose size={24} />
+            </button>
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center space-x-2">
+                <span>Post to:</span>
+                <div className="bg-purple-600 px-3 py-1 rounded-full">#natural</div>
+              </div>
+              <textarea
+            className="w-full p-0 bg-transparent text-white placeholder-gray-400 text-2xl focus:outline-none"
+            value={heading}
+            onChange={handleHeadingChange}
+            maxLength="100"
+            placeholder="Heading" 
+          />
+              <textarea
+                className="w-full p-2 bg-gray-700 border-2 border-primary-pink  rounded-lg text-white placeholder-gray-400"
+                value={description}
+                onChange={handleDescriptionChange}
+                maxLength="500"
+                placeholder="Description"
+              />
+              <div className="flex items-center">
+              <label className="cursor-pointer flex items-center justify-end">
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageChange} 
+                className="hidden" 
+              />
+              <MdAddPhotoAlternate size={30} className="text-purple-500" />
+            </label>
+              </div>
+              {imgUrl && (
+                <div className="mb-4">
+                  <img src={imgUrl} alt="Preview" className="w-full h-auto rounded-lg" />
+                </div>
+              )}
+              <div className="flex justify-center">
+                <button onClick={handlePost} className="bg-white hover:bg-purple-600 text-black p-2 font-bold border-2 border-primary-pink rounded-[30px] w-40">Post</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    export default Createpost;

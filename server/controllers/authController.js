@@ -66,13 +66,11 @@ const SigninUser = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Check if the provided password matches the stored password
         const match = await comparePassword(password, user.password);
         if (!match) {
             return res.status(401).json({ error: "Password does not match" });
         }
 
-        // Generate JWT token
         const token = jwt.sign(
             { email: user.email, id: user._id, username: user.username },
             process.env.JWT_SECRET,
