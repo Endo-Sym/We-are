@@ -9,7 +9,7 @@ function Createpost({ onClose, addPost }) {
     const [description, setDescription] = useState('');
     const [tag, setTag] = useState("");
 
-    const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
+    const { handleImageChange, imgUrl,  } = usePreviewImg();
     const { user } = useContext(UserContext); 
 
     const handleTagChange = (event) => {

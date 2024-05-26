@@ -1,6 +1,6 @@
 import express from 'express';
 import { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts } from './controllers/postController.js';
-import { authenticate } from './middleware/auth.js'; 
+import protectRoute from "../middlewares/protectRoute.js";
 const router = express.Router();
 
 router.post('/posts', authenticate, createPost);
