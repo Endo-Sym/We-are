@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Perdata from "./pages/Perdata";
 import Pertest from "./pages/Pertest";
 import Resource from "./pages/Resource";
+import FormNewUser from "./pages/FormNewUser";
 import { Toaster }  from 'react-hot-toast';
 import axios from "axios";
 import { UserContextProvider } from "../context/Usercontext";
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/resource" element={<Resource showSidebar={showSidebar}/>} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/formnewuser" element={<FormNewUser />} />
       </Routes>
     </BrowserRouter>
     </UserContextProvider>
