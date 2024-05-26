@@ -1,4 +1,4 @@
-//123
+
 import Sidebar from '../components/Sidebar';
 
 export default function Home({ showSidebar }){
