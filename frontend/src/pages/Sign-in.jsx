@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast, Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
@@ -8,15 +5,18 @@ import logo from '/assets/images/logo.png';
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from 'gapi-script';
 import { FaGoogle } from "react-icons/fa";
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../context/Usercontext';
+import axios from 'axios';
+import { Toaster, toast } from 'react-hot-toast';
 
 function Signin() {
   const clientId = "534684648759-do7luvuc5v62ljngha89jillc4s2o6kn.apps.googleusercontent.com";
   const navigate = useNavigate(); 
+  const { setUser } = useContext(UserContext);
 
-  const [profile, setProfile] = useState(null);
   const [data, setData] = useState({
-    username: '',
-    email: '',
+    identifier: '',
     password: ''
   });
 
@@ -31,20 +31,15 @@ function Signin() {
   }, [clientId]);
 
   const onSuccess = (res) => {
-    console.log('success', res);
-    setProfile(res.profileObj);
-    setIsSuccessModalOpen(true);
+    console.log('Google login success:', res);
+    setUser(res.profileObj);
     setTimeout(() => {
       navigate('/');
     }, 3000); 
   };
 
   const onFailure = (res) => {
-    console.log('failed', res);
-  };
-
-  const logOut = () => {
-    setProfile(null);
+    console.log('Google login failed:', res);
   };
 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -53,22 +48,17 @@ function Signin() {
 
   const SigninUser = async (e) => {
     e.preventDefault();
-    const { email, username, password } = data;
+    const { identifier, password } = data;
     try {
-      const response = await axios.post('/Sign-in', {
-        email,
-        username,
-        password
-      });
+      const response = await axios.post('/Sign-in', { identifier, password });
       const result = response.data;
+      
       if (result.error) {
         toast.error(result.error);
       } else {
-        setData({
-          username: '',
-          email: '',
-          password: ''
-        });
+        console.log('User data:', result);
+        setUser(result.user);
+        setData({ identifier: '', password: '' });
         setIsSuccessModalOpen(true);
         setTimeout(() => {
           navigate('/');
@@ -116,14 +106,15 @@ function Signin() {
             onFailure={onFailure}
             cookiePolicy={"single_host_origin"}
             isSignedIn={true}
+            prompt="select_account"
           />
           <label className="text-[#A8A6A6]">
             <p>Username or Email Address</p>
             <input
               className='blank-space text-white font-medium bg-gray-700 border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 20px] rounded-[16px] w-full px-4 py-3 mt-2'
               type="text"
-              value={data.username || data.email}
-              onChange={(e) => setData({ ...data, username: e.target.value, email: e.target.value })}
+              value={data.identifier}
+              onChange={(e) => setData({ ...data, identifier: e.target.value })}
             />
           </label>
           <label>
