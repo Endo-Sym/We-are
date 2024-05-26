@@ -30,7 +30,7 @@ export const GenderQuestion = ({ onNext }) => {
             <div
               key={gender}
               className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer ${
-                selectedGender === gender ? 'bg-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
+                selectedGender === gender ? 'bg-fuchsia-500 border-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
               }`}
               onClick={() => handleGenderClick(gender)}
             >
@@ -39,9 +39,9 @@ export const GenderQuestion = ({ onNext }) => {
           ))}
         </div>
       </div>
-        <div className="text-center">
+        <div className="text-center ">
           <button
-            className="w-10 h-10 rounded-full bg-fuchsia-500 text-white flex items-center justify-center"
+            className=" flex items-center justify-center w-[55px] h-[55px] rounded-full bg-fuchsia-500 text-white text-[45px]"
             onClick={handleNextClick}
           >
             &gt;
@@ -109,7 +109,7 @@ export const BirthdayQuestion = ({ onNext }) => {
         </div>
         <div className="text-center">
           <button
-            className="w-10 h-10 rounded-full bg-fuchsia-500 text-white flex items-center justify-center"
+            className=" flex items-center justify-center w-[55px] h-[55px] rounded-full bg-fuchsia-500 text-white text-[45px]"
             onClick={handleNextClick}
             disabled={!day || !month || !year}
           >
@@ -169,7 +169,7 @@ export const FriendDateQuestion = ({ onNext }) => {
             <div
               key={gender}
               className={`w-[140px] h-[50px] rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer ${
-                selectedFriendGender === gender ? 'bg-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
+                selectedFriendGender === gender ? 'bg-fuchsia-500 border-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
               }`}
               onClick={() => handleFriendGenderClick(gender)}
             >
@@ -184,7 +184,7 @@ export const FriendDateQuestion = ({ onNext }) => {
             <div
               key={gender}
               className={`w-[140px] h-[50px] rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer ${
-                selectedDateGender === gender ? 'bg-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
+                selectedDateGender === gender ? 'bg-fuchsia-500 border-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
               }`}
               onClick={() => handleDateGenderClick(gender)}
             >
@@ -195,7 +195,7 @@ export const FriendDateQuestion = ({ onNext }) => {
         </div>
         <div className="text-center">
           <button
-            className="w-10 h-10 rounded-full bg-fuchsia-500 text-white flex items-center justify-center"
+            className=" flex items-center justify-center w-[55px] h-[55px] rounded-full bg-fuchsia-500 text-white text-[45px]"
             onClick={handleNextClick}
           >
             &gt;
@@ -242,7 +242,7 @@ export const InterestQuestion = ({ onNext }) => {
             <div
               key={interest}
               className={`w-[140px] h-[40px] rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer ${
-                selectedInterests.includes(interest) ? 'bg-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
+                selectedInterests.includes(interest) ? 'bg-fuchsia-500 border-fuchsia-500' : 'bg-stone-950 border-fuchsia-500'
               }`}
               onClick={() => handleInterestClick(interest)}
             >
@@ -252,7 +252,7 @@ export const InterestQuestion = ({ onNext }) => {
         </div>
         <div className="text-center mt-2">
           <button
-            className="w-10 h-10 rounded-full bg-fuchsia-500 text-white flex items-center justify-center"
+            className=" flex items-center justify-center w-[55px] h-[55px] rounded-full bg-fuchsia-500 text-white text-[45px]"
             onClick={handleNextClick}
             disabled={selectedInterests.length < 5}
           >
