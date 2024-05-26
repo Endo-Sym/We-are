@@ -45,8 +45,8 @@ def preprocess_text(text):
 @app.route('/predict', methods=['POST'])
 def predict():
     req = request.get_json()
-    message = req['message']
-    prediction = model.predict([preprocess_text(message)])
+    text = req['text']
+    prediction = model.predict([preprocess_text(text)])
     prediction_list = prediction.tolist()
     return jsonify({'prediction': prediction_list})
 
