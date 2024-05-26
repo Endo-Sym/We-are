@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react'; // เพิ่ม useContext เข้ามาจาก react
 import { IoMdClose } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import usePreviewImg from './Previewingimga';
+import { UserContext } from '../../context/Usercontext'; 
 
 function Createpost({ onClose }) {
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
+    const [tag, setTag] = useState("");
+
     const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
-  
+    const { user, setUser } = useContext(UserContext); 
+    const handleTagChange = (event) =>{
+        setTag(event.target.value);
+    }
+
     const handleHeadingChange = (event) => {
       setHeading(event.target.value);
     };
@@ -31,13 +38,17 @@ function Createpost({ onClose }) {
                 <span>Post to:</span>
                 <div className="bg-purple-600 px-3 py-1 rounded-full">#natural</div>
               </div>
+              <div className="flex items-center gap-2">
+              <img src={user.imageUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
+              <p className="text-left">{user.name ?? user.username}</p>
+              </div>
               <textarea
-            className="w-full p-0 bg-transparent text-white placeholder-gray-400 text-2xl focus:outline-none"
-            value={heading}
-            onChange={handleHeadingChange}
-            maxLength="100"
-            placeholder="Heading" 
-          />
+                className="w-full p-0 bg-transparent text-white placeholder-gray-400 text-2xl focus:outline-none"
+                value={heading}
+                onChange={handleHeadingChange}
+                maxLength="100"
+                placeholder="Heading" 
+              />
               <textarea
                 className="w-full p-2 bg-gray-700 border-2 border-primary-pink  rounded-lg text-white placeholder-gray-400"
                 value={description}
@@ -46,15 +57,15 @@ function Createpost({ onClose }) {
                 placeholder="Description"
               />
               <div className="flex items-center">
-              <label className="cursor-pointer flex items-center justify-end">
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleImageChange} 
-                className="hidden" 
-              />
-              <MdAddPhotoAlternate size={30} className="text-purple-500" />
-            </label>
+                <label className="cursor-pointer flex items-center justify-end">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleImageChange} 
+                    className="hidden" 
+                  />
+                  <MdAddPhotoAlternate size={30} className="text-purple-500" />
+                </label>
               </div>
               {imgUrl && (
                 <div className="mb-4">
@@ -70,4 +81,4 @@ function Createpost({ onClose }) {
       );
     }
     
-    export default Createpost;
+export default Createpost;
