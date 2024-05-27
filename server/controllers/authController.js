@@ -119,7 +119,6 @@ const getprofile = async (req, res) => {
 
     try {
         let user;
-        // Check if the user is logged in
         if (id) {
             if (mongoose.Types.ObjectId.isValid(id)) {
                 user = await User.findOne({ _id: id }).select("-password -updatedAt");
