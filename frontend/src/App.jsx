@@ -32,7 +32,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home showSidebar={showSidebar}/>} />
         <Route path="/match" element={<Match showSidebar={showSidebar}/>} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile showSidebar={showSidebar}/>} />
         <Route path="/perdata" element={<Perdata showSidebar={showSidebar}/>} />
         <Route path="/pertest" element={<Pertest showSidebar={showSidebar}/>} />
         <Route path="/resource" element={<Resource showSidebar={showSidebar}/>} />

@@ -14,7 +14,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
     };
 
     return (
-        <div className="w-96 h-96 relative bg-stone-950 shadow">
+        <div className="w-full h-full relative bg-stone-950 shadow">
             <form onSubmit={handleSubmit} className="px-4 py-6">
                 {/* Profile Inputs */}
                 <input
@@ -94,14 +94,14 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                 <div className="flex justify-between mt-4">
                     <button
                         type="submit"
-                        className="w-1/2 h-12 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none text-black"
+                        className="w-1/2 h-12 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none"
                     >
                         Save
                     </button>
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="w-1/2 h-12 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none text-black"
+                        className="w-1/2 h-12 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
                     >
                         Cancel
                     </button>

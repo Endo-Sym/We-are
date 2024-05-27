@@ -15,10 +15,14 @@ router.use(
 )
 
 // router.get("/", test)
-router.post('/Sign-up' , SignupUser)
+router.post("/Sign-up" , SignupUser)
 router.post("/Sign-in" , SigninUser)
 router.get("/profile", getprofile)
 router.get("/profile/:id", getprofile)
+router.get("/logout", (req, res) => {
+    res.clearCookie("token");
+    res.json({ message: "Logged out" })
+});
 
 
 module.exports = router;

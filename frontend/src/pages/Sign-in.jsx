@@ -49,8 +49,9 @@ function Signin() {
   const SigninUser = async (e) => {
     e.preventDefault();
     const { identifier, password } = data;
+
     try {
-      const response = await axios.post('/Sign-in', { identifier, password });
+      const response = await axios.post('/Sign-in', { identifier, password }, {credentials: "include"});
       const result = response.data;
       
       if (result.error) {

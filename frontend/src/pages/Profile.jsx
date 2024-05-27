@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import ProfileEdit from '../components/ProfileEdit';
 import Sidebar from '../components/Sidebar';
+import Loading from '../components/Loading';
 import profilePic from '../../assets/images/profile-pic.svg';
 
-const Profile = () => {
+const Profile = ({ showSidebar }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [profileData, setProfileData] = useState({
         name: 'Cactus',
         role: 'Student',
@@ -45,9 +47,11 @@ const Profile = () => {
     };
 
     return (
-        <div className="w-full h-screen flex flex-col items-center justify-center border-black bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
-            <Sidebar showSidebar={true} />
-            <div className="w-3/4 h-3/4 relative bg-transparent flex flex-col items-center justify-center p-2">
+        <>
+            <Sidebar showSidebar={showSidebar} />
+            <Loading isLoading={isLoading}/>
+            <div className={`flex bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full`}>
+                <div className="w-3/4 h-3/4 relative bg-transparent flex flex-col items-center justify-center p-2">
                 {!isEditing ? (
                     <>
                         <div className="relative mb-4 flex flex-col items-center">
@@ -124,8 +128,9 @@ const Profile = () => {
                         </div>
                     </>
                 )}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

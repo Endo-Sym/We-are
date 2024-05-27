@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Sidebar from '../components/Sidebar';
+import Loading from '../components/Loading';
 import Createpost from '../components/Createpost';
 import icon__star_ from '/assets/images/icon__star_.svg';
 import icon_comment from '/assets/images/icon_comment.svg';
@@ -36,7 +37,7 @@ export default function Home({ showSidebar }) {
                 const fetchPostData = fetchPost.data;
 
                 for (let i = 0; i < fetchPostData.length; i++) {
-                    const fetchPostUser = await axios.get(`/profile/${fetchPostData[0].postedBy}`);
+                    const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
                     const fetchPostUserData = fetchPostUser.data;
 
                     combinedData.push({
@@ -105,15 +106,15 @@ export default function Home({ showSidebar }) {
     }
 
     const [tags, setTags] = useState([
-        "#books",
-        "#learning",
-        "#history",
-        "#food",
-        "#movie",
-        "#gaming",
-        "#memes",
-        "#art",
-        "#technology"
+        "books",
+        "learning",
+        "history",
+        "food",
+        "movie",
+        "gaming",
+        "memes",
+        "art",
+        "technology"
     ]);
 
     const getDate = (e) => {
@@ -133,13 +134,7 @@ export default function Home({ showSidebar }) {
     return (
         <>
             <Sidebar showSidebar={showSidebar} />
-            {isLoading &&
-                <div className={`w-full h-full fixed overflow-hidden z-10 bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed flex flex-col gap-4 justify-center items-center `}>
-                    <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-primary-pink">
-                    </div>
-                    <p className="text-primary-pink text-[20px] font-normal font-nunito">Loading...</p>
-                </div>
-            }
+            <Loading isLoading={isLoading}/>
             <div className={`flex bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full`}>
                 <div className="relative flex flex-1 overflow-y-auto">
                     <section className={`flex fixed w-[35%] py-8 px-4 overflow-hidden z-10`}>
@@ -147,7 +142,7 @@ export default function Home({ showSidebar }) {
                             <h1 className="text-[40px] text-center relative z-20 max-w-full">Universes</h1>
                             <div className="flex flex-col gap-3">
                                 {tags.map((tag, index) => (
-                                    <div key={index} className="text-xl border border-primary-pink w-fit rounded-[20px] p-2 hover:cursor-pointer" onClick={() => handleTagClick(tag)}>{tag}</div>
+                                    <div key={index} className="text-xl border border-primary-pink w-fit rounded-[20px] p-2 hover:cursor-pointer" onClick={() => handleTagClick(tag)}>#{tag}</div>
                                 ))}
                             </div>
                         </div>
@@ -161,7 +156,7 @@ export default function Home({ showSidebar }) {
                                             <div className="flex items-center gap-2">
                                                 <img src={post.user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                                                 <p className="text-left">{post.user.name ?? post.user.username}</p>
-                                                <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">{post.user.userType}</p>
+                                                {post.postData.tags && <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">#{post.postData.tags}</p>}
                                                 <div className="flex-grow"></div>
                                                 <p className="text-center">{getDate(post)}</p>
                                             </div>

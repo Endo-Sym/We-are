@@ -1,6 +1,7 @@
 const User = require('../Model/user');
 const { hashPassword, comparePassword } = require('../password/password_manager');
 const jwt = require('jsonwebtoken');
+const { createSecretToken } = require('../tokenGeneration/generateToken');
 const mongoose = require('mongoose');
 
 const test = (req, res) => {
@@ -71,15 +72,26 @@ const SigninUser = async (req, res) => {
             return res.status(401).json({ error: "Password does not match" });
         }
 
-        const token = jwt.sign(
-            { email: user.email, id: user._id, username: user.username },
-            process.env.JWT_SECRET,
-            {},
-            (err, token) => {
-                if (err) throw err;
-                res.cookie("token", token).json(user);
-            }
-        );
+        const token = createSecretToken(user._id);
+        res.cookie("token", token, {
+            path: "/", // Cookie is accessible from all paths
+            expires: new Date(Date.now() + 86400000), // Cookie expires in 1 day
+            secure: false, // Cookie will only be sent over HTTPS
+            httpOnly: false, // Cookie cannot be accessed via client-side scripts
+            sameSite: "None",
+        });
+
+        res.json(user);
+
+        // const token = jwt.sign(
+        //     { email: user.email, id: user._id, username: user.username },
+        //     process.env.JWT_SECRET,
+        //     {},
+        //     (err, token) => {
+        //         if (err) throw err;
+        //         res.cookie("token", token).json(user);
+        //     }
+        // );
 
     } catch (error) {
         console.error(error);
@@ -119,21 +131,31 @@ const getprofile = async (req, res) => {
 
     try {
         let user;
+
         if (id) {
             if (mongoose.Types.ObjectId.isValid(id)) {
                 user = await User.findOne({ _id: id }).select("-password -updatedAt");
             } else {
                 user = await User.findOne({ username: id }).select("-password -updatedAt");
             }
-        } else if (token) { // If not logged in but has a token
+        } else if (token) {
+            // Verify the token
             jwt.verify(token, process.env.JWT_SECRET, {}, async (err, decoded) => {
-                if (err) throw err;
-                // Decode the token and find user
+                if (err) {
+                    return res.status(401).json({ error: "Invalid token" });
+                }
                 user = await User.findById(decoded.id).select("-password -updatedAt");
+                res.json(user);
             });
+            // Return here to avoid sending response multiple times
+            return;
+        } else if (!token) {
+            return res.status(401).json({ error: "Token not provided" });
         }
 
-        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
 
         res.json(user);
     } catch (err) {
