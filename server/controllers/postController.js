@@ -1,12 +1,28 @@
-import Post from '../Modelod/post.js';
-import User from '../Models/user.js';
-import { v2 as cloudinary } from 'cloudinary';
+// import Post from '../Modelod/post.js';
+// import User from '../Models/user.js';
+const { v2: cloudinary } = require('cloudinary');
+const User = require('../Model/user');
+const Post = require('../Model/post');
+
+const test = (req, res) => {
+  const { test } = req.body;
+  res.json({ message: "yayyy", data: test});
+};
 
 const createPost = async (req, res) => {
   try {
-    const { postedBy, text, img } = req.body;
+    const { 
+      postedBy,
+      tags,
+      heading,
+      description,
+      imgUrl,
+      likes,
+      comments,
+      shares
+    } = req.body;
 
-    if (!postedBy || !text) {
+    if (!postedBy || !heading || !description) {
       return res.status(400).json({ error: "PostedBy and text fields are required" });
     }
 
@@ -15,18 +31,23 @@ const createPost = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const maxLength = 600;
-    if (text.length > maxLength) {
-      return res.status(400).json({ error: `Text must be less than ${maxLength} characters` });
+    const maxHeadingLength = 100;
+    if (heading.length > maxHeadingLength) {
+      return res.status(400).json({ error: `Heading must be less than ${maxHeadingLength} characters` });
+    }
+
+    const maxDescriptionLength = 600;
+    if (description.length > maxDescriptionLength) {
+      return res.status(400).json({ error: `Description must be less than ${maxDescriptionLength} characters` });
     }
 
     let imageUrl = '';
-    if (img) {
-      const uploadedResponse = await cloudinary.uploader.upload(img);
+    if (imgUrl) {
+      const uploadedResponse = await cloudinary.uploader.upload(imgUrl);
       imageUrl = uploadedResponse.secure_url;
     }
 
-    const newPost = new Post({ postedBy, text, img: imageUrl, userId: user._id });
+    const newPost = new Post({ ...req.body, imgUrl: imageUrl});
     await newPost.save();
 
     res.status(201).json(newPost);
@@ -152,4 +173,37 @@ const getUserPosts = async (req, res) => {
   }
 };
 
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts };
+const getTagPost = async (req, res) => {
+  const { tag } = req.params;
+  try {
+    const post = await Post.find({ tags: tag });
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+const fetchPost = async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { 
+  createPost, 
+  getPost, 
+  deletePost, 
+  likeUnlikePost, 
+  replyToPost, 
+  getFeedPosts, 
+  getUserPosts, 
+  getTagPost, 
+  test,
+  fetchPost
+};

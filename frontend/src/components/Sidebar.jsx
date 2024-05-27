@@ -38,7 +38,8 @@ export default function Sidebar({ showSidebar }){
                 {showSidebar && <button className={`text-left flex-1 group-hover:text-primary-pink transition-colors ${pageActive === "/" ? "text-primary-pink" : ""}`}>Home</button>}
             </div>
             <div id="/match" onClick={routeChange} className="flex cursor-pointer group gap-1">
-                <div className="flex items-center justify-center h-14 w-14">
+                <div className="flex items-center justify-center h-14 w-14 relative">
+                    {/* <div class="opacity-0 group-hover:opacity-100 duration-300 absolute z-10 left-12 w-full flex justify-center items-center text-6xl text-white font-semibold">Match</div> */}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 34" className="size-10" fill="none">
                         <g filter="url(#a)">
                             <path stroke="#fff" strokeWidth="5" d="m15.601 6.58-3.655 6.1a1 1 0 0 1-.6.452l-7.678 2.053a1 1 0 0 0-.452 1.67l5.187 5.223a1 1 0 0 1 .267.918l-1.538 7.028a1 1 0 0 0 1.363 1.136l7.578-3.168a1 1 0 0 1 .772 0l7.578 3.168a1 1 0 0 0 1.363-1.136l-1.545-7.056a1 1 0 0 1 .236-.886l4.77-5.259a1 1 0 0 0-.468-1.633l-7.218-2.055a1 1 0 0 1-.584-.447l-3.66-6.109a1 1 0 0 0-1.716 0Z" className={`group-hover:stroke-primary-pink transition-colors ${pageActive === "/match" ? "stroke-primary-pink" : ""}`}/>
@@ -71,7 +72,7 @@ export default function Sidebar({ showSidebar }){
                 </div>
                 {showSidebar && <button className={`text-left flex-1 group-hover:text-primary-pink transition-colors ${pageActive === "/pertest" ? "text-primary-pink" : ""}`}>Personality Test</button>}
             </div>
-            <div id="/resource" onClick={routeChange} className="flex cursor-pointer group gap-1">
+            {/* <div id="/resource" onClick={routeChange} className="flex cursor-pointer group gap-1">
                 <div className="flex items-center justify-center h-14 w-14">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 41" className="size-8" fill="none">
                         <path stroke="#fff" strokeLinecap="round" strokeWidth="4" d="M14 19.25h14M11.375 12.25h19.25M11.375 26.25h19.25" className={`group-hover:stroke-primary-pink transition-colors ${pageActive === "/resource" ? "stroke-primary-pink" : ""}`}/>
@@ -79,7 +80,7 @@ export default function Sidebar({ showSidebar }){
                     </svg> 
                 </div>
                 {showSidebar && <button className={`text-left flex-1 group-hover:text-primary-pink transition-colors ${pageActive === "/resource" ? "text-primary-pink" : ""}`}>Resources</button>}
-            </div>
+            </div> */}
 
             {/* <button name="/signin" onClick={routeChange}>Sign-in</button>
             <button name="/signup" onClick={routeChange}>Sign-up</button> */}

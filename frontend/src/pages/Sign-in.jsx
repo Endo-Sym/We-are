@@ -57,7 +57,7 @@ function Signin() {
         toast.error(result.error);
       } else {
         console.log('User data:', result);
-        setUser(result.user);
+        setUser(result);
         setData({ identifier: '', password: '' });
         setIsSuccessModalOpen(true);
         setTimeout(() => {

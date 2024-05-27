@@ -14,10 +14,11 @@ router.use(
     })
 )
 
-router.get("/", test)
+// router.get("/", test)
 router.post('/Sign-up' , SignupUser)
 router.post("/Sign-in" , SigninUser)
 router.get("/profile", getprofile)
+router.get("/profile/:id", getprofile)
 
 
 module.exports = router;
