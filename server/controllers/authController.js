@@ -88,29 +88,55 @@ const SigninUser = async (req, res) => {
 };
 
 
+// const getprofile = async (req, res) => {
+//     const { id } = req.params;
+//     const { token } = req.cookies;
+
+//     try {
+//         let user;
+
+//         if (mongoose.isValidObjectId(id)) {
+//             user = await User.findOne({ _id: id }).select("-password -updatedAt");
+//         } else if (token) {
+//             jwt.verify(token, process.env.JWT_SECRET, {}, (err, decoded) => {
+//                 if (err) throw err;
+//                 user = User.findOne({ _id: decoded.id }).select("-password -updatedAt");
+//                 res.json(user);
+//             });
+//         };
+
+//         return res.status(404).json({ error: "User not found" });
+
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//         console.log("Error in getUserProfile: ", err.message);
+//     }
+// };
+
 const getprofile = async (req, res) => {
-    const { query } = req.params;
+    const { id } = req.params;
     const { token } = req.cookies;
 
     try {
         let user;
-
-        if (mongoose.Types.ObjectId.isValid(query)) {
-            user = await User.findOne({ _id: query }).select("-password -updatedAt");
-        } else {
-            user = await User.findOne({ username: query }).select("-password -updatedAt");
+        // Check if the user is logged in
+        if (id) {
+            if (mongoose.Types.ObjectId.isValid(id)) {
+                user = await User.findOne({ _id: id }).select("-password -updatedAt");
+            } else {
+                user = await User.findOne({ username: id }).select("-password -updatedAt");
+            }
+        } else if (token) { // If not logged in but has a token
+            jwt.verify(token, process.env.JWT_SECRET, {}, async (err, decoded) => {
+                if (err) throw err;
+                // Decode the token and find user
+                user = await User.findById(decoded.id).select("-password -updatedAt");
+            });
         }
 
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        if (token) {
-            jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-                if (err) throw err;
-                res.json(user);
-            });
-        } else {
-            res.json(null);
-        }
+        res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
         console.log("Error in getUserProfile: ", err.message);

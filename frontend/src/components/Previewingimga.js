@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const usePreviewImg = () => {
-	const [imgUrl, setImgUrl] = useState(null);
+	const [imgUrl, setImgUrl] = useState("");
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
 		if (file && file.type.startsWith("image/")) {
@@ -13,7 +13,7 @@ const usePreviewImg = () => {
 
 			reader.readAsDataURL(file);
 		} else {
-			setImgUrl(null);
+			setImgUrl("");
 		}
 	};
 	return { handleImageChange, imgUrl, setImgUrl };

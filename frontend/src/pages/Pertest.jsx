@@ -64,10 +64,8 @@ export default function Pertest({ showSidebar }){
                 </div>
                 <div className="flex flex-col items-center h-full w-[600px] max-lg:w-full">
                     <label className="w-full p-2 py-0 text-[22px] font-semibold text-white mt-3"> 
-                        <p className="">
-                            Dialogue: 
-                            {isVoid && <p className="inline font-medium text-[18px] text-red-500 mx-2">(Please enter text before analyze)</p>}
-                        </p>
+                        Dialogue: 
+                        {isVoid && <span className="inline font-medium text-[18px] text-red-500 mx-2">(Please enter text before analyze)</span>}
                     </label>
                     <textarea id="message" rows="" className="block px-5 py-2 w-full min-h-[6rem] text-[18px] font-medium text-gray-900 border border-[#CE9EFF] shadow-[rgba(223,_28,_255,_0.6)_0px_0px_16px] rounded-[20px] bg-gradient-to-r from-[#FFFFFF] from-0% to-[#B770FF] to-89% focus:outline-none overscroll-contain" onChange={handleTextChange}></textarea>
                     <p className='text-white w-full p-2 py-1 text-[14px]'>{textCount}/6500</p>

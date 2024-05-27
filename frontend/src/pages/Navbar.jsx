@@ -41,7 +41,7 @@ export default function Home({ toggleNavbar, showSidebar }) {
     }
 
     return (
-        <div className="font-nunito">
+        <div className="font-nunito relative z-50">
             <section className="fixed top-0 h-[60px] w-full bg-primary-pink bg-opacity-[16%] backdrop-blur-sm">
                 <div className="grid grid-cols-[20%_auto_20%] gap-2 h-full max-w-full mx-6">
                     <div className="flex items-center gap-8 col-span-1">
@@ -61,7 +61,7 @@ export default function Home({ toggleNavbar, showSidebar }) {
                         {user ? (
                             <>
                                 <p className="text-right">{user.name ?? user.username}</p>
-                                <img src={user.imageUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
+                                <img src={user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                             </>
                         ) : (
                             <a href="/signin" className="flex items-center justify-end gap-3 text-white col-span-1">

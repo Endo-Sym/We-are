@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+const mongoose= require("mongoose")
+const {Schema} = mongoose
 
 const postSchema = new mongoose.Schema({
     postedBy: {
@@ -6,43 +7,57 @@ const postSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    text: {
+    tags: {
+        type: String,
+        default: ''
+    },
+    heading: {
+        type: String,
+        maxLength: 100
+    },
+    description: {
         type: String,
         maxLength: 600
     },
-    img: {
-        type: String
+    imgUrl: {
+        type: String,
+        default: ''
     },
     likes: {
         type: Number,
         default: 0
     },
-    comment: [
-        {
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-                required: true
-            },
-            text: {
-                type: String,
-                required: true
-            },
-            ProfilePicture: {
-                type: String
-            },
-            username: {
-                type: String
-            }
-        }
+    comments: [
+        // {
+        //     userId: {
+        //         type: mongoose.Schema.Types.ObjectId,
+        //         ref: "User",
+        //         required: true
+        //     },
+        //     text: {
+        //         type: String,
+        //         required: true
+        //     },
+        //     ProfilePicture: {
+        //         type: String
+        //     },
+        //     username: {
+        //         type: String
+        //     }
+        // }
     ],
-    userId: {  
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+    shares: {
+        type: Number,
+        default: 0
     }
+    // ,
+    // userId: {  
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "User",
+    //     required: true
+    // }
 }, { timestamps: true });
 
 const Post = mongoose.model("Post", postSchema);
 
-export default Post;
+module.exports = Post

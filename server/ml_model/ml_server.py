@@ -11,12 +11,12 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 model = load('server/ml_model/model.sav')
 
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('wordnet')
+# nltk.download('stopwords')
+# nltk.download('punkt')
+# nltk.download('wordnet')
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
-
+nltk.download('omw-1.4')
 # Preprocess text
 def preprocess_text(text):
     # lowercase
