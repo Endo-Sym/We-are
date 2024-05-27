@@ -16,7 +16,7 @@ model = load('server/ml_model/model.sav')
 # nltk.download('wordnet')
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
-
+nltk.download('omw-1.4')
 # Preprocess text
 def preprocess_text(text):
     # lowercase
