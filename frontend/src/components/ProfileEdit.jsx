@@ -1,4 +1,3 @@
-// ProfileEdit.jsx
 import React, { useState } from 'react';
 
 const ProfileEdit = ({ profile, onSave, onCancel }) => {
@@ -24,7 +23,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.name}
                     onChange={handleChange}
                     placeholder="Name"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -32,7 +31,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.role}
                     onChange={handleChange}
                     placeholder="Role"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -40,7 +39,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.status}
                     onChange={handleChange}
                     placeholder="Status"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -48,7 +47,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.address}
                     onChange={handleChange}
                     placeholder="Address"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -56,7 +55,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.gender}
                     onChange={handleChange}
                     placeholder="Gender"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -64,7 +63,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.idWeAre}
                     onChange={handleChange}
                     placeholder="ID We Are"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -72,7 +71,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.lookingFor}
                     onChange={handleChange}
                     placeholder="Looking For"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -80,7 +79,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.type16}
                     onChange={handleChange}
                     placeholder="Type16"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
                 <input
                     type="text"
@@ -88,21 +87,21 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     value={editedProfile.interests}
                     onChange={handleChange}
                     placeholder="Interests"
-                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500"
+                    className="w-full h-12 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                 />
 
                 {/* Action Buttons */}
                 <div className="flex justify-between mt-4">
                     <button
                         type="submit"
-                        className="w-1/2 h-12 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none"
+                        className="w-1/2 h-12 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none text-black"
                     >
                         Save
                     </button>
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="w-1/2 h-12 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
+                        className="w-1/2 h-12 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none text-black"
                     >
                         Cancel
                     </button>

@@ -13,7 +13,6 @@ import FormNewUser from "./pages/FormNewUser";
 import { Toaster }  from 'react-hot-toast';
 import axios from "axios";
 import { UserContextProvider } from "../context/Usercontext";
-
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true
 

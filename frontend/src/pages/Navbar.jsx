@@ -60,8 +60,8 @@ export default function Home({ toggleNavbar, showSidebar }) {
                         <CiLogout onClick={handleLogoutClick} className="cursor-pointer" />
                         {user ? (
                             <>
-                                <p className="text-right">{user.name ?? user.username}</p>
-                                <img src={user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
+                                <a className="text-right" href="/profile">{user.name ?? user.username}</a>
+                                <img src={user.imgUrl} alt="User"  className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                             </>
                         ) : (
                             <a href="/signin" className="flex items-center justify-end gap-3 text-white col-span-1">

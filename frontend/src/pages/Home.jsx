@@ -12,10 +12,10 @@ import axios from 'axios';
 export default function Home({ showSidebar }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [posts, setPosts] = useState([]);
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedPosts, setExpandedPosts] = useState({});
-
+    const [comments,setcoments] = useState({})
 
 
     const handleOpenModal = () => {
@@ -83,7 +83,11 @@ export default function Home({ showSidebar }) {
             return updatedPosts;
         });
     }
+    const handlecomments = async () => {}
 
+        const newcomments = {
+            
+        };
     const toggleComment = (postId) => {
         setExpandedPosts(prevExpandedPosts => ({
             ...prevExpandedPosts,
@@ -188,7 +192,6 @@ export default function Home({ showSidebar }) {
                                             <div className="mt-4 flex flex-col ">
                                             <div className="flex items-center gap-2 mb-2">
                                             <img src={user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
-                                            <p className="text-left">{user.name ?? user.username}</p>
                                             </div>
                                             <div className=" flex flex-col relative">
                                             <textarea

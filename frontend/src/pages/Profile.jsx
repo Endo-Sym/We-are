@@ -1,4 +1,3 @@
-// Profile.jsx
 import React, { useState } from 'react';
 import ProfileEdit from '../components/ProfileEdit';
 import Sidebar from '../components/Sidebar';
@@ -13,21 +12,25 @@ const Profile = () => {
         address: 'Bangmod, Bangkok TH',
         gender: 'ENFP',
         idWeAre: '20',
-        lookingFor: '',
-        type16: '',
-        interests: '',
+        lookingFor: 'Friends',
+        type16: 'ENFP',
+        interests: ['#sport', '#art', '#movie', '#food', '#technology'],
         followers: 5,
         love: 20,
-        profileImage: profilePic, // Use the profile picture from the assets
+        profileImage: profilePic,
     });
 
     const handleSave = (editedProfile) => {
-        setProfileData(editedProfile);
-        setIsEditing(false); // Exit edit mode
+        setProfileData(prevProfile => ({
+            ...editedProfile,
+            followers: prevProfile.followers,
+            love: prevProfile.love,
+        }));
+        setIsEditing(false);
     };
 
     const handleEditClick = () => {
-        setIsEditing(true); // Enter edit mode
+        setIsEditing(true);
     };
 
     const handleImageChange = (e) => {
@@ -43,41 +46,44 @@ const Profile = () => {
 
     return (
         <div className="w-full h-screen flex flex-col items-center justify-center border-black bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
-            <Sidebar showSidebar={true} /> {/* Adjust showSidebar prop as needed */}
-            <div className="w-3/4 h-3/4 relative bg-transparent flex flex-col items-center justify-center p-4">
+            <Sidebar showSidebar={true} />
+            <div className="w-3/4 h-3/4 relative bg-transparent flex flex-col items-center justify-center p-2">
                 {!isEditing ? (
                     <>
-                        {/* Large profile image */}
                         <div className="relative mb-4 flex flex-col items-center">
-                            <div className="w-72 h-72 mb-4 relative">
+                            <div className="w-60 h-60 mb-4 relative rounded-[50px] border-4 border-fuchsia-500 overflow-hidden">
                                 <img 
                                     src={profileData.profileImage} 
                                     alt="Profile" 
-                                    className="w-full h-full rounded-lg object-cover"
+                                    className="w-full h-full object-cover"
                                 />
                             </div>
-                            {/* Small circular profile image */}
-                            <div className="w-16 h-16 mb-4 absolute top-4 left-4">
+                            <div className="w-16 h-16 mb-4 absolute top-[-20px] left-[-20px] border-4 border-fuchsia-500 rounded-full overflow-hidden">
                                 <img
                                     src={profileData.profileImage}
                                     alt="Profile"
-                                    className="w-full h-full rounded-full object-cover border-4 border-white"
+                                    className="w-full h-full object-cover"
                                 />
                             </div>
                         </div>
-                        {/* Profile details */}
-                        <div className="text-white text-left flex flex-col items-start mb-4">
+                        <div className="text-white text-center flex flex-col items-center mb-4">
                             <h1 className="text-3xl font-bold">{profileData.name}</h1>
-                            <p className="flex items-center"><span className="material-icons">school</span>{profileData.role}</p>
-                            <p className="flex items-center"><span className="material-icons">update</span>{profileData.status}</p>
-                            <p className="flex items-center"><span className="material-icons">place</span>{profileData.address}</p>
-                            <p className="flex items-center"><span className="material-icons">favorite</span>{profileData.idWeAre}</p>
-                            <p className="flex items-center"><span className="material-icons">star</span>{profileData.gender}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">school</span>{profileData.role}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">update</span>{profileData.status}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">place</span>{profileData.address}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">favorite</span>{profileData.idWeAre}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">star</span>{profileData.gender}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">search</span>{profileData.lookingFor}</p>
+                            <p className="flex items-center text-lg"><span className="material-icons mr-2">psychology</span>{profileData.type16}</p>
+                            <div className="flex flex-wrap justify-center mt-2">
+                                {profileData.interests.map((interest, index) => (
+                                    <span key={index} className="bg-fuchsia-500 rounded-full px-3 py-1 text-sm m-1">{interest}</span>
+                                ))}
+                            </div>
                         </div>
-                        {/* Edit Button */}
                         <button
                             onClick={handleEditClick}
-                            className="absolute top-4 right-4 px-4 py-2 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600"
+                            className="absolute w-40 h-15 top-4 right-4 px-4 py-2 border-fuchsia-500 bg-fuchsia-500 text-white rounded-[50px] hover:bg-fuchsia-600"
                         >
                             Edit
                         </button>
@@ -100,16 +106,24 @@ const Profile = () => {
                         <ProfileEdit profile={profileData} onSave={handleSave} onCancel={() => setIsEditing(false)} />
                     </div>
                 )}
-                <div className="flex justify-between w-full mt-4 px-8">
-                    <div className="text-center">
-                        <span className="material-icons">group</span>
-                        <p>{profileData.followers} Followers</p>
-                    </div>
-                    <div className="text-center">
-                        <span className="material-icons">favorite</span>
-                        <p>{profileData.love} Love</p>
-                    </div>
-                </div>
+                {!isEditing && (
+                    <>
+                        <div className="flex justify-around w-full mt-4 px-8">
+                            <div className="text-center w-40 h-15 px-4 py-2 border-fuchsia-500 bg-fuchsia-500 text-white rounded-[15px] hover:bg-fuchsia-600">
+                                <span className="material-icons">group</span>
+                                <p>{profileData.followers} Followers</p>
+                            </div>
+                            <div className="text-center w-40 h-15 px-4 py-2 border-fuchsia-500 bg-fuchsia-500 text-white rounded-[15px] hover:bg-fuchsia-600">
+                                <span className="material-icons">favorite</span>
+                                <p>{profileData.love} Love</p>
+                            </div>
+                        </div>
+                        <div className="w-3/4 text-center mt-8 text-xl bg-fuchsia-500 h-50">
+                            <p>Caption</p>
+                            <p className="italic">love is love</p>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
