@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import axios from 'axios';
 
 const ProfileEdit = ({ profile, onSave, onCancel }) => {
     const [editedProfile, setEditedProfile] = useState(profile);
+    const [inputs, setInputs] = useState(profile);
+    const [imgUrl, setImgUrl] = useState(profile.image || '');
+    const fileInputRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        setInputs({ ...inputs, [name]: value });
         setEditedProfile({ ...editedProfile, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSave(editedProfile);
+        try {
+            const response = await axios.post('http://localhost:8000/profile', { ...editedProfile, image: imgUrl });
+            onSave(response.data);
+        } catch (error) {
+            console.error('Error saving profile:', error);
+        }
     };
-    const handleImageUpload = async (file) => {
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', 'imfstvzq');
-    
+
         try {
             const response = await axios.post('http://localhost:8000/profile/upload', formData, {
                 headers: {
@@ -25,24 +36,25 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
             });
             console.log('Image uploaded successfully:', response.data);
             setImgUrl(response.data.secure_url);
-            return response.data;
         } catch (error) {
             console.error('Error uploading image:', error);
-            throw error;
         }
     };
 
-    
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
     return (
         <div className="max-w-[600px] w-full h-auto relative bg-black bg-opacity-60 backdrop-blur-sm border rounded-[10px] border-primary-pink shadow">
             <form onSubmit={handleSubmit} className="px-4 py-2">
                 {/* Profile Inputs */}
                 <div className='flex flex-row items-center gap-2'>
                     <p>Name :</p>
-                    <input 
+                    <input
                         type="text"
                         name="name"
-                        value={editedProfile.name}
+                        value={inputs.name}
                         onChange={handleChange}
                         placeholder="Name"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -53,7 +65,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="role"
-                        value={editedProfile.role}
+                        value={inputs.role}
                         onChange={handleChange}
                         placeholder="Role"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -64,7 +76,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="status"
-                        value={editedProfile.status}
+                        value={inputs.status}
                         onChange={handleChange}
                         placeholder="Status"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -75,7 +87,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="address"
-                        value={editedProfile.address}
+                        value={inputs.address}
                         onChange={handleChange}
                         placeholder="Address"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -86,7 +98,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="gender"
-                        value={editedProfile.gender}
+                        value={inputs.gender}
                         onChange={handleChange}
                         placeholder="Gender"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -97,7 +109,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="idWeAre"
-                        value={editedProfile.idWeAre}
+                        value={inputs.idWeAre}
                         onChange={handleChange}
                         placeholder="ID We Are"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -108,7 +120,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="lookingFor"
-                        value={editedProfile.lookingFor}
+                        value={inputs.lookingFor}
                         onChange={handleChange}
                         placeholder="Looking For"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -119,7 +131,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <input
                         type="text"
                         name="type16"
-                        value={editedProfile.type16}
+                        value={inputs.type16}
                         onChange={handleChange}
                         placeholder="Type16"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -129,13 +141,14 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <p>Interests :</p>
                     <input
                         type="text"
-                        name="interests"
-                        value={editedProfile.interests}
+                        name="interest"
+                        value={inputs.interest}
                         onChange={handleChange}
                         placeholder="Interests"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
                     />
                 </div>
+       
 
                 {/* Action Buttons */}
                 <div className="flex justify-between gap-5 mt-4">
