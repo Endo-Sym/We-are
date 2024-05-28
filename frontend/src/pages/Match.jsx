@@ -93,7 +93,7 @@ const Match = ({ showSidebar }) => {
                         </button>
                         <div className="flex flex-col items-center relative">
                             <div className="relative">
-                                <div className="max-w-[30rem] h-[30rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
+                                <div className="max-w-[30rem] h-[29rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
                                     <img
                                         src={profileData.profileImage}
                                         alt="Profile"
@@ -120,6 +120,15 @@ const Match = ({ showSidebar }) => {
                                     </div>
                                 </div>
                             </div>
+
+                            <p className="flex flex-wrap gap-2 mt-4">
+                                    {profileData.interests.map((interest, index) => (
+                                        <span key={index} className="w-auto h-[30px] px-3 rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer bg-black bg-opacity-30 backdrop-blur-md border-fuchsia-500">
+                                            {interest}
+                                        </span>
+                                    ))}
+                            </p>
+
                             <div className="flex gap-6 mt-5">
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">
