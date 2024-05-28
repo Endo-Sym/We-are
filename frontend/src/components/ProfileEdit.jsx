@@ -12,8 +12,27 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         e.preventDefault();
         onSave(editedProfile);
     };
+    const handleImageUpload = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'imfstvzq');
+    
+        try {
+            const response = await axios.post('http://localhost:8000/profile/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            console.log('Image uploaded successfully:', response.data);
+            setImgUrl(response.data.secure_url);
+            return response.data;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    };
 
-
+    
     return (
         <div className="max-w-[600px] w-full h-auto relative bg-black bg-opacity-60 backdrop-blur-sm border rounded-[10px] border-primary-pink shadow">
             <form onSubmit={handleSubmit} className="px-4 py-2">

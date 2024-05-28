@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ProfileEdit from '../components/ProfileEdit';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import profilePic from '../../assets/images/profile-pic.svg';
+import { UserContext } from '../../context/Usercontext';
 
-const Profile = ({ showSidebar }) => {
+const Profile = ({ showSidebar, location }) => {
+    const { user, setUser } = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [profileData, setProfileData] = useState({
-        name: 'Cactus',
+        name: user.name || user.username,
         role: 'Student',
         status: 'In progress',
         address: 'Bangmod, Bangkok TH',
@@ -22,8 +24,14 @@ const Profile = ({ showSidebar }) => {
         profileImage: profilePic,
     });
 
+    useEffect(() => {
+        if (location && location.state && location.state.user) {
+            setUser(location.state.user);
+        }
+    }, [location, setUser]);
+
     const handleSave = (editedProfile) => {
-        setProfileData(prevProfile => ({
+        setProfileData((prevProfile) => ({
             ...editedProfile,
             followers: prevProfile.followers,
             love: prevProfile.love,
@@ -37,15 +45,17 @@ const Profile = ({ showSidebar }) => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setProfileData({ ...profileData, profileImage: reader.result });
-        };
         if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileData((prevProfile) => ({
+                    ...prevProfile,
+                    profileImage: reader.result,
+                }));
+            };
             reader.readAsDataURL(file);
         }
     };
-
     return (
         <>
             <Sidebar showSidebar={showSidebar} />
@@ -71,7 +81,7 @@ const Profile = ({ showSidebar }) => {
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
-                                    <h1 className="text-3xl font-bold">{profileData.name}</h1>
+                                    <h1 className="text-3xl font-bold">{user.name ?? user.username}</h1>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">school</span>{profileData.role}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">update</span>{profileData.status}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">place</span>{profileData.address}</p>

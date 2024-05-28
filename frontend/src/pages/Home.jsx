@@ -8,6 +8,7 @@ import Share from '/assets/images/Share.svg';
 import { FaCirclePlus } from "react-icons/fa6";
 import { UserContext } from '../../context/Usercontext';
 import { MdSend } from "react-icons/md";
+import Comment from'../components/Comment'
 import axios from 'axios';
 
 export default function Home({ showSidebar }) {
@@ -195,6 +196,7 @@ export default function Home({ showSidebar }) {
                                                  </textarea>
                                                 <button   className="absolute bottom-3 right-3 bg-primary-pink text-black px-4 py-3 rounded-[30px] hover:bg-pink-500">
                                             <MdSend size={20} />
+                                            <comment/>
                                             
                                             </button>
                                             </div>

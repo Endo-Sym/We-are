@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import profilePic from '../../assets/images/profile-pic.svg';
+import { UserContext } from '../../context/Usercontext';
 
 const Match = ({ showSidebar }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const { user = {}, setUser } = useContext(UserContext);
     const [profileData, setProfileData] = useState({
-        name: 'Cactus',
+        name: user.name || user.username,
         role: 'Student',
         status: 'In progress',
         address: 'Bangmod, Bangkok TH',
@@ -19,6 +21,7 @@ const Match = ({ showSidebar }) => {
         love: 20,
         profileImage: profilePic,
     });
+
 
     return (
         <>

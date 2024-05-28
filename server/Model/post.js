@@ -28,23 +28,23 @@ const postSchema = new mongoose.Schema({
         default: 0
     },
     comments: [
-        // {
-        //     userId: {
-        //         type: mongoose.Schema.Types.ObjectId,
-        //         ref: "User",
-        //         required: true
-        //     },
-        //     text: {
-        //         type: String,
-        //         required: true
-        //     },
-        //     ProfilePicture: {
-        //         type: String
-        //     },
-        //     username: {
-        //         type: String
-        //     }
-        // }
+        {
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+                required: true
+            },
+            text: {
+                type: String,
+                required: true
+            },
+            ProfilePicture: {
+                type: String
+            },
+            username: {
+                type: String
+            }
+        }
     ],
     shares: {
         type: Number,
