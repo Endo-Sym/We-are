@@ -36,7 +36,7 @@ const createPost = async (req, res) => {
       return res.status(400).json({ error: `Heading must be less than ${maxHeadingLength} characters` });
     }
 
-    const maxDescriptionLength = 600;
+    const maxDescriptionLength = 500;
     if (description.length > maxDescriptionLength) {
       return res.status(400).json({ error: `Description must be less than ${maxDescriptionLength} characters` });
     }
@@ -47,7 +47,7 @@ const createPost = async (req, res) => {
       imageUrl = uploadedResponse.secure_url;
     }
 
-    const newPost = new Post({ ...req.body, imgUrl: imageUrl});
+    const newPost = new Post({ postedBy, tags, heading, description, imgUrl: imageUrl, likes, comments, shares });
     await newPost.save();
 
     res.status(201).json(newPost);

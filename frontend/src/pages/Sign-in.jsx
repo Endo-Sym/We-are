@@ -2,12 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
 import logo from '/assets/images/logo.png';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { UserContext } from '../../context/Usercontext';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import { FaGoogle } from "react-icons/fa";
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin,  } from '@react-oauth/google';
 
 function Signin() {
   const navigate = useNavigate(); 
@@ -25,22 +25,26 @@ function Signin() {
   const onSuccess = (credentialResponse) => {
     console.log('Google login success:', credentialResponse);
     const profile = credentialResponse.profileObj;
-    const user = {
-      id: profile.googleId,
-      name: profile.name,
-      email: profile.email,
-      imageUrl: profile.imageUrl,
-    };
-    setUser(user);
-    navigate('/');
-  };
+    if (profile) {
+        const user = {
+            id: profile.googleId,
+            name: profile.name,
+            email: profile.email,
+            imageUrl: profile.imageUrl,
+        };
+        console.log('User profile:', user);
+        setUser(user);
+        navigate('/');
+    } else {
+        console.error('Profile is undefined:', profile);
+    }
+};
 
-  const onFailure = () => {
-    console.log('Google login failed');
+const onFailure = (error) => {
+    console.log('Google login failed:', error);
     toast.error('Google login failed.');
     navigate('/');
-  };
-
+};
   const SigninUser = async (e) => {
     e.preventDefault();
     const { identifier, password } = data;

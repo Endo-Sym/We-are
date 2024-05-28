@@ -8,27 +8,22 @@ export function UserContextProvider({ children }) {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (!user) {
-            axios.get(`/profile`)
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
+        } else {
+            axios.get('/profile')
                 .then(({ data }) => {
-                    console.log("Fetched user profile from cookie:", data); 
+                    console.log("Fetched user profile from cookie:", data);
                     setUser(data);
+                    localStorage.setItem('user', JSON.stringify(data));
                 })
                 .catch((error) => {
                     console.error("Error fetching user profile from cookie:", error);
                 });
-        } else if (user) {
-            axios.get(`/profile/${user._id}`)
-                .then(({ data }) => {
-                    console.log("Fetched user profile from database:", data); 
-                    setUser(data);
-                })
-                .catch((error) => {
-                    console.error("Error fetching user profile from database:", error);
-                });
         }
     }, []);
-    
+
     const saveUser = (userData) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));

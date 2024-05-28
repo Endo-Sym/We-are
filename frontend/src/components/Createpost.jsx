@@ -3,7 +3,6 @@ import { IoMdClose } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import usePreviewImg from './Previewingimga';
 import { UserContext } from '../../context/Usercontext';
-import { IoClose } from "react-icons/io5";
 import axios from 'axios';
 
 function Createpost({ onClose }) {
@@ -26,24 +25,37 @@ function Createpost({ onClose }) {
         setDescription(event.target.value);
     };
 
-    const handleImageUpload = async (event) => {
-        const file = event.target.files[0];
+    const handleImageUpload = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', 'your_upload_preset'); // Replace with your Cloudinary upload preset
+        formData.append('upload_preset', 'imfstvzq');
     
         try {
-            const response = await axios.post('https://api.cloudinary.com/v1_1/drouipoiv/image/upload', formData, {
-                withCredentials: true 
+            const response = await axios.post('http://localhost:8000/post/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
             });
+            console.log('Image uploaded successfully:', response.data);
             setImgUrl(response.data.secure_url);
-        } catch (err) {
-            console.error('Error uploading image:', err);
+            return response.data;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
         }
     };
     
-
     const handlePost = async () => {
+        if (imageRef.current.files.length > 0) {
+            try {
+                const uploadedImage = await handleImageUpload(imageRef.current.files[0]);
+                setImgUrl(uploadedImage.secure_url);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                return;
+            }
+        }
+
         const newPost = {
             postedBy: user._id,
             tags: tag,
@@ -56,18 +68,23 @@ function Createpost({ onClose }) {
         };
 
         try {
-            const response = await axios.post('/post/posts', newPost);
-            console.log(response.data);
+            const response = await axios.post('http://localhost:8000/post/posts', newPost, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+            console.log('Post created successfully:', response.data);
+    
             setTimeout(() => {
                 window.location.reload();
-            }, 1000); 
+            }, 1000);
         } catch (err) {
-            console.error('Error creating post:', err);
+            console.error('Error creating post:', err.response ? err.response.data : err.message);
         }
-
+    
         onClose();
     };
-
     return (
         <div className="w-full h-full bg-black bg-opacity-20 z-50 fixed overflow-y-hidden">
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -95,20 +112,20 @@ function Createpost({ onClose }) {
                             value={heading}
                             onChange={handleHeadingChange}
                             maxLength="100"
-                            placeholder="Heading" 
+                            placeholder="Header" 
                         />
                         <textarea
                             className="w-full p-2 bg-gray-700 border-2 border-primary-pink rounded-lg text-white placeholder-gray-400"
                             value={description}
                             onChange={handleDescriptionChange}
                             maxLength="500"
-                            placeholder="Description"
+                            placeholder="decsription"
                         />
                         <div className="flex items-center">
                             <label className="cursor-pointer flex items-center justify-end">
                                 <input 
                                     type="file" 
-                                    onChange={(e) => {handleImageChange(e); handleImageUpload(e);}} 
+                                    onChange={(e) => {handleImageChange(e); handleImageUpload(e.target.files[0]);}} 
                                     className="hidden" 
                                     ref={imageRef}
                                 />

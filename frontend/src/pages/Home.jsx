@@ -16,9 +16,7 @@ export default function Home({ showSidebar }) {
     const { user } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedPosts, setExpandedPosts] = useState({});
-    const [comments,setcoments] = useState({})
-
-
+    
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
@@ -84,11 +82,7 @@ export default function Home({ showSidebar }) {
             return updatedPosts;
         });
     }
-    const handlecomments = async () => {}
 
-        const newcomments = {
-            
-        };
     const toggleComment = (postId) => {
         setExpandedPosts(prevExpandedPosts => ({
             ...prevExpandedPosts,
@@ -137,9 +131,9 @@ export default function Home({ showSidebar }) {
             <Loading isLoading={isLoading}/>
             <div className={`flex bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full`}>
                 <div className="relative flex flex-1 overflow-y-auto">
-                    <section className={`flex fixed w-[35%] py-8 px-4 overflow-hidden z-10`}>
+                    <section className={`flex fixed w-[35%] py-8 px-4 overflow-hidden z-10 `}>
                         <div className="h-full min-w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4 flex flex-col">
-                            <h1 className="text-[40px] text-center relative z-20 max-w-full">Universes</h1>
+                            <h1 className="text-[40px] text-center relative z-30 max-w-full">Universes</h1>
                             <div className="flex flex-col gap-3">
                                 {tags.map((tag, index) => (
                                     <div key={index} className="text-xl border border-primary-pink w-fit rounded-[20px] p-2 hover:cursor-pointer" onClick={() => handleTagClick(tag)}>#{tag}</div>
@@ -147,9 +141,9 @@ export default function Home({ showSidebar }) {
                             </div>
                         </div>
                     </section>
-                    <section className={`flex flex-col gap-4 justify-start left-[40%] relative w-[60%] py-8 px-4 overflow-y-auto overflow-hidden`}>
+                    <section className={`flex flex-col gap-4 justify-start left-[40%] absolute right-0 w-[60%] py-8 px-4 overflow-y-auto overflow-hidden `}>
                         {posts.map((post, index) => (
-                            <div key={index} className={`flex justify-center w-[70%] ${expandedPosts[post.postData._id] ? 'min-h-[24rem]' : 'min-h-[16rem]'} border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4`}>
+                            <div key={index} className={`flex justify-end w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4`}>
                                 <div className="w-full h-full">
                                     <div className="bg-primary-dark rounded-lg w-full h-full flex flex-col justify-between">
                                         <div>
@@ -163,7 +157,12 @@ export default function Home({ showSidebar }) {
                                             <h2 className="text-2xl break-words my-2">{post.postData.heading}</h2>
                                             <p className="text-md break-words">{post.postData.description}</p>
                                             {post.postData.imgUrl && (
-                                                <img src={post.postData.imgUrl} className="max-w-50 max-h-50" alt="Post" />
+                                                <img 
+                                                    src={post.postData.imgUrl} 
+                                                    className="mx-auto max max-h-50 object"
+                                                    style={{ width: '60', height: '60', maxWidth: '100%', maxHeight: '100%' }}
+                                                    alt="Post" 
+                                                />
                                             )}
                                         </div>
                                         <div className="mt-2">
