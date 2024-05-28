@@ -1,5 +1,3 @@
-// FormNewUser.jsx
-
 import React, { useState } from 'react';
 import { GenderQuestion } from '../components/Form';
 import { FriendDateQuestion } from '../components/Form';
@@ -11,6 +9,9 @@ const FormNewUser = () => {
 
   const handleNextStep = () => {
     setStep(step + 1);
+    if (step === 4) {
+      alert('เสร็จสิ้น');
+    }
   };
 
   return (
@@ -29,4 +30,3 @@ const FormNewUser = () => {
 };
 
 export default FormNewUser;
-
