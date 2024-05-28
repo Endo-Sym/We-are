@@ -109,11 +109,11 @@ const Match = ({ showSidebar }) => {
                                         />
                                     </div>
                                     <h1 className="text-3xl font-bold">{profileData.name}</h1>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">school</span>{profileData.role}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">update</span>{profileData.status}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">place</span>{profileData.address}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">favorite</span>{profileData.idWeAre}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">search</span>{profileData.lookingFor}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Role</span>{profileData.role}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Status</span>{profileData.status}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Address</span>{profileData.address}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">ID We Are</span>{profileData.idWeAre}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Looking for</span>{profileData.lookingFor}</p>
                                     <div className="flex justify-start gap-2 mt-2">
                                         <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] ${profileData.gender === "Female" ? "bg-pink-500" : "bg-blue-500"}`}><span className="material-icons p-2">{profileData.gender}</span></p>
                                         <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}><span className="material-icons p-2">{profileData.type16}</span></p>
