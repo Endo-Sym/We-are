@@ -66,7 +66,7 @@ const Profile = ({ showSidebar, location }) => {
                     (<div className="flex items-start gap-4">
                         <div className="flex flex-col items-center relative">
                             <div className="relative">
-                                <div className="max-w-[30rem] h-[30rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
+                                <div className="max-w-[30rem] h-[29rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
                                     <img 
                                         src={profileData.profileImage} 
                                         alt="Profile" 
@@ -93,11 +93,18 @@ const Profile = ({ showSidebar, location }) => {
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <p className="flex flex-wrap gap-2 mt-4">
+                                    {profileData.interests.map((interest, index) => (
+                                        <span key={index} className="w-auto h-[30px] px-3 rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer bg-fuchsia-500 border-fuchsia-500">
+                                            {interest}
+                                        </span>
+                                    ))}
+                                </p>
+                            </div>
                             <div className="flex gap-6 mt-5">
                                 <div className="flex flex-col items-center gap-1">
-                                    <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">
-                                        {/* <div className="material-icons">icon</div> */}
-                                        <svg width="44" height="45" viewBox="0 0 44 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">                                        <svg width="44" height="45" viewBox="0 0 44 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect x="6" y="13.7998" width="33" height="12.4" rx="4" stroke="white" stroke-width="2"/>
                                             <path d="M38.3519 22C38.3519 31.4519 31.1937 39 22.5 39C13.8064 39 6.64819 31.4519 6.64819 22C6.64819 12.5481 13.8064 5 22.5 5C31.1937 5 38.3519 12.5481 38.3519 22Z" stroke="white" stroke-width="2"/>
                                             <rect x="9.88892" y="16.2" width="10.963" height="8.4" rx="4" stroke="white" stroke-width="2"/>
@@ -123,7 +130,7 @@ const Profile = ({ showSidebar, location }) => {
                                 </div>
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all flex items-center justify-center gap-2">
-                                        {/* <div className="material-icons">icon</div> */}
+                                        
                                         <svg width="43" height="47" viewBox="0 0 43 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g filter="url(#filter0_f_509_710)">
                                             <path d="M20.6433 6.56771L15.8364 15.3643C15.7136 15.589 15.5093 15.7581 15.2655 15.8366L6.37125 18.7012C5.70729 18.9151 5.46074 19.7259 5.89326 20.2731L12.2509 28.3175C12.3814 28.4826 12.4565 28.6846 12.4655 28.8948L12.9222 39.5594C12.952 40.2567 13.6689 40.7097 14.3115 40.4374L22.7066 36.8796C22.956 36.774 23.2376 36.774 23.487 36.8796L31.6864 40.3544C32.3788 40.6479 33.1352 40.1007 33.0732 39.3512L32.1744 28.4965C32.1555 28.2677 32.2158 28.0394 32.3453 27.8499L37.2568 20.6595C37.6302 20.1129 37.379 19.3609 36.7521 19.1484L28.2454 16.2644C28.0145 16.1861 27.8202 16.0261 27.6989 15.8146L22.3884 6.54994C21.9997 5.87178 21.0181 5.88178 20.6433 6.56771Z" stroke="white" stroke-width="3"/>
