@@ -14,7 +14,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
     };
 
     return (
-        <div className="w-full h-full relative bg-stone-950 shadow">
+        <div className="max-w-[600px] w-full h-full relative bg-black bg-opacity-60 backdrop-blur-sm border rounded-[10px] border-primary-pink shadow">
             <form onSubmit={handleSubmit} className="px-4 py-6">
                 {/* Profile Inputs */}
                 <input
@@ -91,17 +91,17 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                 />
 
                 {/* Action Buttons */}
-                <div className="flex justify-between mt-4">
+                <div className="flex justify-between gap-5 mt-4">
                     <button
                         type="submit"
-                        className="w-1/2 h-12 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none"
+                        className="flex-1 h-12 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none"
                     >
                         Save
                     </button>
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="w-1/2 h-12 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
+                        className="flex-1 h-12 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
                     >
                         Cancel
                     </button>
