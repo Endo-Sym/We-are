@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { MdSend } from 'react-icons/md';
+import axios from 'axios';
+import { UserContext } from '../../context/Usercontext';
 
-const Comment = ({ user }) => {
+const Comment = ({ user, postId, onComment }) => {
     const [comment, setComment] = useState('');
 
     const handleCommentChange = (event) => {
         setComment(event.target.value);
     };
 
-    const handleSendComment = () => {
-        // Handle sending the comment
+    const handleSendComment = async () => {
+        try {
+            const response = await axios.post(`/posts/${postId}/comment`, { text: comment });
+            onComment(response.data);  
+            setComment('');
+        } catch (error) {
+            console.error('Error sending comment:', error);
+        }
     };
 
     return (

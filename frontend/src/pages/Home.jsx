@@ -91,6 +91,24 @@ export default function Home({ showSidebar }) {
         }));
     }
 
+    const handleNewComment = (postId, comment) => {
+        setPosts(prevPosts => {
+            const updatedPosts = prevPosts.map(post => {
+                if (post.postData._id === postId) {
+                    return {
+                        ...post,
+                        postData: {
+                            ...post.postData,
+                            comments: [...post.postData.comments, comment]
+                        }
+                    };
+                }
+                return post;
+            });
+            return updatedPosts;
+        });
+    };
+
     const handleTagClick = async (tag) => {
         try {
             const res = await axios.get(`/post/${tag}`);
@@ -174,36 +192,31 @@ export default function Home({ showSidebar }) {
                                                 </a>
                                                 <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleComment(post.postData._id)}>
                                                     <img className="size-6 min-w-10" src={icon_comment} alt="comment" />
-                                                    <div className="text-lg">{post.postData.comments}</div>
+                                                    <div className="text-lg">{post.postData.comments.length}</div>
                                                 </a>
                                                 <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleShare(post.postData._id)}>
                                                     <img className="size-6 min-w-10" src={Share} alt="share" />
                                                     <div className="text-lg">{post.postData.shares}</div>
                                                 </a>
                                             </div>
-                                            <div></div>
+                                            <div>
+                                                {post.postData.comments.map((comment, index) => (
+                                                    <div key={index} className="mt-2 bg-gray-800 p-2 rounded-lg">
+                                                        <div className="flex items-center gap-2">
+                                                            <img src={comment.userImg} alt="Comment User" className="size-6 rounded-full" />
+                                                            <p className="text-sm">{comment.username}</p>
+                                                        </div>
+                                                        <p className="ml-8">{comment.text}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                             {expandedPosts[post.postData._id] && (
-                                             <div className="mt-2">
-                                            <div className="mt-4 flex flex-col ">
-                                            <div className="flex items-center gap-2 mb-2">
-                                            <img src={user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
-                                            </div>
-                                            <div className=" flex flex-col relative">
-                                            <textarea
-                                                 className="w-full h-24 p-2 border border-primary-pink rounded-[20px] bg-primary-dark text-white mb-2 bg-black"
-                                                 placeholder={`Write a comment as ${user.name ?? user.username}...`}>
-
-                                                 </textarea>
-                                                <button   className="absolute bottom-3 right-3 bg-primary-pink text-black px-4 py-3 rounded-[30px] hover:bg-pink-500">
-                                            <MdSend size={20} />
-                                            <comment/>
-                                            
-                                            </button>
-                                            </div>
-                                            </div>
-                                            </div>
-                                                )}
-
+                                                <Comment
+                                                    user={user}
+                                                    postId={post.postData._id}
+                                                    onComment={(newComment) => handleNewComment(post.postData._id, newComment)}
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                 </div>
