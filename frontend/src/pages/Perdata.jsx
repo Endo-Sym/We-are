@@ -131,12 +131,3 @@ export default function Perdata({ showSidebar }) {
         </div>
     );
 }
-
-// export default function Perdata({ showSidebar }){
-//     return(
-//         <div className="w-full h-screen flex flex-col items-center justify-center border-black bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-poppins">
-//             <Sidebar showSidebar={showSidebar}/>
-
-//         </div>
-//     )
-// }
