@@ -12,7 +12,14 @@ mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("Database Connected"))
 .catch((err) => console.log ("Database not connected, err"))
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 app.use(express.json())
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 
@@ -36,11 +43,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-cloudinary.config({
-    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+
 
 const port = process.env.PORT || 8000
 

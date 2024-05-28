@@ -16,6 +16,10 @@ import { UserContextProvider } from "../context/Usercontext";
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true
 
+
+
+
+
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -42,6 +46,7 @@ const App = () => {
       </Routes>
     </BrowserRouter>
     </UserContextProvider>
+    
     </>
   );
 };

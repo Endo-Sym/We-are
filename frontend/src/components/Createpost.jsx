@@ -1,17 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import usePreviewImg from './Previewingimga';
-import { UserContext } from '../../context/Usercontext'; 
+import { UserContext } from '../../context/Usercontext';
+import { IoClose } from "react-icons/io5";
 import axios from 'axios';
 
 function Createpost({ onClose }) {
     const [heading, setHeading] = useState('');
     const [description, setDescription] = useState('');
     const [tag, setTag] = useState("");
-
     const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
     const { user } = useContext(UserContext); 
+    const imageRef = useRef();
 
     const handleTagChange = (event) => {
         setTag(event.target.value);
@@ -25,8 +26,24 @@ function Createpost({ onClose }) {
         setDescription(event.target.value);
     };
 
-    const handlePost = async () => {
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'your_upload_preset'); // Replace with your Cloudinary upload preset
+    
+        try {
+            const response = await axios.post('https://api.cloudinary.com/v1_1/drouipoiv/image/upload', formData, {
+                withCredentials: true 
+            });
+            setImgUrl(response.data.secure_url);
+        } catch (err) {
+            console.error('Error uploading image:', err);
+        }
+    };
+    
 
+    const handlePost = async () => {
         const newPost = {
             postedBy: user._id,
             tags: tag,
@@ -38,16 +55,16 @@ function Createpost({ onClose }) {
             shares: 0
         };
 
-        console.log(newPost);
         try {
             const response = await axios.post('/post/posts', newPost);
             console.log(response.data);
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000); 
         } catch (err) {
             console.error('Error creating post:', err);
         }
-        
-        // addPost([response.data, ...posts]);
-        // addPost(newPost);
+
         onClose();
     };
 
@@ -91,16 +108,22 @@ function Createpost({ onClose }) {
                             <label className="cursor-pointer flex items-center justify-end">
                                 <input 
                                     type="file" 
-                                    accept="image/*" 
-                                    onChange={handleImageChange} 
+                                    onChange={(e) => {handleImageChange(e); handleImageUpload(e);}} 
                                     className="hidden" 
+                                    ref={imageRef}
                                 />
-                                <MdAddPhotoAlternate size={30} className="text-purple-500" />
+                                <MdAddPhotoAlternate size={30} className="text-purple-500" 
+                                onClick={() => imageRef.current.click()}
+                                />
                             </label>
                         </div>
                         {imgUrl && (
-                            <div className="mb-4">
+                            <div className="mmb-4 flex items-start justify-between">
                                 <img src={imgUrl} alt="Preview" className="w-full max-h-30 rounded-lg" />
+                                <IoMdClose 
+                                    size={24} 
+                                    className=" top-2 right-2 text-white cursor-pointer" 
+                                    onClick={() => setImgUrl("")} />
                             </div>
                         )}
                         <div className="flex justify-center">
@@ -110,7 +133,6 @@ function Createpost({ onClose }) {
                 </div>
             </div>
         </div>
-        
     );
 }
 

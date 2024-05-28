@@ -2,56 +2,50 @@ import { useNavigate } from 'react-router-dom';
 import ErrorModal from './ErrorModal';
 import SuccessModal from './SuccessModal';
 import logo from '/assets/images/logo.png';
-import { GoogleLogin } from 'react-google-login';
-import { gapi } from 'gapi-script';
-import { FaGoogle } from "react-icons/fa";
 import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../context/Usercontext';
 import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
+import { FaGoogle } from "react-icons/fa";
+import { GoogleLogin } from '@react-oauth/google';
 
 function Signin() {
-  const clientId = "534684648759-do7luvuc5v62ljngha89jillc4s2o6kn.apps.googleusercontent.com";
   const navigate = useNavigate(); 
   const { setUser } = useContext(UserContext);
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [data, setData] = useState({
     identifier: '',
     password: ''
   });
 
-  useEffect(() => {
-    function initClient() {
-      gapi.client.init({
-        clientId: clientId,
-        scope: ''
-      });
-    }
-    gapi.load('client:auth2', initClient);
-  }, [clientId]);
-
-  const onSuccess = (res) => {
-    console.log('Google login success:', res);
-    setUser(res.profileObj);
-    setTimeout(() => {
-      navigate('/');
-    }, 3000); 
+  const onSuccess = (credentialResponse) => {
+    console.log('Google login success:', credentialResponse);
+    const profile = credentialResponse.profileObj;
+    const user = {
+      id: profile.googleId,
+      name: profile.name,
+      email: profile.email,
+      imageUrl: profile.imageUrl,
+    };
+    setUser(user);
+    navigate('/');
   };
 
-  const onFailure = (res) => {
-    console.log('Google login failed:', res);
+  const onFailure = () => {
+    console.log('Google login failed');
+    toast.error('Google login failed.');
+    navigate('/');
   };
-
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const SigninUser = async (e) => {
     e.preventDefault();
     const { identifier, password } = data;
-
     try {
-      const response = await axios.post('/Sign-in', { identifier, password }, {credentials: "include"});
+      const response = await axios.post('/Sign-in', { identifier, password });
       const result = response.data;
       
       if (result.error) {
@@ -91,23 +85,20 @@ function Signin() {
         </div>
         <h1 className="text-[64px] font-bold mb-3">Sign in</h1>
         <form className="h-full w-full flex flex-col justify-center gap-4" onSubmit={SigninUser}>
-          <GoogleLogin 
-            clientId={clientId}
+          <GoogleLogin
+            onSuccess={onSuccess}
+            onFailure={onFailure}
             render={renderProps => (
               <button
-                className='signin-button bg-[#DF1CFF] rounded-[16px] w-full mb-6 p-3 font-medium text-xl flex items-center justify-center gap-2'
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
+                className='signin-button bg-[#DF1CFF] rounded-[16px] w-full mb-6 p-3 font-medium text-xl flex items-center justify-center gap-2'
+                type="button"
               >
                 <FaGoogle className='text-white' />
                 <span>Sign in with Google</span>
               </button>
             )}
-            onSuccess={onSuccess}
-            onFailure={onFailure}
-            cookiePolicy={"single_host_origin"}
-            isSignedIn={true}
-            prompt="select_account"
           />
           <label className="text-[#A8A6A6]">
             <p>Username or Email Address</p>
