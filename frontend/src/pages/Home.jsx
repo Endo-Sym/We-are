@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import Createpost from '../components/Createpost';
-import icon__star_ from '/assets/images/icon__star_.svg';
+import iconstar_ from '/assets/images/iconstar_.svg';
 import icon_comment from '/assets/images/icon_comment.svg';
 import Share from '/assets/images/Share.svg';
 import { FaCirclePlus } from "react-icons/fa6";
@@ -168,7 +168,7 @@ export default function Home({ showSidebar }) {
                                         <div className="mt-2">
                                             <div className="flex flex-row gap-1">
                                                 <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleStar(post.postData._id)}>
-                                                    <img className="size-7 min-w-10" src={icon__star_} alt="star" />
+                                                    <img className="size-7 min-w-10" src={iconstar_} alt="star" />
                                                     <div className="text-lg">{post.postData.likes}</div>
                                                 </a>
                                                 <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleComment(post.postData._id)}>
