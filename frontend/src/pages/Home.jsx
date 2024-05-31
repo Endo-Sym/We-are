@@ -228,7 +228,7 @@ export default function Home({ showSidebar }) {
                         onClick={handleOpenModal}
                     >
                         <FaCirclePlus size={30} className="" />
-                    </button>
+                    </button> 
                     {isModalOpen && <Createpost onClose={handleCloseModal} />}
                 </div>
             </div>

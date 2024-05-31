@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
+const userDescriptionRoutes = require('./routes/userDescriptionRoutes');
 const cloudinary = require("cloudinary").v2;
 const multer = require('multer');
 const fs = require('fs');
@@ -23,7 +24,6 @@ if (fs.existsSync(envFilePath)) {
   process.exit(1);
 }
 
-
 if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
   console.error('Cloudinary environment variables not set.');
   process.exit(1);
@@ -32,7 +32,10 @@ if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !pr
 // Database connection
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("Database connected successfully"))
-  .catch((err) => console.log("Database connection failed:", err));
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+    process.exit(1);
+  });
 
 // Cloudinary configuration
 cloudinary.config({
@@ -86,6 +89,7 @@ app.post('/post/upload', upload.single('file'), (req, res) => {
 // Routes
 app.use("/", authRoutes);
 app.use("/post", postRoutes);
+app.use("/api", userDescriptionRoutes);
 
 // Start server
 app.listen(port, () => console.log(`Server is running on port ${port}`));

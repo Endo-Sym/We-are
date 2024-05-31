@@ -1,50 +1,13 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
-const user_descriptionSchema = new mongoose.Schema({
-    user_description: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId,
-        required: true,
-        unique: true
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId,
-        ref: "User",
-    },
-    caption: {
-        type: String,
-    },
-    school: {
-        type: String,
-    },
-    work: {
-        type: String,
-    },
-    address: {
-        type: String,
-    },
-    gender: {
-        type: String,
-    },
-    lookingfor:  {
-        type: String,
-    },
-    interest:  {
-        type: String,
-    },
-    language:  {
-        type: String,
-    },
-    type_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId,
-        required: true,
-        unique: true,
-        ref: "Type_description"
-    }
+const userDescriptionSchema = new mongoose.Schema({
+    gender: String,
+    birthdate: Date,
+    friendGender: String,
+    dateGender: String,
+    interests: [String],
 });
 
-const userdescription = mongoose.model("Description", user_descriptionSchema);
+const UserDescription = mongoose.model('UserDescription', userDescriptionSchema);
 
-export default userdescription;
+module.exports = UserDescription;

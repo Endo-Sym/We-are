@@ -100,6 +100,8 @@ const SigninUser = async (req, res) => {
 };
 
 
+
+
 // const getprofile = async (req, res) => {
 //     const { id } = req.params;
 //     const { token } = req.cookies;
@@ -169,5 +171,6 @@ module.exports = {
     test,
     SignupUser,
     SigninUser,
-    getprofile
+    getprofile,
+    
 };
