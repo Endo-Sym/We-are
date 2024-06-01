@@ -1,31 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export const Form = ({ step, setStep, formData, setFormData, handleNextClick }) => {
+  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+
   const handleGenderClick = (gender) => setFormData((prev) => ({ ...prev, gender }));
   const handleDayChange = (event) => setFormData((prev) => ({ ...prev, birthdate: { ...prev.birthdate, day: event.target.value } }));
   const handleMonthChange = (event) => setFormData((prev) => ({ ...prev, birthdate: { ...prev.birthdate, month: event.target.value } }));
   const handleYearChange = (event) => setFormData((prev) => ({ ...prev, birthdate: { ...prev.birthdate, year: event.target.value } }));
   const handleFriendGenderClick = (gender) => setFormData((prev) => ({ ...prev, friendGender: gender }));
   const handleDateGenderClick = (gender) => setFormData((prev) => ({ ...prev, dateGender: gender }));
+
   const handleInterestClick = (interest) => {
-    if (formData.interests.includes(interest)) {
-      setFormData((prev) => ({
-        ...prev,
-        interests: prev.interests.filter((i) => i !== interest),
-      }));
+    const isSelected = formData.interests.includes(interest);
+    const newInterests = isSelected
+      ? formData.interests.filter((i) => i !== interest)
+      : formData.interests.length < 5
+        ? [...formData.interests, interest]
+        : formData.interests;
+
+    setFormData({ ...formData, interests: newInterests });
+  };
+
+  const handleConfirmation = (isConfirmed) => {
+    setIsConfirmationVisible(false);
+    if (isConfirmed) {
+      handleNextClick();
+    }
+  };
+
+  const handleNextStep = () => {
+    if (step === 2) {
+      setIsConfirmationVisible(true);
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        interests: [...prev.interests, interest],
-      }));
+      handleNextClick();
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-400 to-purple-600">
+    <div className="flex justify-center items-center h-screen from-blue-400 to-purple-600">
       {step === 1 && (
-        <div className="flex flex-col justify-center items-center h-auto w-[70%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
-          <div className='flex flex-col justify-center items-center gap-5'>
+        <div className="flex flex-col justify-center items-center h-auto w-[100%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
+          <div className='flex flex-col justify-center items-center gap-5 '>
             <div className="text-center text-white text-3xl mb-6">How do you identify your gender?</div>
             <div className="flex justify-center gap-4 mb-10">
               {['Man', 'Woman', 'LGBTQIA+', 'Nonbinary'].map((gender) => (
@@ -52,7 +67,7 @@ export const Form = ({ step, setStep, formData, setFormData, handleNextClick }) 
         </div>
       )}
       {step === 2 && (
-        <div className="flex flex-col justify-center items-center h-auto w-[70%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
+        <div className="flex flex-col justify-center items-center h-auto w-auto border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
           <div className='flex flex-col justify-center items-center gap-5'>
             <h1 className="text-center text-white text-3xl mb-6">When is your birthday?</h1>
             <div className="flex justify-center gap-4 mb-6 text-black">
@@ -78,17 +93,29 @@ export const Form = ({ step, setStep, formData, setFormData, handleNextClick }) 
             <div className="text-center">
               <button
                 className="flex items-center justify-center w-[55px] h-[55px] rounded-full bg-fuchsia-500 text-white text-[45px]"
-                onClick={handleNextClick}
+                onClick={handleNextStep}
                 disabled={!formData.birthdate.day || !formData.birthdate.month || !formData.birthdate.year}
               >
                 &gt;
               </button>
             </div>
           </div>
+          {isConfirmationVisible && (
+            <div className="absolute flex justify-center items-center bg-black bg-opacity-50 inset-0">
+              <div className="bg-white p-8 rounded-[20px] shadow-lg animate-fadeIn">
+                <h1 className="text-2xl mb-4 text-black">Birthdate Confirmation</h1>
+                <p className="text-center mb-4 text-black" >Is {formData.birthdate.day}/{formData.birthdate.month}/{formData.birthdate.year} your birthday? <br />It cannot be changed later.</p>
+                <div className="flex justify-center items-center gap-2">
+                  <button className="px-4 py-2 bg-green-500 text-white rounded" onClick={() => handleConfirmation(true)}>Yes</button>
+                  <button className="px-4 py-2 bg-red-500 text-white rounded" onClick={() => handleConfirmation(false)}>No</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
       {step === 3 && (
-        <div className="h-auto w-[70%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
+        <div className="h-auto w-[120%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
           <div className='flex flex-col justify-center items-center gap-4'>
             <h1 className="text-center text-white text-3xl mb-3">Who you want to go with?</h1>
             <p className='text-white text-2xl mb-3'>Friend</p>
@@ -131,12 +158,19 @@ export const Form = ({ step, setStep, formData, setFormData, handleNextClick }) 
           </div>
         </div>
       )}
-      {step === 4 && (
-        <div className="flex flex-col justify-center items-center h-auto w-[70%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223,_28,_255,_1)_0px_0px_50px] bg-black bg-opacity-60 backdrop-blur-md">
+{step === 4 && (
+        <div className="flex flex-col justify-center items-center h-auto w-[70%] border-2 border-primary-pink rounded-[30px] p-10 shadow-[rgba(223, 28, 255, 1) 0px 0px 50px] bg-black bg-opacity-60 backdrop-blur-md">
           <div className='flex flex-col justify-center items-center gap-5'>
-            <h1 className="text-center text-white text-3xl mb-6">What are your interests?</h1>
+            <h1 className="text-center text-white text-3xl mb-2">Your interests?</h1>
+            <h2 className="text-center text-white text-xl mb-6">{formData.interests.length}/5</h2>
+            <p className="text-center text-white text-sm mb-6">Add at least 5 interests to your profile. You'll be able to chat, talk, and meet like-minded people in this universe.</p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
-              {['Sport', 'Gaming', 'Book', 'Learning', 'movie','art','technology','history','food','memes','fasion','music','travel','photography','gym','cooking','coding','design','dance','yoga','fitness','culture','nature','animals'].map((interest) => (
+              {['Sport', 'Gaming', 'Book', 'Learning',
+               'Movie', 'Art', 'Technology', 'History', 
+               'Food', 'Memes', 'Fashion', 'Music', 
+               'Travel', 'Photography', 'Gym', 'Cooking', 
+               'Coding', 'Design', 'Dance', 'Yoga',
+               'Fitness','Culture', 'Nature', 'Animals'].map((interest) => (
                 <div
                   key={interest}
                   className={`w-[140px] h-[50px] rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer ${
@@ -160,7 +194,9 @@ export const Form = ({ step, setStep, formData, setFormData, handleNextClick }) 
           </div>
         </div>
       )}
-      {step > 4 && <div className="text-white text-2xl">Form Complete! Data: {JSON.stringify(formData)}</div>}
     </div>
   );
 };
+
+
+export default Form;

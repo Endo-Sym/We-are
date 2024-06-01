@@ -41,8 +41,9 @@ const SignupUser = async (req, res) => {
             username,
             email,
             password: hashedPassword,
+            profileCompleted: false 
         });
-
+     
         return res.status(201).json(user);
     } catch (error) {
         console.error(error);

@@ -1,12 +1,12 @@
-const mongoose = require("mongoose")
-const { Schema } = mongoose
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    name:{
+    name: {
         type: String,
         unique: true
     },
-    username:{
+    username: {
         type: String,
         unique: true,
     },
@@ -15,27 +15,16 @@ const userSchema = new Schema({
         unique: true
     },
     password: String,
-    imgUrl:{
+    imgUrl: {
         type: String,
         default: "",
+    },
+    profileCompleted: {
+        type: Boolean,
+        default: false
     }
+});
 
-    // ,
-    // userId: {  
-    //     type: Schema.Types.ObjectId,
-    //     ref: "User",
-    //     required: true
-    // }
-})
+const UserModel = mongoose.model("User", userSchema);
 
-// // Define a pre-save hook to generate the userId
-// userSchema.pre('save', function(next) {
-//     // Generate the ObjectId for userId
-//     this.userId = Schema.Types.ObjectId();
-//     next();
-// });
-
-
-const UserModel = mongoose.model("User", userSchema)
-
-module.exports = UserModel
+module.exports = UserModel;

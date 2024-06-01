@@ -1,28 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const { resourceUsage } = require('process');
-const { SigninUser,test, SignupUser , getprofile } = require('../controllers/authController');
+const User = require('../Model/user'); // Make sure the path to the User model is correct
+const { SigninUser, SignupUser, getprofile } = require('../controllers/authController');
 
+// Middleware
+router.use(cors({
+    credentials: true,
+    origin: "http://localhost:5173"
+}));
 
-//middleware
-router.use(
-    cors({
-        credentials: true,
-        origin: "http://localhost:5173"
+router.get('/api/check-new-user', async (req, res) => {
+    const userId = req.query.userId;
 
-    })
-)
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
-// router.get("/", test)
-router.post("/Sign-up" , SignupUser)
-router.post("/Sign-in" , SigninUser)
-router.get("/profile", getprofile)
-router.get("/profile/:id", getprofile)
-router.get("/logout", (req, res) => {
-    res.clearCookie("token");
-    res.json({ message: "Logged out" })
+        const isNewUser = !user.profileCompleted;
+        res.json({ isNewUser });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
+router.post("/Sign-up", SignupUser);
+router.post("/Sign-in", SigninUser);
+router.get("/profile", getprofile);
+router.get("/profile/:id", getprofile);
+router.get("/logout", (req, res) => {
+    res.clearCookie("token");
+    res.json({ message: "Logged out" });
+});
 
 module.exports = router;

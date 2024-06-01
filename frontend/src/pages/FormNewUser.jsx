@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form } from '../components/Form';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/Usercontext';
 
 const FormNewUser = () => {
+  const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
     gender: '',
     birthdate: { day: '', month: '', year: '' },
@@ -12,6 +15,7 @@ const FormNewUser = () => {
   });
 
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
   const handleNextClick = () => {
     if (step === 1 && formData.gender) {
@@ -29,11 +33,13 @@ const FormNewUser = () => {
     const formattedFormData = {
       ...formData,
       birthdate: new Date(formData.birthdate.year, formData.birthdate.month - 1, formData.birthdate.day),
+      userId: user.id,
     };
 
     try {
       const response = await axios.post('/api/user-description', formattedFormData);
       alert('Form submitted successfully!');
+      navigate('/');  // Redirect to the homepage or any desired path
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Failed to submit form.');
