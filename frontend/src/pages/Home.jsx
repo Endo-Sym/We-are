@@ -84,12 +84,12 @@ export default function Home({ showSidebar }) {
         });
     }
 
-    const toggleComment = (postId) => {
+     const toggleComment = (postId) => {
         setExpandedPosts(prevExpandedPosts => ({
             ...prevExpandedPosts,
             [postId]: !prevExpandedPosts[postId]
         }));
-    }
+    };
 
     const handleNewComment = (postId, comment) => {
         setPosts(prevPosts => {
@@ -117,6 +117,7 @@ export default function Home({ showSidebar }) {
             console.error('Error fetching posts from tag:', error);
         }
     }
+
 
     const [tags, setTags] = useState([
         "books",

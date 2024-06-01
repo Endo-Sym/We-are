@@ -29,6 +29,7 @@ if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !pr
   process.exit(1);
 }
 
+
 // Database connection
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("Database connected successfully"))

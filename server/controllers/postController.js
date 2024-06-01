@@ -1,12 +1,10 @@
-// import Post from '../Modelod/post.js';
-// import User from '../Models/user.js';
 const { v2: cloudinary } = require('cloudinary');
 const User = require('../Model/user');
 const Post = require('../Model/post');
 
 const test = (req, res) => {
   const { test } = req.body;
-  res.json({ message: "yayyy", data: test});
+  res.json({ message: "yayyy", data: test });
 };
 
 const createPost = async (req, res) => {
@@ -23,7 +21,7 @@ const createPost = async (req, res) => {
     } = req.body;
 
     if (!postedBy || !heading || !description) {
-      return res.status(400).json({ error: "PostedBy and text fields are required" });
+      return res.status(400).json({ error: "PostedBy, heading, and description fields are required" });
     }
 
     const user = await User.findById(postedBy);
@@ -115,28 +113,37 @@ const likeUnlikePost = async (req, res) => {
   }
 };
 
-const replyToPost = async (req, res) => {
+const addComment = async (req, res) => {
+  const { id } = req.params;
+  const { text, userId, ProfilePicture, username } = req.body;
+
   try {
-    const { text } = req.body;
+      const post = await Post.findById(id);
+      if (!post) return res.status(404).send('Post not found');
+
+      const newComment = {
+          userId,
+          text,
+          ProfilePicture,
+          username
+      };
+
+      post.comments.push(newComment);
+      await post.save();
+
+      res.status(201).json(newComment);
+  } catch (error) {
+      res.status(500).json({ error: 'Error adding comment' });
+  }
+};
+const getComments = async (req, res) => {
+  try {
     const postId = req.params.id;
-    const userId = req.user._id;
-    const userProfilePic = req.user.profilePic;
-    const username = req.user.username;
-
-    if (!text) {
-      return res.status(400).json({ error: "Text field is required" });
-    }
-
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('comments.userId', 'username profilePic');
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
-
-    const reply = { userId, text, ProfilePicture: userProfilePic, username };
-    post.replies.push(reply);
-    await post.save();
-
-    res.status(200).json(reply);
+    res.status(200).json(post.comments);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -200,10 +207,11 @@ module.exports = {
   getPost, 
   deletePost, 
   likeUnlikePost, 
-  replyToPost, 
+  addComment, 
+  getComments, 
   getFeedPosts, 
   getUserPosts, 
   getTagPost, 
   test,
-  fetchPost
+  fetchPost 
 };

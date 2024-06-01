@@ -12,7 +12,12 @@ const Comment = ({ user, postId, onComment }) => {
 
     const handleSendComment = async () => {
         try {
-            const response = await axios.post(`/posts/${postId}/comment`, { text: comment });
+            const response = await axios.post(`/posts/${postId}/comment`, {
+                text: comment,
+                userId: user._id,
+                ProfilePicture: user.imgUrl,
+                username: user.name ?? user.username
+            });
             onComment(response.data);  
             setComment('');
         } catch (error) {
