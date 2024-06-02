@@ -1,4 +1,5 @@
 const User = require('../Model/user');
+const UserDescription = require('../Model/user_description');
 const { hashPassword, comparePassword } = require('../password/password_manager');
 const jwt = require('jsonwebtoken');
 const { createSecretToken } = require('../tokenGeneration/generateToken');
@@ -138,6 +139,7 @@ const getprofile = async (req, res) => {
         if (id) {
             if (mongoose.Types.ObjectId.isValid(id)) {
                 user = await User.findOne({ _id: id }).select("-password -updatedAt");
+                
             } else {
                 user = await User.findOne({ username: id }).select("-password -updatedAt");
             }
@@ -148,7 +150,8 @@ const getprofile = async (req, res) => {
                     return res.status(401).json({ error: "Invalid token" });
                 }
                 user = await User.findById(decoded.id).select("-password -updatedAt");
-                res.json(user);
+                return await fetchUserDescription(user, res);
+                // res.json(user);
             });
             // Return here to avoid sending response multiple times
             return;
@@ -160,18 +163,106 @@ const getprofile = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        res.json(user);
+        return await fetchUserDescription(user, res);
+        // res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
         console.log("Error in getUserProfile: ", err.message);
     }
 };
 
+const fetchUserDescription = async (user, res) => {
+    try {
+        const userDescription = await UserDescription.findOne({ userId: user._id });
+
+        const combinedUser = {
+            ...user.toObject(),
+            ...(userDescription ? userDescription.toObject() : {})
+        };
+
+        res.json(combinedUser);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+        console.log("Error in fetchAndRespond: ", err.message);
+    }
+};
+
+const updateprofile = async (req, res) => {
+    const profile = req.body;
+    const userId = profile.userId;
+
+    // Separate fields for User and UserDescription
+    const userFields = {
+        name: profile.name,
+        imgUrl: profile.imgUrl
+    };
+
+    const userDescriptionFields = {
+        role: profile.role,
+        status: profile.status,
+        address: profile.address,
+        gender: profile.gender,
+        birthdate: profile.birthdate,
+        lookingFor: profile.lookingFor,
+        friendGender: profile.friendGender,
+        dateGender: profile.dateGender,
+        type: profile.type,
+        interests: profile.interests
+    };
+    
+    try {
+        // Update the User document
+        const updatedUser = await User.findByIdAndUpdate(userId, userFields, { new: true }).select("-password -updatedAt");
+
+        if (!updatedUser) {
+            return res.status(400).json({ error: "User not found" });
+        }
+
+        // Update the UserDescription document
+        const updatedUserDescription = await UserDescription.findOneAndUpdate(
+            { userId: userId },
+            userDescriptionFields,
+            { new: true } // upsert option creates the document if it doesn't exist
+        );
+
+        // Combine both updates into a single response
+        const combinedUserProfile = {
+            ...updatedUser.toObject(),
+            ...updatedUserDescription.toObject()
+        };
+
+        return res.json(combinedUserProfile);
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+const createUserDescription = async (req, res) => {
+    try {
+        const { gender, birthdate, friendGender, dateGender, interests, userId } = req.body;
+
+        const newUserDescription = new UserDescription({
+            gender,
+            birthdate,
+            friendGender,
+            dateGender,
+            interests,
+            userId
+        });
+
+        await newUserDescription.save();
+        res.status(201).json({ message: 'User description saved successfully!', userDescription: newUserDescription});
+    } catch (error) {
+        console.error('Error saving user description:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 module.exports = {
     test,
     SignupUser,
     SigninUser,
     getprofile,
-    
+    updateprofile,
+    createUserDescription
 };

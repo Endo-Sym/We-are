@@ -33,12 +33,16 @@ const FormNewUser = () => {
     const formattedFormData = {
       ...formData,
       birthdate: new Date(formData.birthdate.year, formData.birthdate.month - 1, formData.birthdate.day),
-      userId: user.id,
+      userId: user._id,
     };
 
     try {
-      const response = await axios.post('/api/user-description', formattedFormData);
-      alert('Form submitted successfully!');
+      console.log(formattedFormData);
+      const response = await axios.post('/user-description', formattedFormData);
+      alert('Form submitted successfully! : ', response.data);
+
+      // include profile complete too!!!!
+
       navigate('/');  // Redirect to the homepage or any desired path
     } catch (error) {
       console.error('Error submitting form:', error);

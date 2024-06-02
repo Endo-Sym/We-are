@@ -2,18 +2,19 @@ const UserDescription = require('../Model/user_description');
 
 const createUserDescription = async (req, res) => {
     try {
-        const { gender, birthdate, friendGender, dateGender, interests } = req.body;
+        const { gender, birthdate, friendGender, dateGender, interests, userId } = req.body;
 
         const newUserDescription = new UserDescription({
             gender,
             birthdate,
             friendGender,
             dateGender,
-            interests
+            interests,
+            userId
         });
 
         await newUserDescription.save();
-        res.status(201).json({ message: 'User description saved successfully!' });
+        res.status(201).json({ message: 'User description saved successfully!', userDescription: newUserDescription});
     } catch (error) {
         console.error('Error saving user description:', error);
         res.status(500).json({ error: 'Internal Server Error' });

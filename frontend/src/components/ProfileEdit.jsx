@@ -1,35 +1,60 @@
 import React, { useState, useRef } from 'react';
+import usePreviewImg from './Previewingimga';
 import axios from 'axios';
 
 const ProfileEdit = ({ profile, onSave, onCancel }) => {
-    const [editedProfile, setEditedProfile] = useState(profile);
+    // const [editedProfile, setEditedProfile] = useState(profile);
     const [inputs, setInputs] = useState(profile);
-    const [imgUrl, setImgUrl] = useState(profile.image || '');
-    const fileInputRef = useRef(null);
+    // const [imgUrl, setImgUrl] = useState(profile.image || '');
+    const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
+    const imageRef = useRef(null);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setInputs({ ...inputs, [name]: value });
-        setEditedProfile({ ...editedProfile, [name]: value });
+        if(name === "interests"){
+            const interests = value.split(',');
+            setInputs({ ...inputs, [name]: interests });
+        } else {
+            setInputs({ ...inputs, [name]: value });
+        }
+        // setEditedProfile({ ...editedProfile, [name]: value });
     };
 
     const handleSubmit = async (e) => {
+        console.log("before send: ", inputs, imgUrl);
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/profile', { ...editedProfile, image: imgUrl });
+            const response = await axios.put(`/profile`, { ...inputs, imgUrl: imgUrl });
+            console.log("after send: ", response);
             onSave(response.data);
         } catch (error) {
             console.error('Error saving profile:', error);
         }
     };
 
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setInputs((inputs) => ({
+    //                 ...inputs,
+    //                 imgUrl: reader.result,
+    //             }));
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
+    
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('upload_preset', 'imfstvzq');
 
         try {
-            const response = await axios.post('http://localhost:8000/profile/upload', formData, {
+            const response = await axios.post('http://localhost:8000/post/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -48,6 +73,19 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
     return (
         <div className="max-w-[600px] w-full h-auto relative bg-black bg-opacity-60 backdrop-blur-sm border rounded-[10px] border-primary-pink shadow">
             <form onSubmit={handleSubmit} className="px-4 py-2">
+                <label className="mb-4">
+                    <img
+                        src={profile.imgUrl}
+                        alt="Profile"
+                        className="w-[200px] h-full rounded-[30px] object-cover cursor-pointer"
+                    />
+                    <input 
+                        type="file" 
+                        onChange={(e) => {handleImageChange(e); handleImageUpload(e);}} 
+                        className="hidden" 
+                        ref={imageRef}
+                    />Change image
+                </label>
                 {/* Profile Inputs */}
                 <div className='flex flex-row items-center gap-2'>
                     <p>Name :</p>
@@ -130,8 +168,8 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <p>Type :</p>
                     <input
                         type="text"
-                        name="type16"
-                        value={inputs.type16}
+                        name="type"
+                        value={inputs.type}
                         onChange={handleChange}
                         placeholder="Type16"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
@@ -141,8 +179,8 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     <p>Interests :</p>
                     <input
                         type="text"
-                        name="interest"
-                        value={inputs.interest}
+                        name="interests"
+                        value={inputs.interests}
                         onChange={handleChange}
                         placeholder="Interests"
                         className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"

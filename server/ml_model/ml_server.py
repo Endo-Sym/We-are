@@ -9,7 +9,7 @@ import numpy as np
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-model = load('server/ml_model/model.sav')
+model = load('LSVC-removeIntersectTop20.sav')
 
 # nltk.download('stopwords')
 # nltk.download('punkt')
