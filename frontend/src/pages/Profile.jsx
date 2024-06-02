@@ -133,7 +133,6 @@ const Profile = ({ showSidebar, location }) => {
                                         {profileData.status && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-primary-pink`}>
                                             <span className="material-icons p-2">{profileData.status}</span>
                                         </p>}
-
                                     </div>
                                 </div>
 

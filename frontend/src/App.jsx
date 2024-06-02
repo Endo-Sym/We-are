@@ -22,19 +22,24 @@ axios.defaults.withCredentials = true
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const toggleNavbar = () => {
     setShowSidebar(showSidebar => !showSidebar);
   }
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
   
   return (
     <>
     <UserContextProvider>
     <BrowserRouter>
-      <Navbar toggleNavbar={toggleNavbar}/>
+      <Navbar toggleNavbar={toggleNavbar} onSearch={handleSearch}/>
       <Toaster position='bottom-right' toastOptions={{duration: 2000}}/>
       <Routes>
-        <Route path="/" element={<Home showSidebar={showSidebar}/>} />
+        <Route path="/" element={<Home showSidebar={showSidebar} searchTerm={searchTerm}/>} />
         <Route path="/match" element={<Match showSidebar={showSidebar}/>} />
         <Route path="/profile" element={<Profile showSidebar={showSidebar}/>} />
         <Route path="/perdata" element={<Perdata showSidebar={showSidebar}/>} />

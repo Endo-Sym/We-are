@@ -7,7 +7,7 @@ import searchicon from '/assets/images/searchicon.png';
 import LogoutModal from './LogoutModal'; // Ensure this path is correct
 import axios from 'axios';
 
-export default function Navbar({ toggleNavbar }) {
+export default function Navbar({ toggleNavbar, onSearch }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { user, setUser } = useContext(UserContext);
@@ -44,7 +44,9 @@ export default function Navbar({ toggleNavbar }) {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate(`/search?query=${searchQuery}`);
+        console.log(searchQuery);
+        onSearch(searchQuery);
+        // navigate(`/post/search?query=${searchQuery}`);
     };
 
     useEffect(() => {

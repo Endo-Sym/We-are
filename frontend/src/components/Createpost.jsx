@@ -13,6 +13,7 @@ function Createpost({ onClose }) {
     const { user } = useContext(UserContext); 
     const imageRef = useRef();
     const [profileData, setProfileData] = useState({ imgUrl: '' });
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleTagChange = (event) => {
         setTag(event.target.value);
@@ -42,6 +43,7 @@ function Createpost({ onClose }) {
         formData.append('upload_preset', 'imfstvzq');
     
         try {
+            setIsUploading(true);
             const response = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -49,6 +51,7 @@ function Createpost({ onClose }) {
             });
             console.log('Image uploaded successfully:', response.data);
             setImgUrl(response.data.secure_url);
+            setIsUploading(false);
             return response.data;
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -156,7 +159,13 @@ function Createpost({ onClose }) {
                             </div>
                         )}
                         <div className="flex justify-center">
-                            <button onClick={handlePost} className="bg-white hover:bg-purple-600 text-black p-2 font-bold border-2 border-primary-pink rounded-[30px] w-40">Post</button>
+                            {isUploading ? (
+                            <button className="bg-gray-400 text-white p-2 font-bold border-2 border-primary-pink rounded-[30px] w-40">
+                                Loading...
+                            </button>) 
+                            : (<button onClick={handlePost} className="bg-white hover:bg-purple-600 text-black p-2 font-bold border-2 border-primary-pink rounded-[30px] w-40">
+                                Post
+                            </button>)}
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ import { UserContext } from '../../context/Usercontext';
 import Comment from '../components/Comment';
 import axios from 'axios';
 
-export default function Home({ showSidebar }) {
+export default function Home({ showSidebar, searchTerm }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [posts, setPosts] = useState([]);
     const { user } = useContext(UserContext);
@@ -62,6 +62,34 @@ export default function Home({ showSidebar }) {
         };
         fetchPosts();
     }, []);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                setIsLoading(true);
+                let combinedData = [];
+                const fetchPost = await axios.get(`/post/search?query=${searchTerm}`);
+                const fetchPostData = fetchPost.data;
+                console.log(fetchPostData);
+
+                for (let i = 0; i < fetchPostData.length; i++) {
+                    const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
+                    const fetchPostUserData = fetchPostUser.data;
+                    combinedData.push({
+                        postData: fetchPostData[i],
+                        user: fetchPostUserData
+                    });
+                }
+
+                setPosts(combinedData);
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                setIsLoading(false);
+            }
+        };
+        fetchPosts();
+    }, [searchTerm]);
 
     const toggleStar = (postId) => {
         setPosts(prevPosts => {

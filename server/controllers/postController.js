@@ -89,7 +89,7 @@ const searchPosts = async (req, res) => {
         { description: { $regex: query, $options: 'i' } },
         { heading: { $regex: query, $options: 'i' } }
       ]
-    });
+    }).sort({ createdAt: -1 });
     res.json(posts);
   } catch (error) {
     console.error("Error searching posts:", error);
