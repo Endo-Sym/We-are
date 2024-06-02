@@ -44,7 +44,7 @@ function Signin() {
             console.log('User profile:', user);
             setUser(user);
 
-            const isNewUser = await checkNewUser(user.id);
+            const isNewUser = await checkNewUser(user._id);
             if (isNewUser) {
                 navigate('/formnewuser');
             } else {
@@ -75,7 +75,7 @@ function Signin() {
                 setUser(result);
                 setData({ identifier: '', password: '' });
 
-                const isNewUser = await checkNewUser(result.id);
+                const isNewUser = await checkNewUser(result._id);
                 if (isNewUser) {
                     navigate('/formnewuser');
                 } else {

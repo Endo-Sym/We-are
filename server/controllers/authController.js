@@ -191,7 +191,6 @@ const updateprofile = async (req, res) => {
     const profile = req.body;
     const userId = profile.userId;
 
-    // Separate fields for User and UserDescription
     const userFields = {
         name: profile.name,
         imgUrl: profile.imgUrl
@@ -211,21 +210,18 @@ const updateprofile = async (req, res) => {
     };
     
     try {
-        // Update the User document
         const updatedUser = await User.findByIdAndUpdate(userId, userFields, { new: true }).select("-password -updatedAt");
 
         if (!updatedUser) {
             return res.status(400).json({ error: "User not found" });
         }
 
-        // Update the UserDescription document
         const updatedUserDescription = await UserDescription.findOneAndUpdate(
             { userId: userId },
             userDescriptionFields,
-            { new: true } // upsert option creates the document if it doesn't exist
+            { new: true }
         );
 
-        // Combine both updates into a single response
         const combinedUserProfile = {
             ...updatedUser.toObject(),
             ...updatedUserDescription.toObject()
@@ -240,7 +236,6 @@ const updateprofile = async (req, res) => {
 const createUserDescription = async (req, res) => {
     try {
         const { gender, birthdate, friendGender, dateGender, interests, userId } = req.body;
-
         const newUserDescription = new UserDescription({
             gender,
             birthdate,
@@ -250,8 +245,10 @@ const createUserDescription = async (req, res) => {
             userId
         });
 
+        const updatedUser = await User.findByIdAndUpdate(userId, { profileCompleted: true }, { new: true }).select("-password -updatedAt");
+
         await newUserDescription.save();
-        res.status(201).json({ message: 'User description saved successfully!', userDescription: newUserDescription});
+        res.status(201).json({ message: 'User description saved successfully!', userDescription: newUserDescription, user: updatedUser});
     } catch (error) {
         console.error('Error saving user description:', error);
         res.status(500).json({ error: error.message });

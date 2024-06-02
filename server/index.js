@@ -69,7 +69,7 @@ app.use((req, res, next) => {
 const upload = multer({ dest: 'uploads/' });
 
 // Upload route
-app.post('/post/upload', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('file'), (req, res) => {
   const file = req.file;
 
   if (!file) {

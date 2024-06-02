@@ -31,7 +31,7 @@ function Createpost({ onClose }) {
         formData.append('upload_preset', 'imfstvzq');
     
         try {
-            const response = await axios.post('http://localhost:8000/post/upload', formData, {
+            const response = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }

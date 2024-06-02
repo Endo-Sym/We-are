@@ -3,9 +3,7 @@ import usePreviewImg from './Previewingimga';
 import axios from 'axios';
 
 const ProfileEdit = ({ profile, onSave, onCancel }) => {
-    // const [editedProfile, setEditedProfile] = useState(profile);
     const [inputs, setInputs] = useState(profile);
-    // const [imgUrl, setImgUrl] = useState(profile.image || '');
     const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
     const imageRef = useRef(null);
 
@@ -18,7 +16,6 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         } else {
             setInputs({ ...inputs, [name]: value });
         }
-        // setEditedProfile({ ...editedProfile, [name]: value });
     };
 
     const handleSubmit = async (e) => {
@@ -32,20 +29,6 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
             console.error('Error saving profile:', error);
         }
     };
-
-    // const handleImageChange = (e) => {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onloadend = () => {
-    //             setInputs((inputs) => ({
-    //                 ...inputs,
-    //                 imgUrl: reader.result,
-    //             }));
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // };
     
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
@@ -54,7 +37,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         formData.append('upload_preset', 'imfstvzq');
 
         try {
-            const response = await axios.post('http://localhost:8000/post/upload', formData, {
+            const response = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -64,10 +47,6 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         } catch (error) {
             console.error('Error uploading image:', error);
         }
-    };
-
-    const handleImageClick = () => {
-        fileInputRef.current.click();
     };
 
     return (
