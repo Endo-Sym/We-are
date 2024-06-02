@@ -46,10 +46,7 @@ const postSchema = new Schema({
     default: 0
   },
   comments: [commentSchema],
-  shares: {
-    type: Number,
-    default: 0
-  }
+
 }, { timestamps: true });
 
 const Post = mongoose.model("Post", postSchema);
