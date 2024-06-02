@@ -9,16 +9,7 @@ const test = (req, res) => {
 
 const createPost = async (req, res) => {
   try {
-    const { 
-      postedBy,
-      tags,
-      heading,
-      description,
-      imgUrl,
-      likes,
-      comments,
-      shares
-    } = req.body;
+    const { postedBy, tags, heading, description, imgUrl, likes, comments, shares } = req.body;
 
     if (!postedBy || !heading || !description) {
       return res.status(400).json({ error: "PostedBy, heading, and description fields are required" });
@@ -89,6 +80,23 @@ const deletePost = async (req, res) => {
   }
 };
 
+const searchPosts = async (req, res) => {
+  const { query } = req.query;
+  try {
+    const posts = await Post.find({
+      $or: [
+        { tags: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { heading: { $regex: query, $options: 'i' } }
+      ]
+    });
+    res.json(posts);
+  } catch (error) {
+    console.error("Error searching posts:", error);
+    res.status(500).send("Server Error");
+  }
+};
+
 const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
@@ -118,24 +126,25 @@ const addComment = async (req, res) => {
   const { text, userId, ProfilePicture, username } = req.body;
 
   try {
-      const post = await Post.findById(id);
-      if (!post) return res.status(404).send('Post not found');
+    const post = await Post.findById(id);
+    if (!post) return res.status(404).send('Post not found');
 
-      const newComment = {
-          userId,
-          text,
-          ProfilePicture,
-          username
-      };
+    const newComment = {
+      userId,
+      text,
+      ProfilePicture,
+      username
+    };
 
-      post.comments.push(newComment);
-      await post.save();
+    post.comments.push(newComment);
+    await post.save();
 
-      res.status(201).json(newComment);
+    res.status(201).json(newComment);
   } catch (error) {
-      res.status(500).json({ error: 'Error adding comment' });
+    res.status(500).json({ error: 'Error adding comment' });
   }
 };
+
 const getComments = async (req, res) => {
   try {
     const postId = req.params.id;
@@ -202,16 +211,17 @@ const fetchPost = async (req, res) => {
   }
 };
 
-module.exports = { 
-  createPost, 
-  getPost, 
-  deletePost, 
-  likeUnlikePost, 
-  addComment, 
-  getComments, 
-  getFeedPosts, 
-  getUserPosts, 
-  getTagPost, 
+module.exports = {
+  createPost,
+  getPost,
+  deletePost,
+  likeUnlikePost,
+  addComment,
+  getComments,
+  getFeedPosts,
+  getUserPosts,
+  getTagPost,
   test,
-  fetchPost 
+  fetchPost,
+  searchPosts 
 };

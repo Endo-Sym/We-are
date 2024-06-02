@@ -3,18 +3,18 @@ import { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../context/Usercontext';
 import { CiLogout } from "react-icons/ci";
 import logo from '/assets/images/logo.svg';
-import menuicon from '/assets/images/menuicon.svg';
 import searchicon from '/assets/images/searchicon.png';
 import LogoutModal from './LogoutModal'; // Ensure this path is correct
 import axios from 'axios';
 
-export default function Home({ toggleNavbar }) {
+export default function Navbar({ toggleNavbar }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { user, setUser } = useContext(UserContext);
 
     const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
-    
+    const [searchQuery, setSearchQuery] = useState('');
+    const [profileData, setProfileData] = useState({ imgUrl: '' });
 
     useEffect(() => {
         if (location.state && location.state.user) {
@@ -42,6 +42,23 @@ export default function Home({ toggleNavbar }) {
         setLogoutModalOpen(false);
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        navigate(`/search?query=${searchQuery}`);
+    };
+
+    useEffect(() => {
+        if (user && user._id) {
+            async function fetchData() {
+                console.log("hey! :", user);
+                const response = await axios.get(`/profile/${user._id}`);
+                console.log("set profile: ", response.data);
+                setProfileData(response.data);
+            }
+            fetchData();
+        }
+    }, [user]);
+
     if (location.pathname === '/signin' || location.pathname === '/signup') {
         return null;
     }
@@ -59,15 +76,24 @@ export default function Home({ toggleNavbar }) {
                         </Link>
                     </div>
                     <div className="flex items-center justify-center w-full relative col-span-1 max-md:w-[80%] justify-self-center">
-                        <img src={searchicon} alt="" className="absolute size-6 left-3" />
-                        <input className="border-2 border-primary-pink bg-black text-white caret-primary-pink placeholder-primary-pink placeholder-opacity-60 w-full h-10 pl-9 rounded-full text-sm focus:outline-none" type="search" name="search" placeholder="Search" />
+                        <img src={searchicon} alt="Search Icon" className="absolute size-6 left-3" />
+                        <form onSubmit={handleSearch} className="w-full">
+                            <input
+                                className="border-2 border-primary-pink bg-black text-white caret-primary-pink placeholder-primary-pink placeholder-opacity-60 w-full h-10 pl-9 rounded-full text-sm focus:outline-none"
+                                type="search"
+                                name="search"
+                                placeholder="Search"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </form>
                     </div>
                     <div className="flex items-center justify-end gap-3 text-white col-span-1">
                         {user ? (
                             <>
                                 <CiLogout onClick={handleLogoutClick} className="cursor-pointer" />
                                 <Link to={"/profile"} className="text-right hover:underline">{user.name ?? user.username}</Link>
-                                <img src={user.imgUrl} alt="User"  className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
+                                <img src={profileData.imgUrl} alt="Profile" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                             </>
                         ) : (
                             <a href="/signin" className="flex items-center justify-end gap-3 text-white col-span-1">
