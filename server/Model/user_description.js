@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 
 const userDescriptionSchema = new mongoose.Schema({
+    contact: {
+        type: String,
+        default: ""
+    },
+    country: {
+        type: String,
+        default: ""
+    },
     role: {
         type: String,
         default: ""
@@ -19,7 +27,7 @@ const userDescriptionSchema = new mongoose.Schema({
     },
     birthdate: {
         type: Date,
-        default: "0000-00-00"
+        default: "00-00-0000"
     },
     lookingFor: {
         type: String,
