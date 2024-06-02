@@ -33,6 +33,9 @@ export default {
       },
       screens: {
         "wide": "1440px"
+      },
+      backgroundImage: {
+        'cartoon': "url('/assets/images/cartoon-bg.png')"
       }
     },
   },

@@ -42,9 +42,11 @@ export default function Home({ showSidebar, searchTerm }) {
                 setIsLoading(true);
                 let combinedData = [];
                 const fetchPost = await axios.get('/post/fetch');
+                console.log(fetchPost.data);
                 const fetchPostData = fetchPost.data;
 
                 for (let i = 0; i < fetchPostData.length; i++) {
+                    console.log(i, fetchPostData[i]);
                     const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
                     const fetchPostUserData = fetchPostUser.data;
                     combinedData.push({
@@ -70,7 +72,6 @@ export default function Home({ showSidebar, searchTerm }) {
                 let combinedData = [];
                 const fetchPost = await axios.get(`/post/search?query=${searchTerm}`);
                 const fetchPostData = fetchPost.data;
-                console.log(fetchPostData);
 
                 for (let i = 0; i < fetchPostData.length; i++) {
                     const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
@@ -160,7 +161,7 @@ export default function Home({ showSidebar, searchTerm }) {
         <>
             <Sidebar showSidebar={showSidebar} />
             <Loading isLoading={isLoading} />
-            <div className={`flex bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full`}>
+            <div className={`flex bg-cartoon bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full`}>
                 <div className="relative flex flex-1 overflow-y-auto">
                     <section className="flex fixed w-[35%] py-8 px-4 overflow-hidden z-10">
                         <div className="h-full min-w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4 flex flex-col">

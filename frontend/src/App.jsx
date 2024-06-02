@@ -17,6 +17,8 @@ axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.withCredentials = true
 
 
+import Test from "./pages/Test";
+
 
 
 
@@ -41,13 +43,15 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home showSidebar={showSidebar} searchTerm={searchTerm}/>} />
         <Route path="/match" element={<Match showSidebar={showSidebar}/>} />
-        <Route path="/profile" element={<Profile showSidebar={showSidebar}/>} />
+        <Route path="/profile/:userId" element={<Profile showSidebar={showSidebar}/>} />
         <Route path="/perdata" element={<Perdata showSidebar={showSidebar}/>} />
         <Route path="/pertest" element={<Pertest showSidebar={showSidebar}/>} />
         <Route path="/resource" element={<Resource showSidebar={showSidebar}/>} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/formnewuser" element={<FormNewUser />} />
+        {/* <Route path="/test/:userId" element={<Test />} /> */}
+
       </Routes>
     </BrowserRouter>
     </UserContextProvider>

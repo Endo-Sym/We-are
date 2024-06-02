@@ -21,14 +21,14 @@ function Createpost({ onClose }) {
     useEffect(() => {
         const fetchProfileData = async () => {
             try {
-                const response = await axios.get(`/profile/${user._id}`);
+                const response = await axios.get(`/profile/${user.userId}`);
                 setProfileData(response.data);
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
         };
         fetchProfileData();
-    }, [user._id]);
+    }, [user.userId]);
     const handleHeadingChange = (event) => {
         setHeading(event.target.value);
     };
@@ -71,7 +71,7 @@ function Createpost({ onClose }) {
         }
 
         const newPost = {
-            postedBy: user._id,
+            postedBy: user.userId,
             tags: tag,
             heading: heading,
             description: description,

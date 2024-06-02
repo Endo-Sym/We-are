@@ -72,10 +72,11 @@ function Signin() {
                 toast.error(result.error);
             } else {
                 console.log('User data:', result);
-                setUser(result);
+                const responseUser = await axios.get(`/profile/${result._id}`);
+                setUser(responseUser.data);
                 setData({ identifier: '', password: '' });
 
-                const isNewUser = await checkNewUser(result._id);
+                const isNewUser = await checkNewUser(responseUser.userId);
                 if (isNewUser) {
                     navigate('/formnewuser');
                 } else {

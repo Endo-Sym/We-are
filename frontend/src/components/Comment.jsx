@@ -14,7 +14,7 @@ const Comment = ({ user, postId, onComment }) => {
         try {
             const response = await axios.post(`/posts/${postId}/comment`, {
                 text: comment,
-                userId: user._id,
+                userId: user.userId,
                 ProfilePicture: user.imgUrl,
                 username: user.name ?? user.username
             });

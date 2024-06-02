@@ -50,16 +50,17 @@ export default function Navbar({ toggleNavbar, onSearch }) {
     };
 
     useEffect(() => {
-        if (user && user._id) {
+        if (user && user.userId) {
             async function fetchData() {
-                console.log("hey! :", user);
-                const response = await axios.get(`/profile/${user._id}`);
-                console.log("set profile: ", response.data);
+                // console.log("hey! :", user);
+                const response = await axios.get(`/profile/${user.userId}`);
+                // console.log("set profile: ", response.data);
+                setUser(response.data);
                 setProfileData(response.data);
             }
             fetchData();
         }
-    }, [user]);
+    }, []);
 
     if (location.pathname === '/signin' || location.pathname === '/signup') {
         return null;
@@ -94,8 +95,8 @@ export default function Navbar({ toggleNavbar, onSearch }) {
                         {user ? (
                             <>
                                 <CiLogout onClick={handleLogoutClick} className="cursor-pointer" />
-                                <Link to={"/profile"} className="text-right hover:underline">{user.name ?? user.username}</Link>
-                                <img src={profileData.imgUrl} alt="Profile" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
+                                <Link to={`/profile/${user.userId}`} className="text-right hover:underline">{user.username}</Link>
+                                <img src={user.imgUrl} alt="Profile" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                             </>
                         ) : (
                             <a href="/signin" className="flex items-center justify-end gap-3 text-white col-span-1">

@@ -33,7 +33,7 @@ const FormNewUser = () => {
     const formattedFormData = {
       ...formData,
       birthdate: new Date(formData.birthdate.year, formData.birthdate.month - 1, formData.birthdate.day),
-      userId: user._id,
+      userId: user.userId,
     };
 
     try {

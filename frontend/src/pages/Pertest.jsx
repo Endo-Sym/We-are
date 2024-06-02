@@ -46,7 +46,7 @@ export default function Pertest({ showSidebar }){
     };
 
     return(
-        <div className=" w-full min-h-screen h-full flex flex-col justify-center items-center border-black bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito">
+        <div className=" w-full min-h-screen h-full flex flex-col justify-center items-center border-black bg-cartoon bg-cover bg-fixed font-nunito">
             <Sidebar showSidebar={showSidebar}/>
             <div className={`flex flex-col items-center ${MBTI ? "justify-start pt-16" : "justify-center pt-10"} mt-[3.8rem] ml-[5.5rem] p-10 h-full`}>
                 <div className='flex flex-col items-center justify-center'>

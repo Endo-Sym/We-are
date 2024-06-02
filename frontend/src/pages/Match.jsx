@@ -91,6 +91,18 @@ const Match = ({ showSidebar }) => {
 
     ];
 
+    // useEffect(() => {
+    //     const fetchProfileData = async () => {
+    //         try {
+    //             const response = await axios.get(`/profile/${user._id}`);
+    //             setProfileData(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching profile data:', error);
+    //         }
+    //     };
+    //     fetchProfileData();
+    // }, [user._id]);
+
     const [profileIndex, setProfileIndex] = useState(0);
     const profileData = profiles[profileIndex];
     const handleNextProfile = () => {
@@ -108,8 +120,6 @@ const Match = ({ showSidebar }) => {
         const ageDate = new Date(ageDifMs);
 
         const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-
-        console.log(age);
         return age;
     };
 
@@ -117,7 +127,7 @@ const Match = ({ showSidebar }) => {
         <>
             <Sidebar showSidebar={showSidebar} />
             <Loading isLoading={isLoading} />
-            <div className={`flex bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full items-center justify-center`}>
+            <div className={`flex bg-cartoon bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full items-center justify-center`}>
                 <div className="h-full w-3/4 relative bg-transparent flex flex-col items-center justify-center p-2">
                     <div className="flex items-center gap-4">
                         <button onClick={handlePreviousProfile} className='rotate-180'> 

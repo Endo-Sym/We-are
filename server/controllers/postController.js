@@ -64,7 +64,7 @@ const deletePost = async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    if (post.postedBy.toString() !== req.user._id.toString()) {
+    if (post.postedBy.toString() !== req.user.userId.toString()) {
       return res.status(401).json({ error: "Unauthorized to delete post" });
     }
 
@@ -100,7 +100,7 @@ const searchPosts = async (req, res) => {
 const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
-    const userId = req.user._id;
+    const userId = req.user.userId;
 
     const post = await Post.findById(postId);
     if (!post) {
@@ -160,7 +160,7 @@ const getComments = async (req, res) => {
 
 const getFeedPosts = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.userId;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
