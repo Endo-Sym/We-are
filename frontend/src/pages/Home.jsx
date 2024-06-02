@@ -208,10 +208,7 @@ export default function Home({ showSidebar, searchTerm }) {
                                                     <img className="size-6 min-w-10" src={icon_comment} alt="comment" />
                                                     <div className="text-lg">{post.postData.comments.length}</div>
                                                 </a>
-                                                <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleShare(post.postData._id)}>
-                                                    <img className="size-6 min-w-10" src={Share} alt="share" />
-                                                    <div className="text-lg">{post.postData.shares}</div>
-                                                </a>
+                                             
                                             </div>
                                             <div>
                                                 {post.postData.comments.map((comment, index) => (
