@@ -9,10 +9,6 @@ const userDescriptionSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    role: {
-        type: String,
-        default: ""
-    },
     status: {
         type: String,
         default: ""

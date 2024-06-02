@@ -5,6 +5,7 @@ import axios from 'axios';
 const ProfileEdit = ({ profile, onSave, onCancel }) => {
     const [inputs, setInputs] = useState(profile);
     const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
+    const [isUploading, setIsUploading] = useState(false);
     const imageRef = useRef(null);
 
 
@@ -29,7 +30,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
             console.error('Error saving profile:', error);
         }
     };
-    
+
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         const formData = new FormData();
@@ -37,6 +38,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         formData.append('upload_preset', 'imfstvzq');
 
         try {
+            setIsUploading(true);
             const response = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -44,14 +46,18 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
             });
             console.log('Image uploaded successfully:', response.data);
             setImgUrl(response.data.secure_url);
+            setIsUploading(false);
         } catch (error) {
             console.error('Error uploading image:', error);
         }
     };
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
 
     return (
-        <div className="max-w-[600px] w-full h-auto relative bg-black bg-opacity-60 backdrop-blur-sm border rounded-[10px] border-primary-pink shadow">
-            <form onSubmit={handleSubmit} className="px-4 py-2">
+        <div className="max-w-[800px] w-full h-auto relative bg-black bg-opacity-60 backdrop-blur-sm border rounded-[10px] border-primary-pink shadow">
+            <form onSubmit={handleSubmit} className="px-4 py-4">
                 <label className="mb-4">
                     <img
                         src={profile.imgUrl}
@@ -66,115 +72,145 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     />Change image
                 </label>
                 {/* Profile Inputs */}
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Name :</p>
-                    <input
-                        type="text"
-                        name="name"
-                        value={inputs.name}
-                        onChange={handleChange}
-                        placeholder="Name"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
+                <div className='flex flex-wrap justify-center'>
+                    <div className='w-full lg:w-1/2 p-2'>
+                        <div className='flex items-center gap-2'>
+                            <p className="w-24">Name</p>
+                            <input
+                                type="text"
+                                name="name"
+                                value={inputs.name}
+                                onChange={handleChange}
+                                placeholder="Name"
+                                className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                            />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <p className="w-24">Gender</p>
+                            <input
+                                type="text"
+                                name="gender"
+                                value={inputs.gender}
+                                onChange={handleChange}
+                                placeholder="Gender"
+                                className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                            />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <p className="w-24">Status</p>
+                            <input
+                                type="text"
+                                name="status"
+                                value={inputs.status}
+                                onChange={handleChange}
+                                placeholder="Status"
+                                className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                            />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <p className="w-24">Country</p>
+                            <input
+                                type="text"
+                                name="country"
+                                value={inputs.country}
+                                onChange={handleChange}
+                                placeholder="Country"
+                                className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                            />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <p className="w-24">Type</p>
+                            <input
+                                type="text"
+                                name="type"
+                                value={inputs.type}
+                                onChange={handleChange}
+                                placeholder="Type"
+                                className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                            />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <p className="w-24">Interests</p>
+                            <input
+                                type="text"
+                                name="interests"
+                                value={inputs.interests}
+                                onChange={handleChange}
+                                placeholder="Interests"
+                                className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                            />
+                        </div>
+                    </div>
+
+                    <div className='w-full lg:w-1/2 p-2 flex flex-col justify-between'>
+                        <div>
+                            <div className='flex items-center gap-2'>
+                                <p className="w-24">Looking For</p>
+                                <input
+                                    type="text"
+                                    name="lookingFor"
+                                    value={inputs.lookingFor}
+                                    onChange={handleChange}
+                                    placeholder="Looking For"
+                                    className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                                />
+                            </div>
+                            <div className='flex items-center gap-2'>
+                                <p className="w-24">Date Gender</p>
+                                <input
+                                    type="text"
+                                    name="dateGender"
+                                    value={inputs.dateGender}
+                                    onChange={handleChange}
+                                    placeholder="Date gender"
+                                    className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                                />
+                            </div>
+                            <div className='flex items-center gap-2'>
+                                <p className="w-24">Friend Gender</p>
+                                <input
+                                    type="text"
+                                    name="friendGender"
+                                    value={inputs.friendGender}
+                                    onChange={handleChange}
+                                    placeholder="Friend gender"
+                                    className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className='flex items-center gap-2'>
+                                <p className="w-24">Contact</p>
+                                <input
+                                    type="text"
+                                    name="contact"
+                                    value={inputs.contact}
+                                    onChange={handleChange}
+                                    placeholder="Contact"
+                                    className="flex-1 h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Role :</p>
-                    <input
-                        type="text"
-                        name="role"
-                        value={inputs.role}
-                        onChange={handleChange}
-                        placeholder="Role"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Status :</p>
-                    <input
-                        type="text"
-                        name="status"
-                        value={inputs.status}
-                        onChange={handleChange}
-                        placeholder="Status"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Address :</p>
-                    <input
-                        type="text"
-                        name="address"
-                        value={inputs.address}
-                        onChange={handleChange}
-                        placeholder="Address"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Gender :</p>
-                    <input
-                        type="text"
-                        name="gender"
-                        value={inputs.gender}
-                        onChange={handleChange}
-                        placeholder="Gender"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>ID We Are :</p>
-                    <input
-                        type="text"
-                        name="idWeAre"
-                        value={inputs.idWeAre}
-                        onChange={handleChange}
-                        placeholder="ID We Are"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Looking For :</p>
-                    <input
-                        type="text"
-                        name="lookingFor"
-                        value={inputs.lookingFor}
-                        onChange={handleChange}
-                        placeholder="Looking For"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Type :</p>
-                    <input
-                        type="text"
-                        name="type"
-                        value={inputs.type}
-                        onChange={handleChange}
-                        placeholder="Type16"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-                <div className='flex flex-row items-center gap-2'>
-                    <p>Interests :</p>
-                    <input
-                        type="text"
-                        name="interests"
-                        value={inputs.interests}
-                        onChange={handleChange}
-                        placeholder="Interests"
-                        className="w-auto h-10 px-4 my-2 rounded border border-gray-300 focus:outline-none focus:border-fuchsia-500 text-black"
-                    />
-                </div>
-       
 
                 {/* Action Buttons */}
                 <div className="flex justify-between gap-5 mt-4">
-                    <button
+                    {isUploading ? (
+                        <button
+                            type="button"
+                            className="flex-1 h-10 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
+                        >
+                            Uploading...
+                        </button>
+                    
+                    ) : (<button
                         type="submit"
                         className="flex-1 h-10 bg-fuchsia-500 text-white rounded-lg hover:bg-fuchsia-600 focus:outline-none"
                     >
                         Save
-                    </button>
+                    </button>)}
                     <button
                         type="button"
                         onClick={onCancel}
@@ -187,5 +223,4 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         </div>
     );
 };
-
 export default ProfileEdit;

@@ -3,80 +3,114 @@ import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import profilePic from '../../assets/images/profile-pic.svg';
 import { UserContext } from '../../context/Usercontext';
-
 const Match = ({ showSidebar }) => {
     const [isLoading, setIsLoading] = useState(false);
     const { user = {}, setUser } = useContext(UserContext);
-
     // Define an array to hold multiple profiles
     const profiles = [
         {
             name: user.name || user.username,
-            role: 'Student',
-            status: 'In progress',
-            address: 'Bangmod, Bangkok TH',
-            gender: 'Female',
-            idWeAre: '20',
             lookingFor: 'Friends',
-            type16: 'ENFP',
-            interests: ['#sport', '#art', '#movie', '#food', '#technology'],
-            followers: 5,
-            love: 20,
+            followers: 32000,
+            love: 45200,
+            contact: "@bobppbpbpbp",
+            country: "Thailand",
+            birthdate: "2004-02-14T17:00:00.000Z",
+            dateGender: "Man",
+            email: "tt6@g",
+            friendGender: "Man",
+            gender: "Woman",
+            interests: ['Sport', 'Movie', 'Food', 'Photography', 'Travel'],
+            lookingFor: "Friends",
+            name: "t6",
+            status: "Single",
+            type: "ENTP",
+            userId: "665bbc2038e7d9fa98e3e212",
+            username : "tt6",
             profileImage: profilePic,
         },
         {
-            name: 'John Doe',
-            role: 'Teacher',
-            status: 'Completed',
-            address: 'Siam, Bangkok TH',
-            gender: 'Male',
-            idWeAre: '25',
-            lookingFor: 'Networking',
-            type16: 'INTJ',
-            interests: ['#reading', '#technology', '#gaming'],
-            followers: 10,
+            name: "Alice",
+            lookingFor: "Networking",
+            followers: 200,
             love: 50,
-            profileImage: profilePic,
-        },
-        {
-            name: 'Jane Smith',
-            role: 'Developer',
-            status: 'Employed',
-            address: 'Silom, Bangkok TH',
-            gender: 'Female',
-            idWeAre: '30',
-            lookingFor: 'Collaboration',
-            type16: 'ISTP',
-            interests: ['#coding', '#movies', '#traveling'],
-            followers: 15,
-            love: 40,
-            profileImage: profilePic,
-        },
-        {
-            name: 'Alice Johnson',
-            role: 'Project Manager',
-            status: 'Employed',
-            address: 'Chatuchak, Bangkok TH',
-            gender: 'Female',
-            idWeAre: '32',
-            lookingFor: 'Job Opportunities',
-            type16: 'ENTJ',
-            interests: ['#management', '#fitness', '#reading'],
-            followers: 30,
-            love: 60,
-            profileImage: profilePic,
+            contact: "@alice_nw",
+            country: "USA",
+            birthdate: "1990-05-10T17:00:00.000Z",
+            dateGender: "Woman",
+            email: "alice@example.com",
+            friendGender: "All",
+            gender: "Non-binary",
+            interests: ['Technology', 'Music', 'Gaming', 'Reading', 'Travel'],
+            status: "Complicated",
+            type: "INTJ",
+            userId: "1234567890abcdef12345678",
+            username: "alice_nw",
+            profileImage: profilePic
         }
+        ,
+        {
+            name: "John",
+            lookingFor: "Business",
+            followers: 300,
+            love: 80,
+            contact: "@john_biz",
+            country: "Canada",
+            birthdate: "1985-07-20T17:00:00.000Z",
+            dateGender: "Woman",
+            email: "john@example.com",
+            friendGender: "Woman",
+            gender: "Man",
+            interests: ['Business', 'Fitness', 'Cooking', 'Photography', 'Travel'],
+            status: "Married",
+            type: "ENTP",
+            userId: "abcdef1234567890abcdef12",
+            username: "john_biz",
+            profileImage: profilePic
+        }
+        ,
+        {
+            name: "Sara",
+            lookingFor: "Dating",
+            followers: 150,
+            love: 60,
+            contact: "@sara_date",
+            country: "UK",
+            birthdate: "1995-12-01T17:00:00.000Z",
+            dateGender: "Man",
+            email: "sara@example.com",
+            friendGender: "Man",
+            gender: "Woman",
+            interests: ['Art', 'Movies', 'Fashion', 'Cooking', 'Travel'],
+            status: "Single",
+            type: "INFJ",
+            userId: "7890abcdef1234567890abcd",
+            username: "sara_date",
+            profileImage: profilePic
+        }
+
     ];
 
     const [profileIndex, setProfileIndex] = useState(0);
     const profileData = profiles[profileIndex];
-
     const handleNextProfile = () => {
         setProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
     };
-
     const handlePreviousProfile = () => {
         setProfileIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length);
+    };
+
+    const getAge = (rawDate) => {
+        const mongooseDate = new Date(rawDate);
+        const currentDate = new Date();
+
+        const ageDifMs = currentDate - mongooseDate;
+        const ageDate = new Date(ageDifMs);
+
+        const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+        console.log(age);
+        return age;
     };
 
     return (
@@ -109,18 +143,24 @@ const Match = ({ showSidebar }) => {
                                         />
                                     </div>
                                     <h1 className="text-3xl font-bold">{profileData.name}</h1>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Role</span>{profileData.role}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Status</span>{profileData.status}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Address</span>{profileData.address}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">ID We Are</span>{profileData.idWeAre}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Looking for</span>{profileData.lookingFor}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Country :</span>{profileData.country ? profileData.country : "-"}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Age :</span>{profileData.birthdate ? getAge(profileData.birthdate) : "-"}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Looking for :</span>{profileData.lookingFor ? profileData.lookingFor : "-"}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Date gender :</span>{profileData.dateGender ? profileData.dateGender : "-"}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Friend gender :</span>{profileData.friendGender ? profileData.friendGender : "-"}</p>
                                     <div className="flex justify-start gap-2 mt-2">
-                                        <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] ${profileData.gender === "Female" ? "bg-pink-500" : "bg-blue-500"}`}><span className="material-icons p-2">{profileData.gender}</span></p>
-                                        <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}><span className="material-icons p-2">{profileData.type16}</span></p>
+                                        {profileData.gender && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] ${profileData.gender === "Woman" ? "bg-pink-500" : "bg-blue-500"}`}>
+                                            <span className="material-icons p-2">{profileData.gender}</span>
+                                        </p>}
+                                        {profileData.type && <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}>
+                                            <span className="material-icons p-2">{profileData.type}</span>
+                                        </p>}
+                                        {profileData.status && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-primary-pink`}>
+                                            <span className="material-icons p-2">{profileData.status}</span>
+                                        </p>}
                                     </div>
                                 </div>
                             </div>
-
                             <p className="flex flex-wrap gap-2 mt-4">
                                     {profileData.interests.map((interest, index) => (
                                         <span key={index} className="w-auto h-[30px] px-3 rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer bg-black bg-opacity-30 backdrop-blur-md border-fuchsia-500">
@@ -128,7 +168,6 @@ const Match = ({ showSidebar }) => {
                                         </span>
                                     ))}
                             </p>
-
                             <div className="flex gap-6 mt-5">
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">
@@ -187,5 +226,4 @@ const Match = ({ showSidebar }) => {
         </>
     );
 };
-
 export default Match;

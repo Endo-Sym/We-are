@@ -197,16 +197,15 @@ const updateprofile = async (req, res) => {
     };
 
     const userDescriptionFields = {
-        role: profile.role,
         status: profile.status,
-        address: profile.address,
         gender: profile.gender,
-        birthdate: profile.birthdate,
         lookingFor: profile.lookingFor,
         friendGender: profile.friendGender,
         dateGender: profile.dateGender,
         type: profile.type,
-        interests: profile.interests
+        interests: profile.interests,
+        contact: profile.contact,
+        country: profile.country
     };
     
     try {
