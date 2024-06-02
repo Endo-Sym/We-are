@@ -11,17 +11,25 @@ const Profile = ({ showSidebar, location }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [profileData, setProfileData] = useState({
         name: user.name || user.username,
-        role: 'Student',
-        status: 'In progress',
-        address: 'Bangmod, Bangkok TH',
-        gender: 'Female',
-        idWeAre: '20',
         lookingFor: 'Friends',
-        type16: 'ENFP',
-        interests: ['#sport', '#art', '#movie', '#food', '#technology'],
         followers: 5,
         love: 20,
+        contact: "@bobppbpbpbp",
+        country: "Thailand",
+        birthdate: "2004-02-14T17:00:00.000Z",
+        dateGender: "Man",
+        email: "tt6@g",
+        friendGender: "Man",
+        gender: "Woman",
+        interests: ['Sport', 'Movie', 'Food', 'Photography', 'Travel'],
+        lookingFor: "Friends",
+        name: "t6",
+        status: "Single",
+        type: "ENTP",
+        userId: "665bbc2038e7d9fa98e3e212",
+        username : "tt6",
         profileImage: profilePic,
+        
     });
 
     useEffect(() => {
@@ -66,7 +74,7 @@ const Profile = ({ showSidebar, location }) => {
                     (<div className="flex items-start gap-4">
                         <div className="flex flex-col items-center relative">
                             <div className="relative">
-                                <div className="max-w-[30rem] h-[29rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
+                                <div className="max-w-[38rem] h-[27rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
                                     <img 
                                         src={profileData.profileImage} 
                                         alt="Profile" 
@@ -82,29 +90,38 @@ const Profile = ({ showSidebar, location }) => {
                                         />
                                     </div>
                                     <h1 className="text-3xl font-bold">{user.name ?? user.username}</h1>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">school</span>{profileData.role}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">update</span>{profileData.status}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">place</span>{profileData.address}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">favorite</span>{profileData.idWeAre}</p>
-                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">search</span>{profileData.lookingFor}</p>
+
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Country :</span>{profileData.country}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Birthday :</span>{profileData.birthdate}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Looking for :</span>{profileData.lookingFor}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Date gender :</span>{profileData.dateGender}</p>
+                                    <p className="flex items-center text-lg"><span className="material-icons mr-2">Freind gender :</span>{profileData.friendGender}</p>
                                     <div className="flex justify-start gap-2 mt-2">
-                                        <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] ${profileData.gender === "Female" ? "bg-pink-500" : "bg-blue-500"}`}><span className="material-icons p-2">gender</span></p>
-                                        <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}><span className="material-icons p-2">{profileData.type16}</span></p>
+                                        <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] ${profileData.gender === "Woman" ? "bg-pink-500" : "bg-blue-500"}`}>
+                                            <span className="material-icons p-2">{profileData.gender}</span></p>                                        <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}>
+                                            <span className="material-icons p-2">{profileData.type}</span></p>
+                                        <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-primary-pink`}><span className="material-icons p-2">{profileData.status}</span></p>
+
                                     </div>
                                 </div>
+                                
                             </div>
-
-                                <p className="flex flex-wrap gap-2 mt-4">
+                                                        
+                            <p className="flex flex-wrap gap-2 mt-3">
                                     {profileData.interests.map((interest, index) => (
                                         <span key={index} className="w-auto h-[30px] px-3 rounded-full flex items-center justify-center text-white text-xl font-medium border-2 cursor-pointer bg-black bg-opacity-30 backdrop-blur-md border-fuchsia-500">
                                             {interest}
                                         </span>
                                     ))}
-                                </p>
+                            </p>
             
-                            <div className="flex gap-6 mt-5">
+                            <p className="flex items-center text-lg mt-2"><span className="material-icons mr-2">Contact :</span>{profileData.contact}<span className="material-icons ml-2 mr-2">| Email :</span>{profileData.email}</p> 
+                            {/* <p className="flex items-center text-lg mt-3"><span className="material-icons mr-2">Email :</span>{profileData.email}</p> */}
+                            <p className="flex items-center text-lg mt-1"><span className="material-icons mr-2">ID :</span>{profileData.userId}</p>
+
+                            <div className="flex gap-6 mt-3">
                                 <div className="flex flex-col items-center gap-1">
-                                    <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">                                        <svg width="44" height="45" viewBox="0 0 44 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <div className="text-center min-w-[6rem] h-[3.5rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">                                        <svg width="44" height="45" viewBox="0 0 44 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect x="6" y="13.7998" width="33" height="12.4" rx="4" stroke="white" stroke-width="2"/>
                                             <path d="M38.3519 22C38.3519 31.4519 31.1937 39 22.5 39C13.8064 39 6.64819 31.4519 6.64819 22C6.64819 12.5481 13.8064 5 22.5 5C31.1937 5 38.3519 12.5481 38.3519 22Z" stroke="white" stroke-width="2"/>
                                             <rect x="9.88892" y="16.2" width="10.963" height="8.4" rx="4" stroke="white" stroke-width="2"/>
@@ -129,7 +146,7 @@ const Profile = ({ showSidebar, location }) => {
                                     <p>Followers</p>
                                 </div>
                                 <div className="flex flex-col items-center gap-1">
-                                    <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all flex items-center justify-center gap-2">
+                                    <div className="text-center min-w-[6rem] h-[3.5rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all flex items-center justify-center gap-2">
                                         
                                         <svg width="43" height="47" viewBox="0 0 43 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g filter="url(#filter0_f_509_710)">
@@ -155,12 +172,12 @@ const Profile = ({ showSidebar, location }) => {
                         </button>
                     </div>
                     ) : (
-                    <div className="flex flex-row justify-center items-center h-[600px] w-[1000px] border-2 gap-10 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-6">
+                    <div className="flex flex-row justify-center items-center h-[600px] w-[1200px] border-2 gap-10 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-6">
                         <label className="mb-4">
                             <img
                                 src={profileData.profileImage}
                                 alt="Profile"
-                                className="w-[200px] h-full rounded-[30px] object-cover cursor-pointer"
+                                className="w-[300px] h-full rounded-[30px] object-cover cursor-pointer"
                             />
                             <input
                                 type="file"
