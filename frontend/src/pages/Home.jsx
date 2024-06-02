@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import Createpost from '../components/Createpost';
@@ -7,8 +7,7 @@ import icon_comment from '/assets/images/icon_comment.svg';
 import Share from '/assets/images/Share.svg';
 import { FaCirclePlus } from "react-icons/fa6";
 import { UserContext } from '../../context/Usercontext';
-import { MdSend } from "react-icons/md";
-import Comment from'../components/Comment'
+import Comment from '../components/Comment';
 import axios from 'axios';
 
 export default function Home({ showSidebar }) {
@@ -17,7 +16,18 @@ export default function Home({ showSidebar }) {
     const { user } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
     const [expandedPosts, setExpandedPosts] = useState({});
-    
+    const [tags, setTags] = useState([
+        "books",
+        "learning",
+        "history",
+        "food",
+        "movie",
+        "gaming",
+        "memes",
+        "art",
+        "technology"
+    ]);
+
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
@@ -31,14 +41,12 @@ export default function Home({ showSidebar }) {
             try {
                 setIsLoading(true);
                 let combinedData = [];
-
                 const fetchPost = await axios.get('/post/fetch');
                 const fetchPostData = fetchPost.data;
 
                 for (let i = 0; i < fetchPostData.length; i++) {
                     const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
                     const fetchPostUserData = fetchPostUser.data;
-
                     combinedData.push({
                         postData: fetchPostData[i],
                         user: fetchPostUserData
@@ -49,47 +57,36 @@ export default function Home({ showSidebar }) {
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching posts:', error);
+                setIsLoading(false);
             }
         };
         fetchPosts();
     }, []);
 
     const toggleStar = (postId) => {
-        const postIndex = posts.findIndex(post => post.postData._id === postId);
         setPosts(prevPosts => {
             const updatedPosts = [...prevPosts];
-            updatedPosts[postIndex] = {
-                ...updatedPosts[postIndex],
-                postData: {
-                    ...updatedPosts[postIndex].postData,
-                    likes: updatedPosts[postIndex].postData.likes + 1
-                }
-            };
+            const postIndex = updatedPosts.findIndex(post => post.postData._id === postId);
+            updatedPosts[postIndex].postData.likes += 1;
             return updatedPosts;
         });
-    }
+    };
 
     const toggleShare = (postId) => {
-        const postIndex = posts.findIndex(post => post.postData._id === postId);
         setPosts(prevPosts => {
             const updatedPosts = [...prevPosts];
-            updatedPosts[postIndex] = {
-                ...updatedPosts[postIndex],
-                postData: {
-                    ...updatedPosts[postIndex].postData,
-                    shares: updatedPosts[postIndex].postData.shares + 1
-                }
-            };
+            const postIndex = updatedPosts.findIndex(post => post.postData._id === postId);
+            updatedPosts[postIndex].postData.shares += 1;
             return updatedPosts;
         });
-    }
+    };
 
     const toggleComment = (postId) => {
         setExpandedPosts(prevExpandedPosts => ({
             ...prevExpandedPosts,
             [postId]: !prevExpandedPosts[postId]
         }));
-    }
+    };
 
     const handleNewComment = (postId, comment) => {
         setPosts(prevPosts => {
@@ -116,19 +113,7 @@ export default function Home({ showSidebar }) {
         } catch (error) {
             console.error('Error fetching posts from tag:', error);
         }
-    }
-
-    const [tags, setTags] = useState([
-        "books",
-        "learning",
-        "history",
-        "food",
-        "movie",
-        "gaming",
-        "memes",
-        "art",
-        "technology"
-    ]);
+    };
 
     const getDate = (e) => {
         const rawTimestamp = e.postData.createdAt;
@@ -140,17 +125,16 @@ export default function Home({ showSidebar }) {
             hour: 'numeric',
             minute: 'numeric'
         }).format(date);
-
         return formattedDate;
     };
 
     return (
         <>
             <Sidebar showSidebar={showSidebar} />
-            <Loading isLoading={isLoading}/>
+            <Loading isLoading={isLoading} />
             <div className={`flex bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full`}>
                 <div className="relative flex flex-1 overflow-y-auto">
-                    <section className={`flex fixed w-[35%] py-8 px-4 overflow-hidden z-10 `}>
+                    <section className="flex fixed w-[35%] py-8 px-4 overflow-hidden z-10">
                         <div className="h-full min-w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4 flex flex-col">
                             <h1 className="text-[40px] text-center relative z-30 max-w-full">Universes</h1>
                             <div className="flex flex-col gap-3">
@@ -160,28 +144,29 @@ export default function Home({ showSidebar }) {
                             </div>
                         </div>
                     </section>
-                    <section className={`flex flex-col gap-4 justify-start left-[40%] absolute right-0 w-[60%] py-8 px-4 overflow-y-auto overflow-hidden `}>
+                    <section className="flex flex-col gap-4 justify-start left-[40%] absolute right-0 w-[60%] py-8 px-4 overflow-y-auto overflow-hidden">
                         {posts.map((post, index) => (
-                            <div key={index} className={`flex justify-end w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4`}>
+                            <div key={index} className="flex justify-end w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4">
                                 <div className="w-full h-full">
                                     <div className="bg-primary-dark rounded-lg w-full h-full flex flex-col justify-between">
                                         <div>
-                                            <div className="flex items-center gap-2">
+                                            {post.postData.tags && <p className="text-2xl text-primary-pink font-semibold">#{post.postData.tags}</p>}
+                                            <div className="flex items-center gap-2 mt-3">
                                                 <img src={post.user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                                                 <p className="text-left">{post.user.name ?? post.user.username}</p>
-                                                {post.postData.tags && <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">#{post.postData.tags}</p>}
+                                                <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">{post.user.type}</p>
                                                 <div className="flex-grow"></div>
                                                 <p className="text-center">{getDate(post)}</p>
                                             </div>
                                             <h2 className="text-2xl break-words my-2">{post.postData.heading}</h2>
-                                            <p className="text-md break-words">{post.postData.description}</p>
-                                            {post.postData.imgUrl && (
-                                                <img 
-                                                    src={post.postData.imgUrl} 
-                                                    className="mx-auto max max-h-50 object"
-                                                    style={{ width: '60', height: '60', maxWidth: '100%', maxHeight: '100%' }}
-                                                    alt="Post" 
-                                                />
+                                                <p className="text-md break-words">{post.postData.description}</p>
+                                                {post.postData.imgUrl && (
+                                                    <img 
+                                                        src={post.postData.imgUrl} 
+                                                        className="mx-auto max max-h-50 object"
+                                                        style={{ width: '60', height: '60', maxWidth: '100%', maxHeight: '100%' }}
+                                                        alt="Post" 
+                                                    />
                                             )}
                                         </div>
                                         <div className="mt-2">
@@ -227,7 +212,7 @@ export default function Home({ showSidebar }) {
                         className="flex items-center justify-center bg-purple-500 text-white p-2 rounded-full hover:bg-purple-700 fixed bottom-10 right-10 z-20"
                         onClick={handleOpenModal}
                     >
-                        <FaCirclePlus size={30} className="" />
+                        <FaCirclePlus size={30} />
                     </button>
                     {isModalOpen && <Createpost onClose={handleCloseModal} />}
                 </div>

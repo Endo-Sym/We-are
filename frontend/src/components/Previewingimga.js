@@ -8,6 +8,7 @@ const usePreviewImg = () => {
 			const reader = new FileReader();
 
 			reader.onloadend = () => {
+				console.log(reader.result);
 				setImgUrl(reader.result);
 			};
 

@@ -33,7 +33,10 @@ export default {
       },
       screens: {
         "wide": "1440px"
-      }
+      },
+      backgroundImage: {
+        'binary': 'linear-gradient(90deg, #FCF434, #FFFFFF, #9C59D1, #2C2C2C)',
+      },
     },
   },
   plugins: []

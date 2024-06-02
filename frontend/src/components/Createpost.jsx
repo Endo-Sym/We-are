@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef , useEffect } from 'react';
 import { IoMdClose } from "react-icons/io";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import usePreviewImg from './Previewingimga';
@@ -12,11 +12,22 @@ function Createpost({ onClose }) {
     const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
     const { user } = useContext(UserContext); 
     const imageRef = useRef();
+    const [profileData, setProfileData] = useState({ imgUrl: '' });
 
     const handleTagChange = (event) => {
         setTag(event.target.value);
     };
-
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const response = await axios.get(`/profile/${user._id}`);
+                setProfileData(response.data);
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+            }
+        };
+        fetchProfileData();
+    }, [user._id]);
     const handleHeadingChange = (event) => {
         setHeading(event.target.value);
     };
@@ -24,14 +35,14 @@ function Createpost({ onClose }) {
     const handleDescriptionChange = (event) => {
         setDescription(event.target.value);
     };
-
+    
     const handleImageUpload = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'imfstvzq');
     
         try {
-            const response = await axios.post('http://localhost:8000/post/upload', formData, {
+            const response = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -75,6 +86,7 @@ function Createpost({ onClose }) {
                 withCredentials: true,
             });
             console.log('Post created successfully:', response.data);
+            onClose(); 
     
             setTimeout(() => {
                 window.location.reload();
@@ -104,7 +116,7 @@ function Createpost({ onClose }) {
                             />
                         </div>
                         <div className="flex items-center gap-2">
-                            <img src={user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
+                            <img src={profileData.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                             <p className="text-left">{user.name ?? user.username}</p>
                         </div>
                         <textarea

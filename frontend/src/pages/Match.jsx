@@ -140,7 +140,7 @@ const Match = ({ showSidebar }) => {
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Date gender :</span>{profileData.dateGender}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Freind gender :</span>{profileData.friendGender}</p>
                                     <div className="flex justify-start gap-2 mt-2">
-                                        <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] ${profileData.gender === "Woman" ? "bg-pink-500" : "bg-blue-500"}`}>
+                                        <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] ${profileData.gender === "Woman" ? "bg-pink-500" : profileData.gender === "Man" ? "bg-blue-500" : "bg-[#9C59D1]"}`}>
                                             <span className="material-icons p-2">{profileData.gender}</span></p>                                        <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}>
                                             <span className="material-icons p-2">{profileData.type}</span></p>
                                         <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-primary-pink`}><span className="material-icons p-2">{profileData.status}</span></p>
