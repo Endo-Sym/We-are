@@ -97,6 +97,17 @@ const searchPosts = async (req, res) => {
   }
 };
 
+const getTagPost = async (req, res) => {
+  const { query } = req.query;
+  try {
+    const posts = await Post.find({ tags: query }).sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    console.error("Error searching tags:", error);
+    res.status(500).send("Server Error");
+  }
+};
+
 const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
@@ -189,16 +200,22 @@ const getUserPosts = async (req, res) => {
   }
 };
 
-const getTagPost = async (req, res) => {
-  const { tag } = req.params;
+const getTags = async (req, res) => {
   try {
-    const post = await Post.find({ tags: tag });
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-    res.status(200).json(post);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const tagsCount = await Post.aggregate([
+        // Split tags by space and unwind them into individual documents
+        { $addFields: { tagsArray: { $split: ["$tags", " "] } } },
+        { $unwind: "$tagsArray" },
+        // Group by tags and count the occurrences
+        { $group: { _id: "$tagsArray", count: { $sum: 1 } } },
+        // Sort by count in descending order
+        { $sort: { count: -1 } }
+    ]);
+
+    res.json(tagsCount);
+  } catch (error) {
+      console.error('Error fetching tags count:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -223,5 +240,6 @@ module.exports = {
   getTagPost,
   test,
   fetchPost,
-  searchPosts 
+  searchPosts,
+  getTags
 };

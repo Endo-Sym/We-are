@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import Createpost from '../components/Createpost';
 import iconstar_ from '/assets/images/iconstar_.svg';
 import icon_comment from '/assets/images/icon_comment.svg';
-import Share from '/assets/images/Share.svg';
 import { FaCirclePlus } from "react-icons/fa6";
 import { UserContext } from '../../context/Usercontext';
 import Comment from '../components/Comment';
@@ -14,19 +14,11 @@ export default function Home({ showSidebar, searchTerm }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [posts, setPosts] = useState([]);
     const { user } = useContext(UserContext);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [expandedPosts, setExpandedPosts] = useState({});
-    const [tags, setTags] = useState([
-        "books",
-        "learning",
-        "history",
-        "food",
-        "movie",
-        "gaming",
-        "memes",
-        "art",
-        "technology"
-    ]);
+    const [postTag, setPostTag] = useState('-');
+    const [tags, setTags] = useState([]);
+    const [search, setSearch] = useState('-');
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -36,41 +28,53 @@ export default function Home({ showSidebar, searchTerm }) {
         setIsModalOpen(false);
     };
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                setIsLoading(true);
-                let combinedData = [];
-                const fetchPost = await axios.get('/post/fetch');
-                console.log(fetchPost.data);
-                const fetchPostData = fetchPost.data;
+    const fetchPosts = async () => {
+        try {
+            setIsLoading(true);
+            let combinedData = [];
+            const fetchPost = await axios.get('/post/fetch');
+            const fetchPostData = fetchPost.data;
 
-                for (let i = 0; i < fetchPostData.length; i++) {
-                    console.log(i, fetchPostData[i]);
-                    const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
-                    const fetchPostUserData = fetchPostUser.data;
-                    combinedData.push({
-                        postData: fetchPostData[i],
-                        user: fetchPostUserData
-                    });
-                }
-
-                setPosts(combinedData);
-                setIsLoading(false);
-            } catch (error) {
-                console.error('Error fetching posts:', error);
-                setIsLoading(false);
+            for (let i = 0; i < fetchPostData.length; i++) {
+                const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
+                const fetchPostUserData = fetchPostUser.data;
+                combinedData.push({
+                    postData: fetchPostData[i],
+                    user: fetchPostUserData
+                });
             }
-        };
-        fetchPosts();
+            setPosts(combinedData);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    };
+
+    const fetchTags = async () => {
+        try {
+            let tempTags = [];
+            let limit = 10;
+            const response = await axios.get('/post/tags');
+            for(let i = 0; i < limit; i++){
+                tempTags.push(response.data[i]._id);
+            };
+            setTags(tempTags);
+        } catch (error) {
+            console.error('Error fetching tags:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTags();
     }, []);
 
     useEffect(() => {
         const fetchPosts = async () => {
+            if(search === "-") return;
             try {
                 setIsLoading(true);
                 let combinedData = [];
-                const fetchPost = await axios.get(`/post/search?query=${searchTerm}`);
+                const fetchPost = await axios.get(`/post/search?query=${search}`);
                 const fetchPostData = fetchPost.data;
 
                 for (let i = 0; i < fetchPostData.length; i++) {
@@ -90,6 +94,38 @@ export default function Home({ showSidebar, searchTerm }) {
             }
         };
         fetchPosts();
+    }, [search]);
+
+    useEffect(() => {
+        const fetchPostsTag = async () => {
+            if(postTag === "-") return;
+            try {
+                setIsLoading(true);
+                let combinedData = [];
+                const fetchPost = await axios.get(`/post/tagPost?query=${postTag}`);
+                const fetchPostData = fetchPost.data;
+
+                for (let i = 0; i < fetchPostData.length; i++) {
+                    const fetchPostUser = await axios.get(`/profile/${fetchPostData[i].postedBy}`);
+                    const fetchPostUserData = fetchPostUser.data;
+                    combinedData.push({
+                        postData: fetchPostData[i],
+                        user: fetchPostUserData
+                    });
+                }
+
+                setPosts(combinedData);
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                setIsLoading(false);
+            }
+        };
+        fetchPostsTag();
+    }, [postTag]);
+    
+    useEffect(() => {
+        setSearch(searchTerm);
     }, [searchTerm]);
 
     const toggleStar = (postId) => {
@@ -97,15 +133,6 @@ export default function Home({ showSidebar, searchTerm }) {
             const updatedPosts = [...prevPosts];
             const postIndex = updatedPosts.findIndex(post => post.postData._id === postId);
             updatedPosts[postIndex].postData.likes += 1;
-            return updatedPosts;
-        });
-    };
-
-    const toggleShare = (postId) => {
-        setPosts(prevPosts => {
-            const updatedPosts = [...prevPosts];
-            const postIndex = updatedPosts.findIndex(post => post.postData._id === postId);
-            updatedPosts[postIndex].postData.shares += 1;
             return updatedPosts;
         });
     };
@@ -135,15 +162,6 @@ export default function Home({ showSidebar, searchTerm }) {
         });
     };
 
-    const handleTagClick = async (tag) => {
-        try {
-            const res = await axios.get(`/post/${tag}`);
-            console.log("Get tag post successfully: ", res.data);
-        } catch (error) {
-            console.error('Error fetching posts from tag:', error);
-        }
-    };
-
     const getDate = (e) => {
         const rawTimestamp = e.postData.createdAt;
         const date = new Date(rawTimestamp);
@@ -167,8 +185,9 @@ export default function Home({ showSidebar, searchTerm }) {
                         <div className="h-full min-w-[60%] border-2 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-4 flex flex-col">
                             <h1 className="text-[40px] text-center relative z-30 max-w-full">Universes</h1>
                             <div className="flex flex-col gap-3">
+                            <div className="text-xl border border-primary-pink w-fit rounded-[20px] p-2 hover:cursor-pointer" onClick={() => fetchPosts()}>All posts</div>
                                 {tags.map((tag, index) => (
-                                    <div key={index} className="text-xl border border-primary-pink w-fit rounded-[20px] p-2 hover:cursor-pointer" onClick={() => handleTagClick(tag)}>#{tag}</div>
+                                    <div key={index} className="text-xl border border-primary-pink w-fit rounded-[20px] p-2 hover:cursor-pointer" onClick={() => setPostTag(tag)}>{tag === "" ? "Not Tagged Posts" : `#${tag}`}</div>
                                 ))}
                             </div>
                         </div>
@@ -179,11 +198,11 @@ export default function Home({ showSidebar, searchTerm }) {
                                 <div className="w-full h-full">
                                     <div className="bg-primary-dark rounded-lg w-full h-full flex flex-col justify-between">
                                         <div>
-                                            {post.postData.tags && <p className="text-2xl text-primary-pink font-semibold">#{post.postData.tags}</p>}
+                                            {post.postData.tags && <p className="text-2xl text-primary-pink font-semibold hover:cursor-pointer hover:underline" onClick={() => setPostTag(post.postData.tags)}>#{post.postData.tags}</p>}
                                             <div className="flex items-center gap-2 mt-3">
                                                 <img src={post.user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
-                                                <p className="text-left">{post.user.name ?? post.user.username}</p>
-                                                <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">{post.user.type}</p>
+                                                <Link to={`/profile/${post.user.userId}`} className="text-left hover:underline hover:cursor-pointer">{post.user.name}</Link>
+                                                {post.user.type && <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">{post.user.type}</p>}
                                                 <div className="flex-grow"></div>
                                                 <p className="text-center">{getDate(post)}</p>
                                             </div>

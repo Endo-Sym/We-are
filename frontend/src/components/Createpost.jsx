@@ -69,10 +69,12 @@ function Createpost({ onClose }) {
                 return;
             }
         }
+        const cleanTag = tag.replace(/^#+/, '');
+        console.log("clean: ", cleanTag);
 
         const newPost = {
             postedBy: user.userId,
-            tags: tag,
+            tags: cleanTag,
             heading: heading,
             description: description,
             imgUrl: imgUrl,

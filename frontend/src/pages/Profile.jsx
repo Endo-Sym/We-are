@@ -9,24 +9,8 @@ import axios from 'axios';
 const Profile = ({ showSidebar, location }) => {
     const { user, setUser } = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const { userId } = useParams();
-    // const [profileData, setProfileData] = useState({
-    //     _id: user._id,
-    //     name: user.name, // User name
-    //     role: 'Student', // UserDescription role
-    //     status: 'In progress', // UserDescription status
-    //     address: 'Bangmod, Bangkok TH', // UserDescription address
-    //     gender: 'Female', // UserDescription gender
-    //     lookingFor: 'Friends', // UserDescription lookingFor
-    //     friendGender: 'Male', // UserDescription friendGender
-    //     dateGender: 'Male', // UserDescription dateGender
-    //     type: 'ENFP', // UserDescription type
-    //     interests: ['#sport', '#art', '#movie', '#food', '#technology'], // UserDescription interests
-    //     followers: [], // UserDescription followers
-    //     love: [], // UserDescription love
-    //     imgUrl: "", // User imgUrl
-    // });
 
     const [profileData, setProfileData] = useState({
         _id: "",
@@ -50,8 +34,6 @@ const Profile = ({ showSidebar, location }) => {
         imgUrl: ""
     });
 
-    // const [profileData, setProfileData] = useState({});
-
     useEffect(() => {
         if (userId) {
             const fetchProfileData = async () => {
@@ -70,25 +52,13 @@ const Profile = ({ showSidebar, location }) => {
         } else {
             console.error('userId is not defined');
         }
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
         if (location && location.state && location.state.user) {
             setUser(location.state.user);
         }
     }, [location]);
-
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         // console.log("hey! :", user);
-    //         setIsLoading(true);
-    //         const response = await axios.get(`/profile/${user.userId}`);
-    //         console.log("set profile: ", response.data);
-    //         setProfileData(response.data);
-    //     }
-    //     fetchData();
-    //     setIsLoading(false);
-    // }, []);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -220,9 +190,9 @@ const Profile = ({ showSidebar, location }) => {
                                 </div>
                             </div>
                         </div>
-                        <button className="text-center px-6 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all " onClick={handleEditClick}>
+                        {profileData.userId === user.userId && <button className="text-center px-6 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all " onClick={handleEditClick}>
                             Edit
-                        </button>
+                        </button>}
                     </div>
                     ) : (
                     <div className="flex flex-row justify-center items-center h-[600px] w-[1200px] border-2 gap-10 border-primary-pink rounded-[30px] bg-black bg-opacity-60 backdrop-blur-md p-6">

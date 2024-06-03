@@ -13,7 +13,8 @@ const {
     getTagPost,
     test,
     fetchPost,
-    searchPosts
+    searchPosts,
+    getTags
 } = require('../controllers/postController.js');
 
 router.use(
@@ -32,6 +33,7 @@ router.post('/posts/:id/comment', addComment);
 router.get('/comments/:id', getComments);
 router.get('/feed', getFeedPosts);
 router.get('/users/:username/posts', getUserPosts);
-router.get('/posts/:tag', getTagPost);
+router.get('/tagPost', getTagPost);
+router.get('/tags', getTags);
 
 module.exports = router;

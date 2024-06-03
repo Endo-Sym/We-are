@@ -49,7 +49,7 @@ const FormNewUser = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[url('./assets/images/cartoon-bg.png')] bg-cover bg-fixed font-nunito text-white">
+    <div className="flex flex-col h-screen overflow-hidden bg-cartoon bg-cover bg-fixed font-nunito text-white">
       <div className="top-[40px] relative flex-grow overflow-y-auto">
         <div className="min-h-screen flex items-center justify-center">
           <Form 
