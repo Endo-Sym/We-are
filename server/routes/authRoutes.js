@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cors = require('cors');
 const User = require('../Model/user'); // Make sure the path to the User model is correct
-const { SigninUser, SignupUser, getprofile, updateprofile, createUserDescription, showprofile } = require('../controllers/authController');
+const { SigninUser, SignupUser, getprofile, updateprofile, createUserDescription, showprofile, getAllProfiles } = require('../controllers/authController');
 
 // Middleware
 router.use(cors({
@@ -29,6 +29,7 @@ router.get('/api/check-new-user', async (req, res) => {
 router.post("/Sign-up", SignupUser);
 router.post("/Sign-in", SigninUser);
 router.get("/profile", getprofile);
+router.get("/allProfile", getAllProfiles);
 router.get("/profile/:id", getprofile);
 router.put("/profile", updateprofile);
 router.post("/user-description", createUserDescription)

@@ -171,24 +171,38 @@ const getprofile = async (req, res) => {
     }
 };
 
-const showprofile = async (req, res) => {
+const getAllProfiles = async (req, res) => {
     try {
-        const userId = req.params.userId;
-        const user = await User.findById(userId);
+        // Fetch all users excluding sensitive information
+        const users = await User.find().select("-password -updatedAt");
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+        // Fetch descriptions for all users
+        const userDescriptions = await UserDescription.find({
+            userId: { $in: users.map(user => user._id) }
+        });
 
-        // ป้องกันไม่ให้ส่งข้อมูลที่สำคัญหรือเป็นความลับ
-        const { password, ...profileData } = user.toObject();
+        // Create a map for quick lookup of user descriptions
+        const descriptionsMap = userDescriptions.reduce((map, desc) => {
+            map[desc.userId] = desc;
+            return map;
+        }, {});
 
-        res.json(profileData);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        // Combine user data with their descriptions
+        const combinedUsers = users.map(user => {
+            const userObject = user.toObject();
+            const description = descriptionsMap[user._id.toString()];
+            return {
+                ...userObject,
+                ...(description ? description.toObject() : {})
+            };
+        });
+
+        res.json(combinedUsers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+        console.log("Error in getAllProfiles: ", err.message);
     }
 };
-
 
 const fetchUserDescription = async (user, res) => {
     try {
@@ -273,6 +287,25 @@ const createUserDescription = async (req, res) => {
     }
 };
 
+const showprofile = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // ป้องกันไม่ให้ส่งข้อมูลที่สำคัญหรือเป็นความลับ
+        const { password, ...profileData } = user.toObject();
+
+        res.json(profileData);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+
 module.exports = {
     test,
     SignupUser,
@@ -280,5 +313,6 @@ module.exports = {
     getprofile,
     updateprofile,
     createUserDescription,
-    showprofile
+    showprofile,
+    getAllProfiles
 };
