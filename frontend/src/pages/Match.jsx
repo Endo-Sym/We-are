@@ -35,9 +35,7 @@ const Match = ({ showSidebar }) => {
         profileImage: "",
         imgUrl: profilePic
     });
-
     const [profiles, setProfiles] = useState([]);
-
     useEffect(() => {
         const fetchProfiles = async () => {
             try {
@@ -50,7 +48,6 @@ const Match = ({ showSidebar }) => {
 
         fetchProfiles();
     }, []);
-
 
     useEffect(() => {
         if (location && location.state && location.state.user) {
