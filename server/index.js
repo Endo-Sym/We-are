@@ -57,6 +57,15 @@ app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
 }));
+app.get('/api/user_descriptions', async (req, res) => {
+  try {
+      const use__Descriptions = await UserDescription.find().populate('followers').populate('love');
+      res.json(userDescriptions);
+  } catch (error) {
+      console.error('Error fetching user descriptions:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin);

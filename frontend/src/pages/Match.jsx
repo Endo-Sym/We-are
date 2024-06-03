@@ -1,145 +1,104 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import profilePic from '../../assets/images/profile-pic.svg';
 import { UserContext } from '../../context/Usercontext';
+
 const Match = ({ showSidebar }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const { user = {}, setUser } = useContext(UserContext);
-    // Define an array to hold multiple profiles
-    const profiles = [
-        {
-            name: user.name || user.username,
-            lookingFor: 'Friends',
-            followers: 32000,
-            love: 45200,
-            contact: "@bobppbpbpbp",
-            country: "Thailand",
-            birthdate: "2004-02-14T17:00:00.000Z",
-            dateGender: "Man",
-            email: "tt6@g",
-            friendGender: "Man",
-            gender: "Woman",
-            interests: ['Sport', 'Movie', 'Food', 'Photography', 'Travel'],
-            lookingFor: "Friends",
-            name: "t6",
-            status: "Single",
-            type: "ENTP",
-            userId: "665bbc2038e7d9fa98e3e212",
-            username : "tt6",
-            profileImage: profilePic,
-        },
-        {
-            name: "Alice",
-            lookingFor: "Networking",
-            followers: 200,
-            love: 50,
-            contact: "@alice_nw",
-            country: "USA",
-            birthdate: "1990-05-10T17:00:00.000Z",
-            dateGender: "Woman",
-            email: "alice@example.com",
-            friendGender: "All",
-            gender: "Non-binary",
-            interests: ['Technology', 'Music', 'Gaming', 'Reading', 'Travel'],
-            status: "Complicated",
-            type: "INTJ",
-            userId: "1234567890abcdef12345678",
-            username: "alice_nw",
-            profileImage: profilePic
-        }
-        ,
-        {
-            name: "John",
-            lookingFor: "Business",
-            followers: 300,
-            love: 80,
-            contact: "@john_biz",
-            country: "Canada",
-            birthdate: "1985-07-20T17:00:00.000Z",
-            dateGender: "Woman",
-            email: "john@example.com",
-            friendGender: "Woman",
-            gender: "Man",
-            interests: ['Business', 'Fitness', 'Cooking', 'Photography', 'Travel'],
-            status: "Married",
-            type: "ENTP",
-            userId: "abcdef1234567890abcdef12",
-            username: "john_biz",
-            profileImage: profilePic
-        }
-        ,
-        {
-            name: "Sara",
-            lookingFor: "Dating",
-            followers: 150,
-            love: 60,
-            contact: "@sara_date",
-            country: "UK",
-            birthdate: "1995-12-01T17:00:00.000Z",
-            dateGender: "Man",
-            email: "sara@example.com",
-            friendGender: "Man",
-            gender: "Woman",
-            interests: ['Art', 'Movies', 'Fashion', 'Cooking', 'Travel'],
-            status: "Single",
-            type: "INFJ",
-            userId: "7890abcdef1234567890abcd",
-            username: "sara_date",
-            profileImage: profilePic
-        }
+    const { user, setUser } = useContext(UserContext);
+    const { userId } = useParams();
+    const location = useLocation();
 
-    ];
+    const [allProfiles, setAllProfiles] = useState([]);
+    const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+    const [profileData, setProfileData] = useState({
+        _id: "",
+        userId: "",
+        name: "",
+        username: "",
+        lookingFor: "",
+        followers: 0,
+        love: 0,
+        contact: "",
+        country: "",
+        birthdate: "",
+        dateGender: "",
+        email: "",
+        friendGender: "",
+        gender: "",
+        interests: [],
+        status: "",
+        type: "",
+        profileImage: "",
+        imgUrl: profilePic
+    });
 
-    // useEffect(() => {
-    //     const fetchProfileData = async () => {
-    //         try {
-    //             const response = await axios.get(`/profile/${user._id}`);
-    //             setProfileData(response.data);
-    //         } catch (error) {
-    //             console.error('Error fetching profile data:', error);
-    //         }
-    //     };
-    //     fetchProfileData();
-    // }, [user._id]);
+    const [profiles, setProfiles] = useState([]);
 
-    const [profileIndex, setProfileIndex] = useState(0);
-    const profileData = profiles[profileIndex];
-    const handleNextProfile = () => {
-        setProfileIndex((prevIndex) => (prevIndex + 1) % profiles.length);
-    };
+    useEffect(() => {
+        const fetchProfiles = async () => {
+            try {
+                const response = await axios.get('/api/userdescriptions');
+                setProfiles(response.data);
+            } catch (error) {
+                console.error('Error fetching profiles:', error);
+            }
+        };
+
+        fetchProfiles();
+    }, []);
+
+
+    useEffect(() => {
+        if (location && location.state && location.state.user) {
+            setUser(location.state.user);
+        }
+    }, [location, setUser]);
+
     const handlePreviousProfile = () => {
-        setProfileIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length);
+        const newIndex = (currentProfileIndex - 1 + allProfiles.length) % allProfiles.length;
+        setCurrentProfileIndex(newIndex);
+        setProfileData(allProfiles[newIndex]);
+    };
+
+    const handleNextProfile = () => {
+        const newIndex = (currentProfileIndex + 1) % allProfiles.length;
+        setCurrentProfileIndex(newIndex);
+        setProfileData(allProfiles[newIndex]);
     };
 
     const getAge = (rawDate) => {
         const mongooseDate = new Date(rawDate);
         const currentDate = new Date();
-
         const ageDifMs = currentDate - mongooseDate;
         const ageDate = new Date(ageDifMs);
-
-        const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-        return age;
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
     };
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
 
     return (
         <>
             <Sidebar showSidebar={showSidebar} />
-            <Loading isLoading={isLoading} />
             <div className={`flex bg-cartoon bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full items-center justify-center`}>
                 <div className="h-full w-3/4 relative bg-transparent flex flex-col items-center justify-center p-2">
                     <div className="flex items-center gap-4">
-                        <button onClick={handlePreviousProfile} className='rotate-180'> 
+                        <button onClick={handlePreviousProfile} className='rotate-180'>
                             <svg width="50" height="91" viewBox="0 0 50 91" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.66356 89.6715C3.50447 91.446 6.48174 91.446 8.3181 89.6715L47.2408 52.0703C48.1121 51.2415 48.8059 50.2439 49.2799 49.1383C49.754 48.0327 49.9985 46.8421 49.9985 45.6389C49.9985 44.4357 49.754 43.2451 49.2799 42.1395C48.8059 41.0339 48.1121 40.0363 47.2408 39.2075L8.03628 1.32872C7.14653 0.482179 5.96824 0.00636803 4.74073 -0.00208275C3.51321 -0.0105335 2.3285 0.449009 1.42719 1.28322C0.980701 1.69518 0.623449 2.1945 0.377559 2.75027C0.13167 3.30604 0.00237801 3.90642 -0.00230922 4.51424C-0.00699645 5.12206 0.11302 5.72437 0.350309 6.28387C0.587598 6.84337 0.937107 7.34816 1.37719 7.76697L37.259 42.4243C37.695 42.8388 38.0422 43.3377 38.2794 43.8907C38.5167 44.4437 38.639 45.0393 38.639 45.6412C38.639 46.243 38.5167 46.8386 38.2794 47.3916C38.0422 47.9447 37.695 48.4436 37.259 48.858L1.66356 83.2424C1.22769 83.6564 0.880594 84.155 0.643402 84.7076C0.406209 85.2603 0.283887 85.8555 0.283887 86.4569C0.283887 87.0584 0.406209 87.6536 0.643402 88.2063C0.880594 88.7589 1.22769 89.2575 1.66356 89.6715Z" fill="white"/>
+                                <path fillRule="evenodd" clipRule="evenodd" d="M1.66356 89.6715C3.50447 91.446 6.48174 91.446 8.3181 89.6715L47.2408 52.0703C48.1121 51.2415 48.8059 50.2439 49.2799 49.1383C49.754 48.0327 49.9985 46.8421 49.9985 45.6389C49.9985 44.4357 49.754 43.2451 49.2799 42.1395C48.8059 41.0339 48.1121 40.0363 47.2408 39.2075L8.03628 1.32872C7.14653 0.482179 5.96824 0.00636803 4.74073 -0.00208275C3.51321 -0.0105335 2.3285 0.449009 1.42719 1.28322C0.980701 1.69518 0.623449 2.1945 0.377559 2.75027C0.13167 3.30604 0.00237801 3.90642 -0.00230922 4.51424C-0.00699645 5.12206 0.11302 5.72437 0.350309 6.28387C0.587598 6.84337 0.937107 7.34816 1.37719 7.76697L37.259 42.4243C37.695 42.8388 38.0422 43.3377 38.2794 43.8907C38.5167 44.4437 38.639 45.0393 38.639 45.6412C38.639 46.243 38.5167 46.8386 38.2794 47.3916C38.0422 47.9447 37.695 48.4436 37.259 48.858L1.66356 83.2424C1.22769 83.6564 0.880594 84.155 0.643402 84.7076C0.406209 85.2603 0.283887 85.8555 0.283887 86.4569C0.283887 87.0584 0.406209 87.6536 0.643402 88.2063C0.880594 88.7589 1.22769 89.2575 1.66356 89.6715Z" fill="white" />
                             </svg>
                         </button>
                         <div className="flex flex-col items-center relative">
                             <div className="relative">
                                 <div className="max-w-[30rem] h-[29rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
                                     <img
-                                        src={profileData.profileImage}
+                                        src={profileData.profileImage || profilePic}
                                         alt="Profile"
                                         className="w-full h-full object-cover"
                                     />
@@ -147,11 +106,11 @@ const Match = ({ showSidebar }) => {
                                 <div className="absolute w-full h-[70%] bottom-0 overflow-hidden flex flex-col justify-end p-6">
                                     <div className="max-w-16 min-w-16 max-h-16 min-h-16 border-2 border-fuchsia-500 rounded-full overflow-hidden">
                                         <img
-                                            src={profileData.profileImage}
+                                            src={profileData.profileImage || profilePic}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
-                                    </div>
+                                      </div>
                                     <h1 className="text-3xl font-bold">{profileData.name}</h1>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Country :</span>{profileData.country ? profileData.country : "-"}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Age :</span>{profileData.birthdate ? getAge(profileData.birthdate) : "-"}</p>
