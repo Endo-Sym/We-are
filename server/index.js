@@ -91,6 +91,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 app.use("/", authRoutes);
 app.use("/post", postRoutes);
 app.use("/api", userDescriptionRoutes);
+app.use('/api', authRoutes);
 
 // Start server
 app.listen(port, () => console.log(`Server is running on port ${port}`));

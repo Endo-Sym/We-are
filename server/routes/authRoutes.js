@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cors = require('cors');
 const User = require('../Model/user'); // Make sure the path to the User model is correct
-const { SigninUser, SignupUser, getprofile, updateprofile, createUserDescription } = require('../controllers/authController');
+const { SigninUser, SignupUser, getprofile, updateprofile, createUserDescription, showprofile } = require('../controllers/authController');
 
 // Middleware
 router.use(cors({
@@ -32,6 +32,7 @@ router.get("/profile", getprofile);
 router.get("/profile/:id", getprofile);
 router.put("/profile", updateprofile);
 router.post("/user-description", createUserDescription)
+router.get('/profile/:userId', showprofile);
 router.get("/logout", (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out" });

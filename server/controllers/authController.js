@@ -171,6 +171,25 @@ const getprofile = async (req, res) => {
     }
 };
 
+const showprofile = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // ป้องกันไม่ให้ส่งข้อมูลที่สำคัญหรือเป็นความลับ
+        const { password, ...profileData } = user.toObject();
+
+        res.json(profileData);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+
 const fetchUserDescription = async (user, res) => {
     try {
         const userDescription = await UserDescription.findOne({ userId: user._id });
@@ -260,5 +279,6 @@ module.exports = {
     SigninUser,
     getprofile,
     updateprofile,
-    createUserDescription
+    createUserDescription,
+    showprofile
 };
