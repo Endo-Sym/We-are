@@ -67,7 +67,7 @@ export default function Pertest({ showSidebar }){
                         Dialogue: 
                         {isVoid && <span className="inline font-medium text-[18px] text-red-500 mx-2">(Please enter text before analyze)</span>}
                     </label>
-                    <textarea id="message" rows="" className="block px-5 py-2 w-full min-h-[6rem] text-[18px] font-medium text-gray-900 border border-[#CE9EFF] shadow-[rgba(223,_28,_255,_0.6)_0px_0px_16px] rounded-[20px] bg-gradient-to-r from-[#FFFFFF] from-0% to-[#B770FF] to-89% focus:outline-none overscroll-contain" onChange={handleTextChange}></textarea>
+                    <textarea id="message" rows="" className="block px-5 py-2 w-full min-h-[10rem] text-[18px] font-medium text-gray-900 border border-[#CE9EFF] shadow-[rgba(223,_28,_255,_0.6)_0px_0px_16px] rounded-[20px] bg-gradient-to-r from-[#FFFFFF] from-0% to-[#B770FF] to-89% focus:outline-none overscroll-contain" onChange={handleTextChange}></textarea>
                     <p className='text-white w-full p-2 py-1 text-[14px]'>{textCount}/6500</p>
                     <button className='bg-white rounded-[16px] w-full p-3 font-bold text-black mt-2 mb-2 px-20 transform motion-safe:hover:scale-105' type="button" onClick={getPredictResult}>Analyze</button>
                     {MBTI &&
