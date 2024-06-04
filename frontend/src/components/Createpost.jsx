@@ -18,6 +18,7 @@ function Createpost({ onClose }) {
     const handleTagChange = (event) => {
         setTag(event.target.value);
     };
+
     useEffect(() => {
         const fetchProfileData = async () => {
             try {

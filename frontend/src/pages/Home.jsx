@@ -259,7 +259,7 @@ export default function Home({ showSidebar, searchTerm }) {
                     >
                         <FaCirclePlus size={30} />
                     </button>
-                    {isModalOpen && <Createpost onClose={handleCloseModal} />}
+                    {isModalOpen && user && <Createpost onClose={handleCloseModal} />}
                 </div>
             </div>
         </>
