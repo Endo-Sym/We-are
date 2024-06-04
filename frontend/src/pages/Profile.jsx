@@ -45,15 +45,14 @@ const Profile = ({ showSidebar, location }) => {
                     setProfileData(response.data);
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
-                } finally {
-                    setIsLoading(false);
-                }
+                };
             };
             fetchProfileData();
+            setIsLoading(false);
         } else {
             console.error('userId is not defined');
         }
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
         if (location && location.state && location.state.user) {
