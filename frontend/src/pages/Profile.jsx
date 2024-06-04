@@ -41,7 +41,6 @@ const Profile = ({ showSidebar, location }) => {
                 try {
                     setIsLoading(true);
                     const response = await axios.get(`/profile/${userId}`);
-                    console.log(response.data);
                     setProfileData(response.data);
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
@@ -164,7 +163,7 @@ const Profile = ({ showSidebar, location }) => {
                                             </filter>
                                             </defs>
                                         </svg>
-                                        <p className="text-[24px]">{profileData.followers}</p>
+                                        <p className="text-[24px]">{profileData.followers || 0}</p>
                                     </div>
                                     <p>Followers</p>
                                 </div>
@@ -184,7 +183,7 @@ const Profile = ({ showSidebar, location }) => {
                                             </filter>
                                             </defs>
                                         </svg>
-                                        <p className="text-[24px]">{profileData.love}</p>
+                                        <p className="text-[24px]">{profileData.love || 0}</p>
                                     </div>
                                     <p>Love</p>
                                 </div>

@@ -5,10 +5,6 @@ const jwt = require('jsonwebtoken');
 const { createSecretToken } = require('../tokenGeneration/generateToken');
 const mongoose = require('mongoose');
 
-const test = (req, res) => {
-    res.json("test is working");
-};
-
 const SignupUser = async (req, res) => {
     try {
         const session = await mongoose.startSession();
@@ -347,7 +343,6 @@ const showprofile = async (req, res) => {
 
 
 module.exports = {
-    test,
     SignupUser,
     SigninUser,
     getprofile,

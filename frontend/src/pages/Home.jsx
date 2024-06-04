@@ -55,9 +55,17 @@ export default function Home({ showSidebar, searchTerm }) {
             let tempTags = [];
             let limit = 10;
             const response = await axios.get('/post/tags');
-            for(let i = 0; i < limit; i++){
-                tempTags.push(response.data[i]._id);
-            };
+            if(response.data.length < limit){
+                for(let i = 0; i < response.data.length; i++){
+                    tempTags.push(response.data[i]._id);
+                };
+            }else{
+                for(let i = 0; i < limit; i++){
+                    console.log(response.data[i]);
+                    tempTags.push(response.data[i]._id);
+                };
+            }
+            
             setTags(tempTags);
         } catch (error) {
             console.error('Error fetching tags:', error);
@@ -129,6 +137,9 @@ export default function Home({ showSidebar, searchTerm }) {
     }, [searchTerm]);
 
     const toggleStar = (postId) => {
+        if (!user) {
+            return;
+        }
         setPosts(prevPosts => {
             const updatedPosts = [...prevPosts];
             const postIndex = updatedPosts.findIndex(post => post.postData._id === postId);
@@ -240,7 +251,7 @@ export default function Home({ showSidebar, searchTerm }) {
                                                     </div>
                                                 ))}
                                             </div>
-                                            {expandedPosts[post.postData._id] && (
+                                            {expandedPosts[post.postData._id] && user && (
                                                 <Comment
                                                     user={user}
                                                     postId={post.postData._id}

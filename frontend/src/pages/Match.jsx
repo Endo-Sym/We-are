@@ -163,7 +163,7 @@ const Match = ({ showSidebar }) => {
                                                 </filter>
                                             </defs>
                                         </svg>
-                                        <p className="text-[24px]">{currentProfile.followers}</p>
+                                        <p className="text-[24px]">{currentProfile.followers || 0}</p>
                                     </div>
                                     <p>Followers</p>
                                 </div>
@@ -182,7 +182,7 @@ const Match = ({ showSidebar }) => {
                                                 </filter>
                                             </defs>
                                         </svg>
-                                        <p className="text-[24px]">{currentProfile.love}</p>
+                                        <p className="text-[24px]">{currentProfile.love || 0}</p>
                                     </div>
                                     <p>Love</p>
                                 </div>
