@@ -188,18 +188,42 @@ export default function Home({ showSidebar, searchTerm }) {
         });
     };
 
-    const getDate = (e) => {
-        const rawTimestamp = e.postData.createdAt;
-        const date = new Date(rawTimestamp);
+    // const getDate = (e) => {
+    //     const rawTimestamp = e.postData.createdAt;
+    //     const date = new Date(rawTimestamp);
+    //     const formattedDate = new Intl.DateTimeFormat('en-GB', {
+    //         day: '2-digit',
+    //         month: '2-digit',
+    //         year: '2-digit',
+    //         hour: 'numeric',
+    //         minute: 'numeric'
+    //     }).format(date);
+    //     return formattedDate;
+    // };
+
+        // Function to format the date
+    const getFormattedDate = (timestamp) => {
+        const date = new Date(timestamp);
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
             day: '2-digit',
             month: '2-digit',
-            year: '2-digit',
-            hour: 'numeric',
-            minute: 'numeric'
+            year: '2-digit'
         }).format(date);
         return formattedDate;
     };
+
+    // Function to format the time
+    const getFormattedTime = (timestamp) => {
+        const time = new Date(timestamp);
+        const formattedTime = new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true // Use 12-hour format (AM/PM)
+        }).format(time);
+        return formattedTime;
+    };
+
+
 
     return (
         <>
@@ -227,17 +251,22 @@ export default function Home({ showSidebar, searchTerm }) {
                                             {post.postData.tags && <p className="text-2xl text-primary-pink font-semibold hover:cursor-pointer hover:underline" onClick={() => setPostTag(post.postData.tags)}>#{post.postData.tags}</p>}
                                             <div className="flex items-center gap-2 mt-3">
                                                 <img src={post.user.imgUrl} alt="User" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
-                                                <Link to={`/profile/${post.user.userId}`} className="text-left hover:underline hover:cursor-pointer">{post.user.name}</Link>
-                                                {post.user.type && <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">{post.user.type}</p>}
+                                                <div className="flex flex-col gap-1">
+                                                    <div className="flex gap-2">
+                                                        <Link to={`/profile/${post.user.userId}`} className="text-left hover:underline hover:cursor-pointer">{post.user.name}</Link>
+                                                        {post.user.type && <p className="bg-purple-600 px-2 py-1 text-xs rounded-full">{post.user.type}</p>}                                      
+                                                    </div>
+                                                    <p className="opacity-80 font-thin text-[14px]">{getFormattedDate(post.postData.createdAt)} {getFormattedTime(post.postData.createdAt)}</p>
+                                                </div>
                                                 <div className="flex-grow"></div>
-                                                <p className="text-center">{getDate(post)}</p>
+                                                {/* <p className="text-center">{getFormattedDate(post.postData.createdAt)}</p> */}
                                             </div>
                                             <h2 className="text-2xl break-words my-2">{post.postData.heading}</h2>
                                                 <p className="text-md break-words">{post.postData.description}</p>
                                                 {post.postData.imgUrl && (
                                                     <img 
                                                         src={post.postData.imgUrl} 
-                                                        className="mx-auto max max-h-50 object"
+                                                        className="mx-auto max max-h-50 object mt-2"
                                                         style={{ width: '60', height: '60', maxWidth: '100%', maxHeight: '100%' }}
                                                         alt="Post" 
                                                     />
