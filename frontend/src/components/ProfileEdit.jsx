@@ -20,11 +20,9 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
     };
 
     const handleSubmit = async (e) => {
-        console.log("before send: ", inputs, imgUrl);
         e.preventDefault();
         try {
             const response = await axios.put(`/profile`, { ...inputs, imgUrl: imgUrl });
-            console.log("after send: ", response);
             onSave(response.data);
         } catch (error) {
             console.error('Error saving profile:', error);

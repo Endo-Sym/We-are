@@ -32,35 +32,35 @@ function Signin() {
         }
     };
 
-    const onSuccess = async (credentialResponse) => {
-        console.log('Google login success:', credentialResponse);
-        const profile = credentialResponse.profileObj;
-        if (profile) {
-            const user = {
-                id: profile.googleId,
-                name: profile.name,
-                email: profile.email,
-                imageUrl: profile.imageUrl,
-            };
-            console.log('User profile:', user);
-            setUser(user);
+    // const onSuccess = async (credentialResponse) => {
+    //     console.log('Google login success:', credentialResponse);
+    //     const profile = credentialResponse.profileObj;
+    //     if (profile) {
+    //         const user = {
+    //             id: profile.googleId,
+    //             name: profile.name,
+    //             email: profile.email,
+    //             imageUrl: profile.imageUrl,
+    //         };
+    //         console.log('User profile:', user);
+    //         setUser(user);
 
-            const isNewUser = await checkNewUser(user._id);
-            if (isNewUser) {
-                navigate('/formnewuser');
-            } else {
-                navigate('/');
-            }
-        } else {
-            console.error('Profile is undefined:', profile);
-        }
-    };
+    //         const isNewUser = await checkNewUser(user._id);
+    //         if (isNewUser) {
+    //             navigate('/formnewuser');
+    //         } else {
+    //             navigate('/');
+    //         }
+    //     } else {
+    //         console.error('Profile is undefined:', profile);
+    //     }
+    // };
 
-    const onFailure = (error) => {
-        console.log('Google login failed:', error);
-        toast.error('Google login failed.');
-        navigate('/');
-    };
+    // const onFailure = (error) => {
+    //     console.log('Google login failed:', error);
+    //     toast.error('Google login failed.');
+    //     navigate('/');
+    // };
 
     const SigninUser = async (e) => {
         e.preventDefault();
@@ -75,7 +75,6 @@ function Signin() {
             } else {
                 const responseUser = await axios.get(`/profile/${result._id}`);
                 setUser(responseUser.data);
-                console.log(responseUser.data);
                 setData({ identifier: '', password: '' });
 
                 const isNewUser = await checkNewUser(responseUser.data.userId);
@@ -108,13 +107,13 @@ function Signin() {
                 onRequestClose={() => setIsSuccessModalOpen(false)}
                 message="Transaction Complete Successfully!."
             />
-            <div className="flex flex-col items-center justify-between m-16 p-16 w-[600px] max-w-[600px] h-[85%] bg-black text-white border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px] relative rounded-[50px] top-5">
+            <div className="flex flex-col items-center justify-between m-16 p-16 w-[600px] max-w-[600px] h-[70%] bg-black text-white border border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px] relative rounded-[50px] top-5">
                 <div className="logo rounded-full border size-[100px] flex items-center justify-center bg-black absolute -top-[50px] border-[#DF1CFF] shadow-[rgba(223, 28, 255, 0.6) 0px 0px 30px]">
                     <a href="/"><img className="w-[60px]" src={logo} alt="logo" /></a>
                 </div>
                 <h1 className="text-[64px] font-bold mb-3">Sign in</h1>
                 <form className="h-full w-full flex flex-col justify-center gap-4" onSubmit={SigninUser}>
-                    <GoogleLogin
+                    {/* <GoogleLogin
                         onSuccess={onSuccess}
                         onFailure={onFailure}
                         render={renderProps => (
@@ -128,7 +127,7 @@ function Signin() {
                                 <span>Sign in with Google</span>
                             </button>
                         )}
-                    />
+                    /> */}
                     <label className="text-[#A8A6A6]">
                         <p>Username or Email Address</p>
                         <input

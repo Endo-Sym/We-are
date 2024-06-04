@@ -41,8 +41,13 @@ const Match = ({ showSidebar }) => {
         const allProfile = async () => {
             try {
                 setIsLoading(true);
+                let filteredProfiles = [];
                 const response = await axios.get('/allProfile');
-                const filteredProfiles = response.data.filter(profile => profile.userId !== user.userId);
+                if(user && user.userId){
+                    filteredProfiles = response.data.filter(profile => profile.userId !== user.userId);
+                }else{
+                    filteredProfiles = response.data;
+                }
                 setAllProfiles(filteredProfiles);
             } catch (error) {
                 console.error('Error fetching profiles:', error);
@@ -106,7 +111,7 @@ const Match = ({ showSidebar }) => {
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                <div className="absolute w-full h-[70%] bottom-0 overflow-hidden flex flex-col justify-end p-6">
+                                <div className="absolute w-full h-[90%] bottom-0 overflow-hidden flex flex-col justify-end p-6 ">
                                     <div className="max-w-16 min-w-16 max-h-16 min-h-16 border-2 border-fuchsia-500 rounded-full overflow-hidden">
                                         <img
                                             src={currentProfile.imgUrl ? currentProfile.imgUrl : profilePic}
@@ -121,7 +126,7 @@ const Match = ({ showSidebar }) => {
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Date gender :</span>{currentProfile.dateGender ? currentProfile.dateGender : "-"}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Friend gender :</span>{currentProfile.friendGender ? currentProfile.friendGender : "-"}</p>
                                     <div className="flex justify-start gap-2 mt-2">
-                                        {currentProfile.gender && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-orange-400`}>
+                                        {currentProfile.gender && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-purple-700`}>
                                             <span className="material-icons p-2">{currentProfile.gender}</span>
                                         </p>}
                                         {currentProfile.type && <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}>

@@ -189,7 +189,7 @@ const Profile = ({ showSidebar, location }) => {
                                 </div>
                             </div>
                         </div>
-                        {profileData.userId === user.userId && <button className="text-center px-6 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all " onClick={handleEditClick}>
+                        {profileData.userId === user?.userId && <button className="text-center px-6 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 hover:backdrop-blur-0 transition-all " onClick={handleEditClick}>
                             Edit
                         </button>}
                     </div>
