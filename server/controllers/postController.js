@@ -2,6 +2,7 @@ const { v2: cloudinary } = require('cloudinary');
 const User = require('../Model/user');
 const Post = require('../Model/post');
 const UserDescription = require('../Model/user_description');
+const mongoose = require('mongoose');
 
 const test = (req, res) => {
   const { test } = req.body;
@@ -229,6 +230,34 @@ const fetchPost = async (req, res) => {
   }
 };
 
+const toggleLike = async (req, res) => {
+  const { userId, postId } = req.body;
+
+  if (!mongoose.isValidObjectId(userId) || !mongoose.isValidObjectId(postId)) {
+    return res.status(400).send('Invalid user or post ID');
+  }
+
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+
+    const userIndex = post.likes.indexOf(userId);
+
+    if (userIndex === -1) {
+      post.likes.push(userId);
+    } else {
+      post.likes.splice(userIndex, 1);
+    }
+
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+};
+
 module.exports = {
   createPost,
   getPost,
@@ -242,5 +271,6 @@ module.exports = {
   test,
   fetchPost,
   searchPosts,
-  getTags
+  getTags,
+  toggleLike
 };

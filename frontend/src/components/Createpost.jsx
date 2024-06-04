@@ -79,7 +79,7 @@ function Createpost({ onClose }) {
             heading: heading,
             description: description,
             imgUrl: imgUrl,
-            likes: 0,
+            likes: [],
             comments: [],
             shares: 0
         };

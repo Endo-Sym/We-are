@@ -37,7 +37,6 @@ const FormNewUser = () => {
     };
 
     try {
-      console.log(formattedFormData);
       const response = await axios.post('/user-description', formattedFormData);
       alert('Form submitted successfully! : ', response.data);
 

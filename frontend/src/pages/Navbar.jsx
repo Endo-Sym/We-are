@@ -61,7 +61,7 @@ export default function Navbar({ toggleNavbar, onSearch }) {
             }
             fetchData();
         }
-    }, []);
+    }, [location]);
 
     if (location.pathname === '/signin' || location.pathname === '/signup') {
         return null;

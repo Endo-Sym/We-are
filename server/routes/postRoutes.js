@@ -14,7 +14,8 @@ const {
     test,
     fetchPost,
     searchPosts,
-    getTags
+    getTags,
+    toggleLike
 } = require('../controllers/postController.js');
 
 router.use(
@@ -35,5 +36,6 @@ router.get('/feed', getFeedPosts);
 router.get('/users/:username/posts', getUserPosts);
 router.get('/tagPost', getTagPost);
 router.get('/tags', getTags);
+router.post('/toggle-like', toggleLike);
 
 module.exports = router;

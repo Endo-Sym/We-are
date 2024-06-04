@@ -42,7 +42,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            console.log('Image uploaded successfully:', response.data);
+            // console.log('Image uploaded successfully:', response.data);
             setImgUrl(response.data.secure_url);
             setIsUploading(false);
         } catch (error) {

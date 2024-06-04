@@ -41,10 +41,10 @@ const postSchema = new Schema({
     type: String,
     default: ''
   },
-  likes: {
-    type: Number,
-    default: 0
-  },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }],
   comments: [commentSchema],
 
 }, { timestamps: true });
@@ -63,6 +63,6 @@ const postLikeSchema = new Schema({
 });
 
 const Post = mongoose.model("Post", postSchema);
-const PostLike = mongoose.model("PostLike", postLikeSchema);
+// const PostLike = mongoose.model("PostLike", postLikeSchema);
 
-module.exports = Post, PostLike;
+module.exports = Post;

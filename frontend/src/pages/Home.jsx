@@ -136,16 +136,31 @@ export default function Home({ showSidebar, searchTerm }) {
         setSearch(searchTerm);
     }, [searchTerm]);
 
-    const toggleStar = (postId) => {
+    const toggleLike = async (postId) => {
         if (!user) {
             return;
         }
-        setPosts(prevPosts => {
-            const updatedPosts = [...prevPosts];
-            const postIndex = updatedPosts.findIndex(post => post.postData._id === postId);
-            updatedPosts[postIndex].postData.likes += 1;
-            return updatedPosts;
-        });
+        try {
+            const response = await axios.post(`/post/toggle-like`, { userId: user.userId, postId });
+            const updatePost = response.data;
+            setPosts(prevPosts => {
+                const updatedPosts = prevPosts.map(post => {
+                  if (post.postData._id === postId) {
+                    return {
+                      ...post,
+                      postData: {
+                        ...post.postData,
+                        likes: updatePost.likes
+                      }
+                    };
+                  }
+                  return post;
+                });
+                return updatedPosts;
+              });
+        } catch (err) {
+            console.error('Error liking post:', err);
+        };
     };
 
     const toggleComment = (postId) => {
@@ -230,9 +245,17 @@ export default function Home({ showSidebar, searchTerm }) {
                                         </div>
                                         <div className="mt-2">
                                             <div className="flex flex-row gap-1">
-                                                <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleStar(post.postData._id)}>
-                                                    <img className="size-7 min-w-10" src={iconstar_} alt="star" />
-                                                    <div className="text-lg">{post.postData.likes}</div>
+                                                <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleLike(post.postData._id)}>
+                                                    {/* <img className={`size-7 min-w-10 ${post.postData.likes?.includes(user.userId) ? "fill-white" : ""}`} src={iconstar_}  alt="star" /> */}
+                                                    <svg className="size-7 min-w-10" width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M14.9046 3.07308C15.3653 1.64231 17.3711 1.64231 17.8318 3.07308L20.1687 10.3313C20.3746 10.9712 20.9655 11.4044 21.6322 11.4044H29.1946C30.6853 11.4044 31.3051 13.3295 30.0991 14.2137L23.9809 18.6996C23.4416 19.095 23.216 19.796 23.422 20.4359L25.7589 27.6942C26.2195 29.1249 24.5968 30.3146 23.3908 29.4304L17.2727 24.9446C16.7334 24.5491 16.003 24.5491 15.4636 24.9446L9.34556 29.4304C8.13955 30.3146 6.51685 29.1249 6.97751 27.6942L9.31442 20.4359C9.52042 19.796 9.29474 19.095 8.7554 18.6996L2.6373 14.2137C1.43126 13.3295 2.05108 11.4044 3.54181 11.4044H11.1042C11.7709 11.4044 12.3617 10.9712 12.5677 10.3313L14.9046 3.07308Z" 
+                                                            stroke="white" 
+                                                            strokeWidth="3" 
+                                                            strokeLinecap="round" 
+                                                            strokeLinejoin="round"
+                                                            fill={post.postData.likes?.includes(user?.userId) ? "white" : "none"}/>
+                                                    </svg>
+                                                    <div className="text-lg">{post.postData.likes?.length || 0}</div>
                                                 </a>
                                                 <a href="#" className="w-14 h-10 min-w-10 transition duration-300 ease-in-out transform hover:scale-105 flex justify-center items-center" onClick={() => toggleComment(post.postData._id)}>
                                                     <img className="size-6 min-w-10" src={icon_comment} alt="comment" />
