@@ -28,6 +28,7 @@ function SignUp() {
         email,
         password
       });
+      console.log(response.data);
       const { data: responseData } = response;
       if (responseData.error) {
         toast.error(responseData.error);

@@ -11,7 +11,7 @@ import { GoogleLogin } from '@react-oauth/google';
 
 function Signin() {
     const navigate = useNavigate(); 
-    const { setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -23,6 +23,7 @@ function Signin() {
 
     const checkNewUser = async (userId) => {
         try {
+            // console.log(userId);
             const response = await axios.get(`/api/check-new-user?userId=${userId}`);
             return response.data.isNewUser;
         } catch (error) {
@@ -68,15 +69,16 @@ function Signin() {
             const response = await axios.post('/Sign-in', { identifier, password });
             const result = response.data;
 
+            
             if (result.error) {
                 toast.error(result.error);
             } else {
-                console.log('User data:', result);
                 const responseUser = await axios.get(`/profile/${result._id}`);
                 setUser(responseUser.data);
+                console.log(responseUser.data);
                 setData({ identifier: '', password: '' });
 
-                const isNewUser = await checkNewUser(responseUser.userId);
+                const isNewUser = await checkNewUser(responseUser.data.userId);
                 if (isNewUser) {
                     navigate('/formnewuser');
                 } else {

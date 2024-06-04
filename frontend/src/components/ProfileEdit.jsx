@@ -200,7 +200,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
                     {isUploading ? (
                         <button
                             type="button"
-                            className="flex-1 h-10 bg-gray-400 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
+                            className="flex-1 h-10 bg-gray-400 text-white rounded-lg focus:outline-none"
                         >
                             Uploading...
                         </button>

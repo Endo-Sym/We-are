@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ProfileEdit from '../components/ProfileEdit';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
+import profilePic from '../../assets/images/profile-pic.svg';
 import { UserContext } from '../../context/Usercontext';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -40,8 +41,8 @@ const Profile = ({ showSidebar, location }) => {
                 try {
                     setIsLoading(true);
                     const response = await axios.get(`/profile/${userId}`);
-                    setProfileData(response.data);
                     console.log(response.data);
+                    setProfileData(response.data);
                 } catch (error) {
                     console.error('Error fetching profile data:', error);
                 } finally {
@@ -52,7 +53,7 @@ const Profile = ({ showSidebar, location }) => {
         } else {
             console.error('userId is not defined');
         }
-    }, [userId]);
+    }, []);
 
     useEffect(() => {
         if (location && location.state && location.state.user) {
@@ -96,7 +97,7 @@ const Profile = ({ showSidebar, location }) => {
                             <div className="relative">
                                 <div className="max-w-[38rem] h-[27rem] relative rounded-[50px] border-2 border-fuchsia-500 overflow-hidden">
                                     <img 
-                                        src={profileData.imgUrl} 
+                                        src={profileData.imgUrl ? profileData.imgUrl : profilePic}
                                         alt="Profile" 
                                         className="w-full h-full object-cover"
                                     />
@@ -104,7 +105,7 @@ const Profile = ({ showSidebar, location }) => {
                                 <div className="absolute w-full h-[70%] bottom-0 overflow-hidden flex flex-col justify-end p-6">
                                     <div className="max-w-16 min-w-16 max-h-16 min-h-16 border-2 border-fuchsia-500 rounded-full overflow-hidden">
                                         <img
-                                            src={profileData.imgUrl}
+                                            src={profileData.imgUrl ? profileData.imgUrl : profilePic}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />

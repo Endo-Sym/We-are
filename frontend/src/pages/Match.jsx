@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
@@ -13,13 +14,34 @@ const Match = ({ showSidebar }) => {
 
     const [allProfiles, setAllProfiles] = useState([]);
     const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
-    const [currentProfile, setCurrentProfile] = useState({});
+    // const [currentProfile, setCurrentProfile] = useState();
+    const [currentProfile, setCurrentProfile] = useState({
+        _id: "",
+        userId: "",
+        name: "",
+        username: "",
+        lookingFor: "",
+        followers: 0, // []
+        love: 0, // []
+        contact: "",
+        country: "",
+        birthdate: "",
+        dateGender: "",
+        email: "",
+        friendGender: "",
+        gender: "",
+        interests: [],
+        status: "",
+        type: "",
+        profileImage: "",
+        imgUrl: ""
+    });
 
     useEffect(() => {
         const allProfile = async () => {
             try {
+                setIsLoading(true);
                 const response = await axios.get('/allProfile');
-                console.log(response.data);
                 const filteredProfiles = response.data.filter(profile => profile.userId !== user.userId);
                 setAllProfiles(filteredProfiles);
             } catch (error) {
@@ -29,6 +51,13 @@ const Match = ({ showSidebar }) => {
 
         allProfile();
     }, []);
+
+    useEffect(() => {
+        if (allProfiles.length > 0) {
+            setCurrentProfile(allProfiles[currentProfileIndex]);
+        }
+        setIsLoading(false);
+    }, [allProfiles]);
 
     useEffect(() => {
         if (location && location.state && location.state.user) {
@@ -56,14 +85,10 @@ const Match = ({ showSidebar }) => {
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     };
 
-    if (isLoading) {
-        return <Loading />;
-    }
-
-
     return (
         <>
             <Sidebar showSidebar={showSidebar} />
+            <Loading isLoading={isLoading} />
             <div className={`flex bg-cartoon bg-cover bg-fixed fixed font-nunito text-white pt-[60px] ${showSidebar ? "pl-[12.5rem]" : "pl-[5.5rem]"} h-full w-full items-center justify-center`}>
                 <div className="h-full w-3/4 relative bg-transparent flex flex-col items-center justify-center p-2">
                     <div className="flex items-center gap-4">
@@ -89,14 +114,14 @@ const Match = ({ showSidebar }) => {
                                             className="w-full h-full object-cover"
                                         />
                                       </div>
-                                    <h1 className="text-3xl font-bold">{currentProfile.name}</h1>
+                                    <h1 className="text-3xl font-bold hover:underline"><Link to={`/profile/${currentProfile.userId}`}> {currentProfile.name}</Link></h1>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Country :</span>{currentProfile.country ? currentProfile.country : "-"}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Age :</span>{currentProfile.birthdate ? getAge(currentProfile.birthdate) : "-"}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Looking for :</span>{currentProfile.lookingFor ? currentProfile.lookingFor : "-"}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Date gender :</span>{currentProfile.dateGender ? currentProfile.dateGender : "-"}</p>
                                     <p className="flex items-center text-lg"><span className="material-icons mr-2">Friend gender :</span>{currentProfile.friendGender ? currentProfile.friendGender : "-"}</p>
                                     <div className="flex justify-start gap-2 mt-2">
-                                        {currentProfile.gender && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] ${currentProfile.gender === "Woman" ? "bg-pink-500" : "bg-blue-500"}`}>
+                                        {currentProfile.gender && <p className={`flex items-center justify-center w-auto text-lg rounded-[18px] bg-orange-400`}>
                                             <span className="material-icons p-2">{currentProfile.gender}</span>
                                         </p>}
                                         {currentProfile.type && <p className={`flex items-center justify-center w-20 text-lg rounded-[18px] bg-primary-pink`}>
@@ -115,6 +140,7 @@ const Match = ({ showSidebar }) => {
                                         </span>
                                     ))}
                             </p>
+                            <p className="flex items-center text-lg mt-2"><span className="material-icons mr-2">Contact :</span>{currentProfile.contact ? currentProfile.contact : "-"}</p> 
                             <div className="flex gap-6 mt-5">
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="text-center min-w-[7rem] h-[4rem] px-4 py-2 border-2 border-fuchsia-500 bg-black backdrop-blur-sm bg-opacity-40 text-white rounded-[20px] hover:bg-fuchsia-500 hover:cursor-pointer hover:bg-opacity-100 transition-colors flex items-center justify-center gap-2">

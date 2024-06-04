@@ -23,7 +23,7 @@ const userDescriptionSchema = new mongoose.Schema({
     },
     birthdate: {
         type: Date,
-        default: "00-00-0000"
+        default: new Date('1970-01-01')
     },
     lookingFor: {
         type: String,

@@ -7,7 +7,6 @@ import searchicon from '/assets/images/searchicon.png';
 import LogoutModal from './LogoutModal'; // Ensure this path is correct
 import axios from 'axios';
 
-
 export default function Navbar({ toggleNavbar, onSearch }) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -15,8 +14,8 @@ export default function Navbar({ toggleNavbar, onSearch }) {
 
     const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [profileData, setProfileData] = useState({ imgUrl: '' , name: ""});
-    
+    const [profileData, setProfileData] = useState({ imgUrl: '' });
+
     useEffect(() => {
         if (location.state && location.state.user) {
             setUser(location.state.user);
@@ -45,25 +44,24 @@ export default function Navbar({ toggleNavbar, onSearch }) {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log(searchQuery);
-        onSearch(searchQuery);
-        // navigate(`/post/search?query=${searchQuery}`);
+        if (location.pathname === '/') {
+            onSearch(searchQuery);
+        } else {
+            navigate('/');
+            onSearch(searchQuery);
+        }
     };
 
     useEffect(() => {
         if (user && user.userId) {
             async function fetchData() {
-                try {
-                    const response = await axios.get(`/profile/${user.userId}`);
-                    setUser(response.data);  // Ensure this response contains userId and username
-                    setProfileData(response.data);
-                } catch (error) {
-                    console.error('Error fetching profile data:', error);
-                }
+                const response = await axios.get(`/profile/${user.userId}`);
+                setUser(response.data);
+                setProfileData(response.data);
             }
             fetchData();
         }
-    }, [user, setUser]);  // Include setUser as dependency
+    }, []);
 
     if (location.pathname === '/signin' || location.pathname === '/signup') {
         return null;
@@ -98,7 +96,7 @@ export default function Navbar({ toggleNavbar, onSearch }) {
                         {user ? (
                             <>
                                 <CiLogout onClick={handleLogoutClick} className="cursor-pointer" />
-                                <Link to={`/profile/${user.userId}`} className="text-right hover:underline">{user.name ?? user.username}</Link>
+                                <Link to={`/profile/${user.userId}`} className="text-right hover:underline">{user.username}</Link>
                                 <img src={user.imgUrl} alt="Profile" className="size-10 rounded-full min-w-10 bg-black border border-primary-pink" />
                             </>
                         ) : (

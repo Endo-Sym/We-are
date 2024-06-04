@@ -11,6 +11,8 @@ const test = (req, res) => {
 
 const SignupUser = async (req, res) => {
     try {
+        const session = await mongoose.startSession();
+        session.startTransaction();
         const { name, username, email, password } = req.body;
 
         if (!name) {
@@ -29,7 +31,7 @@ const SignupUser = async (req, res) => {
             });
         }
 
-        const exist = await User.findOne({ email });
+        const exist = await User.findOne({ email }).session(session);;
         if (exist) {
             return res.status(400).json({
                 error: "Email is already used"
@@ -37,19 +39,32 @@ const SignupUser = async (req, res) => {
         }
         const hashedPassword = await hashPassword(password);
 
-        const user = await User.create({
+        const newUser = new User({
             name,
             username,
             email,
             password: hashedPassword,
-            profileCompleted: false 
+            profileCompleted: false
+        });
+
+        const user = await newUser.save({ session });
+
+        const newUserDescription = new UserDescription({
+            userId: user._id
         });
      
+        await newUserDescription.save({ session });
+        await session.commitTransaction();
+        session.endSession();
+
         return res.status(201).json(user);
     } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
         console.error(error);
         return res.status(500).json({
-            error: "Internal Server Error"
+            error: "Internal Server Error",
+            message: error.message
         });
     }
 };
@@ -226,7 +241,7 @@ const updateprofile = async (req, res) => {
 
     const userFields = {
         name: profile.name,
-        imgUrl: profile.imgUrl
+        ...(profile.imgUrl && { imgUrl: profile.imgUrl })
     };
 
     const userDescriptionFields = {
@@ -268,19 +283,44 @@ const updateprofile = async (req, res) => {
 const createUserDescription = async (req, res) => {
     try {
         const { gender, birthdate, friendGender, dateGender, interests, userId } = req.body;
-        const newUserDescription = new UserDescription({
-            gender,
-            birthdate,
-            friendGender,
-            dateGender,
-            interests,
-            userId
+
+        // Find the existing user description by userId
+        let userDescription = await UserDescription.findOne({ userId });
+
+        if (userDescription) {
+            // Update the existing user description
+            userDescription.gender = gender;
+            userDescription.birthdate = birthdate;
+            userDescription.friendGender = friendGender;
+            userDescription.dateGender = dateGender;
+            userDescription.interests = interests;
+        } else {
+            // Create a new user description if not found
+            userDescription = new UserDescription({
+                gender,
+                birthdate,
+                friendGender,
+                dateGender,
+                interests,
+                userId
+            });
+        }
+
+        // Update the user's profileCompleted status
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profileCompleted: true },
+            { new: true }
+        ).select("-password -updatedAt");
+
+        // Save the user description
+        await userDescription.save();
+
+        res.status(201).json({
+            message: 'User description saved successfully!',
+            userDescription,
+            user: updatedUser
         });
-
-        const updatedUser = await User.findByIdAndUpdate(userId, { profileCompleted: true }, { new: true }).select("-password -updatedAt");
-
-        await newUserDescription.save();
-        res.status(201).json({ message: 'User description saved successfully!', userDescription: newUserDescription, user: updatedUser});
     } catch (error) {
         console.error('Error saving user description:', error);
         res.status(500).json({ error: error.message });
